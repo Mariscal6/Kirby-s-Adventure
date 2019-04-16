@@ -26,7 +26,7 @@ Q.load(unroll(unroll(Object.values(compiling)).map(e => Object.values(e))).join(
     // Compile Sound
     const assets = Object.assign({}, ...compiling.audio);
     Q.load(assets);
-    
+
     // is Audio
     if(Q.hasWebAudio){
         Q.audio.enableWebAudioSound();

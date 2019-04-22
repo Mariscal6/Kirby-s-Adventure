@@ -15,12 +15,11 @@ const Q = window.Q = Quintus()
     width: 800, // Set the default width to 800 pixels
     height: 600 // Set the default height to 600 pixels
 })
-.enableSound().controls().touch();
+.enableSound().controls();
 
 
 function load(callback){
     Q.load(unroll(unroll(Object.values(compiling)).map(e => Object.values(e))).join(","), function() {
-        Q.debug = true;
         // Loading Threads
         const promises = new Array(
             // Compile Sprite Sheets

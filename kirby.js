@@ -43,10 +43,43 @@ Q.animations("kirby", {
             width: 16,
             height: 16,
         }
-    }
+    },
+    flying: {
+        frames: [12, 13, 20, 21, 22],
+        rate: 1/6,
+        collision_box: {
+            width: 22,
+            height: 22
+        }
+    },
+    flying_static_down:{
+        frames: [21, 22],
+        rate: 1/3,
+        collision_box: {
+            width: 22,
+            height: 22
+        }
+    },
+    flying_static_up:{
+        frames: [21, 22],
+        rate: 1/8,
+        collision_box: {
+            width: 22,
+            height: 22
+        }
+    },
 });
 
 /* Object */
+
+const KIRBY_STATE = {
+    IDLE: 0,
+    BALLOON: 1,
+    SKID: 2,
+    DIE: -1,
+};
+
+
 Q.Sprite.extend("Kirby", {
 
     init: function(p){
@@ -58,11 +91,26 @@ Q.Sprite.extend("Kirby", {
             y: 100,
         });
 
+        this.state = KIRBY_STATE.IDLE;
         this.blink = 0;
+        this.flying_constant = false;
         this.last_animation = "";
-        
-        this.add("animation, 2d, platformerControls");
-    }, 
+
+        this.add("platformerControls, Entity");
+
+        /* Events */
+        this.on("highJump", this, "highJump");
+        this.on("balloon", this, "balloon");
+    },
+
+    highJump: function(){
+    },
+
+    balloon: function(){
+        this.state = KIRBY_STATE.BALLOON;
+        this.p.vy = -220;
+        this.p.gravity = 0.5;
+    },
 
     // Update
     update: function(dt){
@@ -70,45 +118,35 @@ Q.Sprite.extend("Kirby", {
     },
 
     // Update Step
-    step: function(){
-        if(this.p.vy > 0){
-            this.cplay("falling");
-        }else if(Math.abs(this.p.vx) > 0){
-            this.cplay("move");
-            this.blink = 0;
-        }else{
-            this.blink = (this.blink + 1) % 100;
-            this.cplay(((this.blink >= 70) && (this.blink % 15) < 10)  ? "blink" : "idle");
+    step: function(dt){
+        switch(this.state){
+            case KIRBY_STATE.IDLE:
+                if(this.p.vy > 0){
+                    this.trigger("cplay","falling");
+                }else if(Math.abs(this.p.vx) > 0){
+                    this.trigger("cplay", "move");
+                    this.blink = 0;
+                }else{
+                    this.blink = (this.blink + 1) % 100;
+                    this.trigger("cplay", ((this.blink >= 70) && (this.blink % 15) < 10)  ? "blink" : "idle");
+                }
+            break;
+            case KIRBY_STATE.BALLOON:
+                if(this.p.vy >= 0 || this.flying_constant){
+                    this.flying_constant = true;
+                    this.trigger("cplay", this.p.vy < 0 ? "flying_static_up" : "flying_static_down");
+                }
+                else{
+                    this.flying_constant = false;
+                    this.trigger("cplay", "flying");
+                }
+
+            break;
         }
+        
 
         // Flip in movement
         this.p.flip = (this.p.direction === "left") ? "x" : undefined;
-    },
-
-    // Override Play
-    cplay: function(str){
-        this.play(str);
-        /*
-            Optimization:
-                - We are not changin all the time the collision box, just when the
-                - animation did.
-        */
-        if(this.last_animation != str){
-            this.last_animation = str;
-            // left top
-            const box = Q.animation(this.p.sprite, str).collision_box;
-            const hw = box.width >> 1, hh = box.height >> 1;
-
-            // left top
-            [this.p.points[0][0], this.p.points[0][1]] = [-hw, -hh];
-            // right top
-            [this.p.points[1][0], this.p.points[1][1]] = [+hw, -hh];
-            // left bottom
-            [this.p.points[2][0], this.p.points[2][1]] = [+hw, +hh];
-            // right bottom
-            [this.p.points[3][0], this.p.points[3][1]] = [-hw, +hh];
-            
-        }
     },
 
 });

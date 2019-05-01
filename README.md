@@ -2,7 +2,7 @@
 
 ## Conectarse con LiveShare y el puerto de localhost
 Uno de los intregrantes debe ser el host, teniendo el puerto del localhost abierto (predeterminado el 80).
-El otro se conecta con el puerto asignado por live share /Kirby-s-Adventure/
+El otro se conecta con el puerto asignado por *Live Share* `/Kirby-s-Adventure/`
 
 
 ## Comentarios en Código.
@@ -26,9 +26,8 @@ El otro se conecta con el puerto asignado por live share /Kirby-s-Adventure/
 
 ## Entidades 
 
------------> Crear entidad Kirby template (Lukas y Guille): juntos para ver estructura
-
-----------> Animaciones comunes 
+1. Crear entidad Kirby template (Lukas y Guille): juntos para ver estructura
+2. Animaciones comunes.
 
 ## GUI
 

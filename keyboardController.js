@@ -1,7 +1,19 @@
 //------------- Input Controller
 Q.input.on("highJump", function(){
-    Q("Kirby").first().trigger("highJump");
-});                 
+    if(Q('Kirby').first().state !== KIRBY_STATE.BALLOON){
+        if(!Q.inputs['up']){
+            Q.inputs['up'] = true;
+            Q("Kirby").first().trigger("highJump");
+        }
+    }else{
+        Q("Kirby").first().trigger("balloon");
+    }
+   
+});
+
+Q.input.on("highJumpUp", function(){
+    Q.inputs['up'] = false;
+});
 
 /* Balloon Key */
 Q.input.on("balloon", function(){

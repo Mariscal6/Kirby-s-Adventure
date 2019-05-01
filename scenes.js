@@ -3,8 +3,7 @@ compiling.level.push(
 );
 
 Q.scene("level1", function(stage) {
-
-    stage.insert(new Q.Kirby());
+    
     Q.stageTMX("level.tmx", stage);
-
+    stage.add("viewport").follow(Q('Kirby').first());
 });

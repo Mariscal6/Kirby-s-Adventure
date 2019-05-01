@@ -99,11 +99,17 @@ Q.Sprite.extend("Kirby", {
         this.add("platformerControls, Entity");
 
         /* Events */
+        this.on("attack", this, "attack");
         this.on("highJump", this, "highJump");
         this.on("balloon", this, "balloon");
     },
 
+    attack: function(){
+        
+    },
+
     highJump: function(){
+
     },
 
     balloon: function(){
@@ -119,6 +125,7 @@ Q.Sprite.extend("Kirby", {
 
     // Update Step
     step: function(dt){
+
         switch(this.state){
             case KIRBY_STATE.IDLE:
                 if(this.p.vy > 0){

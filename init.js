@@ -8,6 +8,7 @@ load(function(){
     Q.stageScene("level1");
 
     /* Input Controller */
+    Q.input.bindKey("Z", "attack");
     Q.input.bindKey("X", "highJump");
     Q.input.bindKey("UP", "balloon");
 

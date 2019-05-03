@@ -12,12 +12,8 @@ compiling.sheet.push({
     "json_path": "sprites.json"
 });
 
-/* Constants */
-const INITIAL_SPEED = 150;
-const MAX_SPEED = 225;
-
 /* Animations */
-Q.animations("kirby", {
+Q.animations("absorb_enity", {
     idle: {
         frames: [0],
         collision_box: {
@@ -25,144 +21,8 @@ Q.animations("kirby", {
             height: 30,
         }
     },
-    blink: {
-        frames: [1],
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-    move: {
-        frames: [4, 3, 2], 
-        rate:1 / 10,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-    /* ABSORBING */
-    start_absorbing: {
-        frames: [12],
-        rate: 1 / 8,
-        collision_box: {
-            width: 30,
-            height: 30
-        },
-    },
-    
-    absorbing: {
-        frames: [14],
-        collision_box: {
-            width: 30,
-            height: 40
-        },
-    },
-
-    /* SPIN */
-    spin: {
-        frames: [7, 8, 9, 0],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-
-    /* FALLING */
-    falling_head: {
-        frames: [8],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-    falling: {
-        frames: [11],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-    bouncing_head:{
-        rames: [8],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-
-
-    /*JUMPING */
-    jumping: {
-        frames: [7],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-    
-    /* FLYING */
-    flying: {
-        frames: [13, 14, 21, 22],
-        rate: 1/6,
-        collision_box: {
-            width: 30,
-            height: 30
-        }
-    },
-    flying_static_down:{
-        frames: [22, 23],
-        rate: 1/3,
-        collision_box: {
-            width: 44,
-            height: 44
-        }
-    },
-    flying_static_up:{
-        frames: [22, 23],
-        rate: 1/8,
-        collision_box: {
-            width: 44,
-            height: 44
-        }
-    },
-
-    /* SKIDDING*/
-
-    skidding: {
-        frames: [10],
-        rate: 1/6,
-        collision_box: {
-            width: 30,
-            height: 30
-        }
-    },
 
 });
-
-/* Object */
-
-const KIRBY_STATE = {
-    IDLE: 0,
-    MOVING: 1,
-    HIGHJUMP: 2,
-    BALLOONING: 3,
-    ABSORBING: 4,
-    BLOWING: 5,
-    SKID: 6,
-    FALLING: 7,
-    BOUNCING: 8,
-    DIE: -1,
-};
-
-const ABSORB_TYPE = {
-    ABSORBING: 0,
-    BLOWING: -1
-};
 
 Q.Sprite.extend("Kirby", {
 

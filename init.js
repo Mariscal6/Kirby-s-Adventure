@@ -3,9 +3,11 @@ load(function(){
     
     // Modo Debug
     Q.debug = true;
+   
+    Q.stageScene("level1", 0);
 
-    //Q.setImageSmoothing(false);
-    Q.stageScene("level1");
+    Q.stageScene("HUD", 1);
+       
 
     /* Input Controller */
     Q.input.bindKey("Z", "attack");

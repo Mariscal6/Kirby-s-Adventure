@@ -10,8 +10,13 @@ Q.component("Entity", {
     },
     
     change_state: function(state){
-        this.entity.last_state = this.entity.state;
-        this.entity.state = state;
+        if(this.entity.state !== state){
+            this.entity.blinkTime = 0;
+            this.entity.absorbTime = 0;
+            
+            this.entity.last_state = this.entity.state;
+            this.entity.state = state;
+        }
     },
 
     // Override Play

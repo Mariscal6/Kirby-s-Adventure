@@ -4,8 +4,14 @@
 Uno de los intregrantes debe ser el host, teniendo el puerto del localhost abierto (predeterminado el 80).
 El otro se conecta con el puerto asignado por *Live Share* `/Kirby-s-Adventure/`
 
+## Propiedades de entidades
+| Propiedades   | Descripción                              | Valor     |
+|:-------------:|:----------------------------------------:|:---------:|
+|`isStatue`     | Los controles básicos dejan de funcionar |`Boolean` |
+|`skipCollision`| La entidad colisiona pero no es empujada |`Boolean` |
 
 ## Comentarios en Código.
+
 
 ### Añadir un nuevo evento con el keyboard.
 

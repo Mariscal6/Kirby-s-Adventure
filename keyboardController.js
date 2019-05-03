@@ -1,5 +1,7 @@
 //------------- Input Controller
 Q.input.on("highJump", function(){
+    if(Q('Kirby').first().p.isStatue) return;
+
     if(Q('Kirby').first().state !== KIRBY_STATE.BALLOON){
         if(!Q.inputs['up']){
             Q.inputs['up'] = true;
@@ -23,4 +25,8 @@ Q.input.on("balloon", function(){
 /* Attack Key */
 Q.input.on("attack", function(){
     Q("Kirby").first().trigger("attack");
+});
+
+Q.input.on("attackUp", function(){
+    Q("Kirby").first().trigger("attack_end");
 });

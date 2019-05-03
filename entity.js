@@ -5,9 +5,15 @@ Q.component("Entity", {
     added: function(){
         this.entity.add("animation, 2d");
 
+        this.entity.on("change_state", this, "change_state");
         this.entity.on("cplay", this, "play");
     },
-       
+    
+    change_state: function(state){
+        this.entity.last_state = this.entity.state;
+        this.entity.state = state;
+    },
+
     // Override Play
     play: function(str){
         const entity = this.entity;
@@ -23,6 +29,9 @@ Q.component("Entity", {
             const box = Q.animation(entity.p.sprite, str).collision_box;
             const hw = box.width >> 1, hh = box.height >> 1;
 
+            // Translate the height center to the new size.
+            entity.p.y += entity.p.points[2][1] - hh;
+            
             // left top
             [entity.p.points[0][0], entity.p.points[0][1]] = [-hw, -hh];
             // right top

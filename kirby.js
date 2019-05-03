@@ -36,9 +36,26 @@ Q.animations("kirby", {
             height: 30,
         }
     },
+    /* ABSORBING */
+    start_absorbing: {
+        frames: [12],
+        rate: 1 / 8,
+        collision_box: {
+            width: 30,
+            height: 30
+        },
+    },
+    
+    absorbing: {
+        frames: [14],
+        collision_box: {
+            width: 30,
+            height: 40
+        },
+    },
 
-    /* FALLING */
-    falling: {
+    /* SPIN */
+    spin: {
         frames: [7, 8, 9, 0],
         rate: 1 / 16,
         collision_box: {
@@ -46,17 +63,37 @@ Q.animations("kirby", {
             height: 30,
         }
     },
-    /*JUMPING */
-    jumping: {
-        frames: [7],
+
+    /* FALLING */
+    falling_head: {
+        frames: [8],
         rate: 1 / 16,
         collision_box: {
             width: 30,
             height: 30,
         }
     },
-    jumping_fall: {
+    falling: {
         frames: [11],
+        rate: 1 / 16,
+        collision_box: {
+            width: 30,
+            height: 30,
+        }
+    },
+    bouncing_head:{
+        rames: [8],
+        rate: 1 / 16,
+        collision_box: {
+            width: 30,
+            height: 30,
+        }
+    },
+
+
+    /*JUMPING */
+    jumping: {
+        frames: [7],
         rate: 1 / 16,
         collision_box: {
             width: 30,
@@ -100,9 +137,15 @@ const KIRBY_STATE = {
     BALLOON: 3,
     ABSORB: 4,
     SKID: 5,
+    FALLING:6,
+    BOUNCING:7,
     DIE: -1,
 };
 
+const ABSORB_TYPE = {
+    ABSORBING: 0,
+    BLOWING: -1
+};
 
 Q.Sprite.extend("Kirby", {
 
@@ -113,40 +156,75 @@ Q.Sprite.extend("Kirby", {
             sprite: "kirby",
             x: 100,
             y: 100,
+            isStatue: false
         });
 
         this.state = KIRBY_STATE.IDLE;
-        this.blink = 0;
-        this.flipped=false;
-        this.jumpTime=0;
         this.flying_constant = false;
         this.last_animation = "";
+        this.last_state = null;
+
+        // idle
+        this.blinkTime = 0;
+
+        // Falling
+        this.fallingSpeed = 0;
+
+        // Bouncing
+        this.bounces = 0;
+        
+        // Absorbing
+        this.absorbTime = 0;
+        this.absorbType = null;
 
         this.add("platformerControls, Entity");
 
         /* Events */
         this.on("attack", this, "attack");
+        this.on("attack_end", this, "attack_end");
+
         this.on("highJump", this, "highJump");
         this.on("balloon", this, "balloon");
     },
 
+    /* ATTACK */
     attack: function(){
-        
+        if(this.absorbTime > 0) return;
+
+
         switch(this.state){
             case KIRBY_STATE.BALLOON:
-                this.state = KIRBY_STATE.IDLE;
-                this.flying_constant = false;
+                this.trigger("change_state", KIRBY_STATE.IDLE);
             break;
-        }
+            default:
+                this.absorbTime = 0;
+                this.p.isStatue = true;
+                this.p.vx = 0.0;
+                this.absorbType = ABSORB_TYPE.ABSORBING;
+                this.trigger("change_state", KIRBY_STATE.ABSORB);
+            break;
+        };
+        
     },
 
+    attack_end: function(){
+
+        this.absorbTime = 0;
+        this.absorbType = ABSORB_TYPE.BLOWING;
+
+    },
+
+    /* END ATTACK */
     highJump: function(){
-        this.state = KIRBY_STATE.HIGHJUMP;
+        this.trigger("change_state", KIRBY_STATE.HIGHJUMP);
         this.p.gravity = 0.5;
     },
 
     balloon: function(){
-        this.state = KIRBY_STATE.BALLOON;
+        // Si somos estatua, no nos debe dejar.
+        if(this.p.isStatue) return;
+
+        this.trigger("change_state", KIRBY_STATE.BALLOON);
         this.p.vy = -220;
         this.p.gravity = 0.5;
     },
@@ -158,30 +236,54 @@ Q.Sprite.extend("Kirby", {
 
     // Update Step
     step: function(dt){
+
         switch(this.state){
             case KIRBY_STATE.IDLE:
 
-                this.blink = (this.blink + 1) % 100;
-                this.trigger("cplay", ((this.blink >= 70) && (this.blink % 15) < 10)  ? "blink" : "idle");
+                if (this.p.vy > 0 || this.last_state == KIRBY_STATE.BALLOON){
+                    this.trigger("change_state", KIRBY_STATE.FALLING);
+                }else{
+                    this.blinkTime = (this.blinkTime + 1) % 100;
+                    this.trigger("cplay", ((this.blinkTime >= 70) && (this.blinkTime % 15) < 10)  ? "blink" : "idle");
                 
-                // Transition if the lenght of the x velocity is greater than 0 (is moving).
-                this.state = Math.abs(this.p.vx) > 0.1 ? KIRBY_STATE.MOVING : KIRBY_STATE.IDLE;
+                    // Transition if the lenght of the x velocity is greater than 0 (is moving).
+                    this.trigger("change_state", Math.abs(this.p.vx) > 0.1 ? KIRBY_STATE.MOVING : KIRBY_STATE.IDLE);
+                }
 
             break;
 
             case KIRBY_STATE.MOVING:
 
-                this.trigger("cplay", "move");
-                this.blink = 0;
-                
-                // Transition if the lenght of the x velocity is 0 (stop moving).
-                this.state = Math.abs(this.p.vx) < 0.1 ? KIRBY_STATE.IDLE : KIRBY_STATE.MOVING;
+                if (this.p.vy > 0){
+                    this.trigger("change_state", KIRBY_STATE.FALLING);
+                }else{
+                    this.trigger("cplay", "move");
+                    this.blinkTime = 0;
+                    // Transition if the lenght of the x velocity is 0 (stop moving).
+                    this.trigger("change_state", Math.abs(this.p.vx) < 0.1 ? KIRBY_STATE.IDLE : KIRBY_STATE.MOVING);
+                }
 
             break;
             
             case KIRBY_STATE.ABSORB:
                 
-                this.trigger("cplay", "absorb");
+                this.absorbTime += dt;
+                
+                if(this.absorbType == ABSORB_TYPE.ABSORBING){
+                    if(this.absorbTime < 1 / 8){
+                        this.trigger("cplay", "start_absorbing");
+                    }else{
+                        this.trigger("cplay", "absorbing");
+                    }
+                }else{
+                    if(this.absorbTime < 1 / 8){
+                        this.trigger("cplay", "start_absorbing");
+                    }else{
+                        this.trigger("change_state", KIRBY_STATE.IDLE);
+                        this.p.isStatue = false;
+                        this.absorbTime = 0;
+                    }
+                }
 
             break;
 
@@ -198,28 +300,49 @@ Q.Sprite.extend("Kirby", {
             break;
             case KIRBY_STATE.HIGHJUMP:
                 // TO DO: Crear estado "falling head"
-                console.log(this.jumpTime);
-                if (Math.abs(this.p.vy) < 0.01 && this.flipped) {               
-                    this.state = KIRBY_STATE.IDLE;
-                    this.jumpTime = 0;
-                    this.flipped = false;
-                } else if (Math.abs(this.p.vy) < 50 && !this.flipped) {
-                    this.trigger("cplay", "falling");
-                    this.jumpTime += dt;
-                    if (this.jumpTime > 0.15) {
-                        this.flipped = true;
-                    }
+                if (Math.abs(this.p.vy) < 50) {
+                    this.trigger("cplay", "spin");
                 } else if (this.p.vy < -50) {
                     this.trigger("cplay", "jumping");
-                } else if (this.p.vy > 50) {
-                    this.jumpTime = 0;
-                    this.trigger("cplay", "jumping_fall");
+                } else {
+                    this.trigger("change_state", KIRBY_STATE.FALLING);
+                }
+            break;
+
+            case KIRBY_STATE.FALLING:
+
+                if (Math.abs(this.p.vy) < 0.01) {
+                    if (this.fallingSpeed >= 400) {
+                        this.trigger("change_state", KIRBY_STATE.BOUNCING);
+                    } else {
+                        this.trigger("change_state", KIRBY_STATE.IDLE);
+                    }
+                } else if (this.p.vy > 1 && this.p.vy < 120) {
+                    this.trigger("cplay", "falling");
+                } else if (this.p.vy >= 400) {
+                    this.trigger("cplay", "falling_head");
+                }
+                this.fallingSpeed = this.p.vy;
+
+            break;
+            case KIRBY_STATE.BOUNCING:
+
+                this.fallingSpeed = 0;
+                if(Math.abs(this.p.vy) < 0.01){
+                    // First Bounce
+                    if (this.bounces++ == 0) {
+                        this.p.vy = -150;
+                        this.trigger("cplay", "falling_head");
+                    }else{ // Last Bounce
+                        this.trigger("change_state", KIRBY_STATE.IDLE);
+                        this.bounces = 0;
+                    }
                 }
 
-                break;
+
+            break;
         }
         
-
         // Flip in movement
         this.p.flip = (this.p.direction === "left") ? "x" : undefined;
     },

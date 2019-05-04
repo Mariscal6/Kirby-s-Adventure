@@ -23,6 +23,7 @@ Q.scene("HUD", function(stage) {
     var power = stage.insert(new Q.UI.Container({
         fill: "red",
         border: 5,
+        asset: "kirby.png",
         w: 100,
         h: 120,
         y: 470,
@@ -38,10 +39,22 @@ Q.scene("HUD", function(stage) {
         x: 710
     }));
 
-   
+   //lifes.insert
+  
 
     stage.insert(new Q.Lifes(), lifes);
     stage.insert(power, container);
+    stage.insert(new Q.UI.Button({
+        asset: 'kirby.png',
+        x: 20,
+        y: 20,
+        w: 0,
+        h: 0,
+        scaleToFit: true,
+        scale: 2.85
+
+    }), power);
+
 
 });
 

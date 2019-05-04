@@ -156,6 +156,7 @@ const KIRBY_STATE = {
     SKID: 6,
     FALLING: 7,
     BOUNCING: 8,
+    HILLING: 9,
     DIE: -1,
 };
 
@@ -263,12 +264,14 @@ Q.Sprite.extend("Kirby", {
 
     // Update Step
     step: function(dt){
-        if (this.isOnHill) {
-            console.log(1);
+        if (this.isOnHill && this.state != KIRBY_STATE.BALLOONING) {
+            //console.log(1);
+            this.state=KIRBY_STATE.HILLING;
         }
+
         switch(this.state){
             case KIRBY_STATE.IDLE:
-                
+                this.p.angle=0;
                 this.p.speed = INITIAL_SPEED; // Reset Speed to initial
 
                 if (this.p.vy > 0 || this.last_state == KIRBY_STATE.BALLOON) {
@@ -306,7 +309,6 @@ Q.Sprite.extend("Kirby", {
                 this.last_direction = this.p.direction;
 
             break;
-            
             case KIRBY_STATE.ABSORBING:
                 
                 this.absorbTime += dt;
@@ -408,8 +410,21 @@ Q.Sprite.extend("Kirby", {
                     this.p.isStatue = false;
                 }
             break;
+            case KIRBY_STATE.HILLING:
+
+                if(this.p.vy < 0){
+                    this.p.speed = INITIAL_SPEED-50;
+                } else {
+                    this.p.speed = INITIAL_SPEED + 50;
+                }
+               // Reset Speed to initial
+                this.trigger("cplay", "idle");
+                //this.trigger("change_state", KIRBY_STATE.IDLE);
+            break;
         }
-        
+
+        this.isOnHill=false;
+        //this.p.angle=0;
         // Flip in movement
         this.p.flip = (this.p.direction === "left") ? "x" : undefined;
     },

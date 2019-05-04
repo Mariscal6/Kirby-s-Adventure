@@ -6,3 +6,7 @@ canvas {
     image-rendering: pixelated;                 /* Awesome future-browsers       */
     -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
 }
+@font-face {
+    font-family: 'myFirstFont';
+    src: url(Kirbys-Adventure.ttf) format('truetype');
+}

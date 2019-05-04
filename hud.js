@@ -30,7 +30,7 @@ Q.scene("HUD", function(stage) {
     }));
 
     var lifes = stage.insert(new Q.UI.Container({
-        color: "yellow",
+        fill: "yellow",
         border: 5,
         w: 125,
         h: 80,
@@ -38,14 +38,27 @@ Q.scene("HUD", function(stage) {
         x: 710
     }));
 
-    var prueba1 = new Q.UI.Text({
-        label: "prueba1",
-        fill: "blue", 
-        x: 0,
-        y: 0
-    });
+   
 
-    stage.insert(prueba1, lifes);
+    stage.insert(new Q.Lifes(), lifes);
     stage.insert(power, container);
 
+});
+
+
+Q.UI.Text.extend("Lifes",{
+    init: function(p){
+        this._super({
+            label: "Lifes X ",
+            color: "blue",
+            x: 0,
+            y: 0,
+            size: 18,
+            weight:80,
+            family: 'myFirstFont',
+        });
+    },
+    score: function(){
+        this.p.label = "Dani mas gordito";
+    }
 });

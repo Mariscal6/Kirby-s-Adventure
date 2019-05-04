@@ -13,8 +13,8 @@ compiling.sheet.push({
 });
 
 /* Constants */
-const INITIAL_SPEED = 150;
-const MAX_SPEED = 225;
+const INITIAL_SPEED = 130;
+const MAX_SPEED = 200;
 
 /* Animations */
 Q.animations("kirby", {
@@ -395,7 +395,7 @@ Q.Sprite.extend("Kirby", {
                 this.p.isStatue = true;
                 this.fallingSpeed = 0;
                 this.skiddingTime += dt;
-                if(this.skiddingTime < 1/6){
+                if(this.skiddingTime <= 1/6){
                     this.p.speed *= 0.98;
                     this.p.direction = (this.p.vx < 0) ? "right" : "left";        
                     this.trigger("cplay", "skidding");

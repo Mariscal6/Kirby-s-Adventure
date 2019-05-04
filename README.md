@@ -12,6 +12,19 @@ El otro se conecta con el puerto asignado por *Live Share* `/Kirby-s-Adventure/`
 
 ## Comentarios en Código.
 
+```js
+
+/* quintus_tmx.js
+
+    Decimos que el frame actual dependa de la gid del objeto (que es referenciado en el tmx)
+*/
+
+var p = Q._extend(Q._extend({ x: x, y: y}, properties), overrideProperties);
+// Se modifica a
+var p = Q._extend(Q._extend({ x: x, y: y, frame: gid - 1 }, properties), overrideProperties);
+
+```
+
 
 ### Añadir un nuevo evento con el keyboard.
 

@@ -1,9 +1,11 @@
 // ----------------- Entity
 
 Q.component("Entity", {
-
+     //Hill
     added: function(){
         this.entity.add("animation, 2d");
+
+        this.entity.isOnHill = false;
 
         this.entity.on("change_state", this, "change_state");
         this.entity.on("cplay", this, "play");

@@ -24,7 +24,7 @@ Q.animations("absorb_enity", {
 
 });
 
-Q.Sprite.extend("Kirby", {
+Q.Sprite.extend("Absorb", {
 
     init: function(p){
 

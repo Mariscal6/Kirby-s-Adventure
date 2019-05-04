@@ -204,6 +204,7 @@ Q.Sprite.extend("Kirby", {
         // Flying
         this.flyingTime = 0;
 
+
         this.add("platformerControls, Entity");
 
         /* Events */
@@ -262,9 +263,9 @@ Q.Sprite.extend("Kirby", {
 
     // Update Step
     step: function(dt){
-        /*if (this.state != this.last_state) {
-            console.log(this.state);
-        }*/
+        if (this.isOnHill) {
+            console.log(1);
+        }
         switch(this.state){
             case KIRBY_STATE.IDLE:
                 

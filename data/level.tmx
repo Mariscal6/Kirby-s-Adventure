@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="2019.04.03" orientation="orthogonal" renderorder="right-down" width="146" height="18" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="27">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="146" height="18" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="33">
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="../images/tiles.png" width="512" height="512"/>
   <tile id="6">
+   <properties>
+    <property name="Class" value="Hill"/>
+    <property name="Direction" value="Right"/>
+   </properties>
    <objectgroup draworder="index">
     <object id="1" x="0" y="32">
      <polygon points="0,0 32,-31.875 32,0"/>
     </object>
    </objectgroup>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="Class" value="Hill"/>
+    <property name="Direction" value="Left"/>
+   </properties>
   </tile>
  </tileset>
  <tileset firstgid="257" name="Kirby" tilewidth="64" tileheight="64" tilecount="25" columns="25">
@@ -2650,10 +2660,18 @@
    <tile gid="2"/>
   </data>
  </layer>
- <objectgroup id="3" name="Kirby" visible="0" offsetx="0.0606061" offsety="0.666667">
+ <objectgroup id="19" name="Hills">
+  <object id="27" gid="8" x="576" y="480" width="32" height="32"/>
+  <object id="28" gid="8" x="544" y="448" width="32" height="32"/>
+  <object id="29" gid="8" x="512" y="416" width="32" height="32"/>
+  <object id="30" gid="7" x="448" y="416" width="32" height="32"/>
+  <object id="31" gid="7" x="384" y="448" width="32" height="32"/>
+  <object id="32" gid="7" x="352" y="480" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="3" name="Kirby" offsetx="0.0606061" offsety="0.666667">
   <object id="18" name="Player" gid="257" x="95" y="465" width="64" height="64"/>
  </objectgroup>
- <layer id="18" name="Collision" width="146" height="18" visible="0">
+ <layer id="18" name="Collision" width="146" height="18">
   <properties>
    <property name="collision" value="true"/>
   </properties>
@@ -4425,7 +4443,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="89"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4569,10 +4587,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="89"/>
+   <tile gid="81"/>
+   <tile gid="97"/>
+   <tile gid="121"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4714,12 +4732,12 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="23"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="121"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4859,14 +4877,14 @@
    <tile gid="89"/>
    <tile gid="89"/>
    <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
+   <tile gid="23"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="121"/>
    <tile gid="89"/>
    <tile gid="89"/>
    <tile gid="89"/>

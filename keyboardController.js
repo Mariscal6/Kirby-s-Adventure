@@ -30,3 +30,15 @@ Q.input.on("attack", function(){
 Q.input.on("attackUp", function(){
     Q("Kirby").first().trigger("attack_end");
 });
+
+Q.input.on("bend", function () {
+    if (!Q.inputs['down']) {
+        Q.inputs['down'] = true;
+        Q("Kirby").first().trigger("bend");
+    }
+});
+
+Q.input.on("bendUp", function(){
+    Q.inputs['down'] = false;
+    Q("Kirby").first().trigger("bend_end");
+});

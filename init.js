@@ -10,8 +10,10 @@ load(function(){
        
 
     /* Input Controller */
+
     Q.input.bindKey("Z", "attack");
     Q.input.bindKey("X", "highJump");
     Q.input.bindKey("UP", "balloon");
+    Q.input.bindKey("DOWN", "bend");
 
 });

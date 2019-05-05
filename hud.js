@@ -1,4 +1,56 @@
 
+/*compiling.sheet.push({
+    "png_path": "powersHUD.png",
+    "json_path": "powers.json"
+});
+*/
+Q.animations("kirby_moves", {
+    move:{
+        frames: [4, 3, 2],
+        rate: 1/5
+    }
+});
+/*
+Q.animations("powers_kirby", {
+    normal:{
+        frames: [0]
+    }
+});*/
+
+Q.Sprite.extend("Vidas", {
+    init: function(p){
+        this._super(p, {
+            sprite: "kirby_moves",
+            sheet: "kirby", 
+            label: "Prueba",
+            x: 0,
+            y: 0,
+        });
+        this.add('animation');
+    },
+    step: function(){
+        this.play("move");
+    }
+});
+
+
+
+/*Q.Sprite.extend("Powers_Kirby", {
+    init: function(p){
+        this._super(p, {
+            sprite: "powers_kirby",
+            sheet: "powers", 
+            x: 0,
+            y: 0
+        });
+        this.add('animation');
+    },
+    step: function(){
+        this.play("normal");
+    }
+});*/
+
+
 
 Q.scene("HUD", function(stage) {
     
@@ -23,7 +75,6 @@ Q.scene("HUD", function(stage) {
     var power = stage.insert(new Q.UI.Container({
         fill: "red",
         border: 5,
-        asset: "powersHUD.png",
         w: 100,
         h: 120,
         y: 470,
@@ -42,40 +93,15 @@ Q.scene("HUD", function(stage) {
 
     //stage.insert(new Q.Lifes(), lifes);
     stage.insert(power, container);
-    stage.insert(new Q.UI.Button({
-        asset: "powersHUD.png",
-        x: 0,
-        y: 0,
-        scale: 1.5,
-        scaleToFit:true
-    }), power);
-
-   // var aux = new Q.PruebaDos();
-    //Aun queda... no toqueis
-    stage.insert(new Q.UI.Button({
-      init: function(p){  
-        this.super({ 
-            //label: "nada",
-            size: 20,
-            scaleToFit: true,
-            asset: "lifes2.png"});
-    }, 
-    step: function(){
-        //console.log(this.p.asset);
-        this.p.asset = "lifes2.png";
-        sleep(1000);
-       // console.log(this.p.asset);
-        this.p.asset = "lifes1.png";
-        sleep(1000);
-    }), lifes);
+    stage.insert(new Q.Vidas(), lifes);  
+   // stage.insert(new Q.Powers_Kirby(), power);
 
 });
 
 
-Q.UI.Text.extend("Lifes",{
+/*Q.UI.Text.extend("Lifes",{
     init: function(p){
         this._super({
-            label: "Lifes X            ",
             color: "black",
             asset: "kirby.png",
             x: 0,
@@ -84,19 +110,19 @@ Q.UI.Text.extend("Lifes",{
             weight:800,
             family: 'myFirstFont',
         });
+        this.add('animation');
+        //this.play('default');
     },
     step: function(){
-       this.p.label = "Lifes X   " + "10";
+        var sprite = new Q.Sprite({asset: "kirby.png", x: 0, y: 0, angle: 0});
+        sprite.add("tween");
+        sprite.animate({x:0, y: 0, angle: 0});
+        this.p.label = this.p.asset +" 10";
        //Bucle constante.
       // console.log("hace cosas");
     }
-});
+});*/
 
-Q.animations("kirby", {
-    move:{frames: [4, 3, 2], 
-        rate:1 / 10,
-    }
-});
 
 Q.UI.Button.extend("AnimationLifes", {
             asset: "kirby.png",
@@ -114,5 +140,12 @@ Q.UI.Text.extend("PruebaDos",{
     },
     step: function(){
 
+    }
+});
+
+Q.animations("kirby_moves", {
+    move:{
+        frames: [4, 3, 2],
+        rate: 1/5
     }
 });

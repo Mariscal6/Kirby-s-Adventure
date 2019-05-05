@@ -9,12 +9,15 @@
 /* Load Sprite */
 compiling.sheet.push({
     "png_path": "kirby.png",
+    //"path_powers": "powersHUD.png",
     "json_path": "sprites.json"
 });
 
 /* Constants */
 const INITIAL_SPEED = 130;
 const MAX_SPEED = 200;
+const BALLOON_MAX_SPEED_Y = 100;
+const BALLOON_MAX_SPEED_X = 160;
 
 /* Animations */
 Q.animations("kirby", {
@@ -142,6 +145,17 @@ Q.animations("kirby", {
         }
     },
 
+    /*Bending*/
+
+    bend: {
+        frames: [5],
+        rate: 1/6,
+        collision_box: {
+            width: 30,
+            height: 30
+        }
+    },
+
 });
 
 /* Object */
@@ -157,6 +171,7 @@ const KIRBY_STATE = {
     FALLING: 7,
     BOUNCING: 8,
     HILLING: 9,
+    BEND: 10,
     DIE: -1,
 };
 
@@ -172,10 +187,9 @@ Q.Sprite.extend("Kirby", {
         this._super(p, {
             sheet: "kirby",
             sprite: "kirby",
-            x: 100,
-            y: 100,
-            isStatue: false
+            isStatue: false,
         });
+
 
         this.state = KIRBY_STATE.IDLE;
         this.last_animation = "";
@@ -214,6 +228,9 @@ Q.Sprite.extend("Kirby", {
 
         this.on("highJump", this, "highJump");
         this.on("balloon", this, "balloon");
+
+        this.on("bend", this, "bend");
+        this.on("bend_end", this, "bend_end");
     },
 
     /* ATTACK */
@@ -257,6 +274,33 @@ Q.Sprite.extend("Kirby", {
         this.p.gravity = 0.5;
     },
 
+    /*BEND*/
+
+    bend: function(){
+        // Si somos estatua, no nos debe dejar.
+        if(this.p.isStatue) return;
+
+        switch(this.state){
+            case KIRBY_STATE.BALLOON:
+            break;
+            default:
+                this.trigger("change_state", KIRBY_STATE.BEND);
+            break;
+        };
+        this.p.gravity = 0.5;
+        this.p.isStatue=true;
+        this.p.vx=0;
+    },
+
+    bend_end: function () {
+
+        if (this.state == KIRBY_STATE.BEND) {
+            this.trigger("change_state", KIRBY_STATE.IDLE);
+            this.p.isStatue=false;
+        }
+
+    },
+
     // Update
     update: function(dt){
         this._super(dt);
@@ -264,14 +308,11 @@ Q.Sprite.extend("Kirby", {
 
     // Update Step
     step: function(dt){
-        if (this.isOnHill && this.state != KIRBY_STATE.BALLOONING) {
-            //console.log(1);
-            this.state=KIRBY_STATE.HILLING;
-        }
+        this.p.gravity = 0.5; // Reset Gravity
 
         switch(this.state){
             case KIRBY_STATE.IDLE:
-                this.p.angle=0;
+
                 this.p.speed = INITIAL_SPEED; // Reset Speed to initial
 
                 if (this.p.vy > 0 || this.last_state == KIRBY_STATE.BALLOON) {
@@ -338,7 +379,7 @@ Q.Sprite.extend("Kirby", {
             break;
 
             case KIRBY_STATE.BALLOON:
-            
+                this.p.vy =Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
                 this.flyingTime += dt;
                 if(this.flyingTime < 4/6){
                     this.flying_constant = false;
@@ -412,19 +453,24 @@ Q.Sprite.extend("Kirby", {
             break;
             case KIRBY_STATE.HILLING:
 
-                if(this.p.vy < 0){
+                /*if(this.p.vy < 0){
                     this.p.speed = INITIAL_SPEED-50;
                 } else {
                     this.p.speed = INITIAL_SPEED + 50;
                 }
-               // Reset Speed to initial
-                this.trigger("cplay", "idle");
+               // Reset Speed to initial*/
+                this.trigger("cplay", "move");
                 //this.trigger("change_state", KIRBY_STATE.IDLE);
+                
+            break;
+
+            case KIRBY_STATE.BEND:
+                this.trigger("cplay", "bend");
+                //this.trigger("change_state", KIRBY_STATE.IDLE);
+
             break;
         }
-
-        this.isOnHill=false;
-        //this.p.angle=0;
+        
         // Flip in movement
         this.p.flip = (this.p.direction === "left") ? "x" : undefined;
     },

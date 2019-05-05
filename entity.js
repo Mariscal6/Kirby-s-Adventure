@@ -9,17 +9,6 @@ Q.component("Entity", {
 
         this.entity.on("change_state", this, "change_state");
         this.entity.on("cplay", this, "play");
-
-        this.entity.on("bump.left, bump.right", this, "bumping");
-    },
-    
-    bumping: function(collided){
-        this.entity.p.angle = 0.0;
-
-        if(collided.obj.isA("Hill")){
-            this.entity.isOnHill = true;
-            this.entity.p.angle = 45 * (collided.obj.p.Direction === "Left" ? 1 : -1);
-        }
     },
 
     change_state: function(state){

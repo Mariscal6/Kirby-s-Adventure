@@ -50,15 +50,24 @@ Q.scene("HUD", function(stage) {
         scaleToFit:true
     }), power);
 
+   // var aux = new Q.PruebaDos();
     //Aun queda... no toqueis
-    /*stage.insert(new Q.UI.Button({
-        label: "Another Button\n" + 
-        lifes.png,
-        scaleToFit: true
-        //asset: "lifes.png"
-    }, function(){
-        this.p.label =  "Another Button" + "lifes.png";
-    }), lifes);*/
+    stage.insert(new Q.UI.Button({
+      init: function(p){  
+        this.super({ 
+            //label: "nada",
+            size: 20,
+            scaleToFit: true,
+            asset: "lifes2.png"});
+    }, 
+    step: function(){
+        //console.log(this.p.asset);
+        this.p.asset = "lifes2.png";
+        sleep(1000);
+       // console.log(this.p.asset);
+        this.p.asset = "lifes1.png";
+        sleep(1000);
+    }), lifes);
 
 });
 
@@ -78,7 +87,8 @@ Q.UI.Text.extend("Lifes",{
     },
     step: function(){
        this.p.label = "Lifes X   " + "10";
-       this.trigger("cplay", "move");
+       //Bucle constante.
+      // console.log("hace cosas");
     }
 });
 
@@ -92,4 +102,17 @@ Q.UI.Button.extend("AnimationLifes", {
             asset: "kirby.png",
             x:0,
             y:0
+});
+
+Q.UI.Text.extend("PruebaDos",{
+    init: function(p){
+        this.super({
+            lablel: "funciona",
+            size: 20,
+            weight: 800
+        });
+    },
+    step: function(){
+
+    }
 });

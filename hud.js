@@ -23,11 +23,11 @@ Q.scene("HUD", function(stage) {
     var power = stage.insert(new Q.UI.Container({
         fill: "red",
         border: 5,
-        asset: "kirby.png",
+        asset: "powersHUD.png",
         w: 100,
         h: 120,
         y: 470,
-        x: 570
+        x: 560
     }));
 
     var lifes = stage.insert(new Q.UI.Container({
@@ -38,23 +38,27 @@ Q.scene("HUD", function(stage) {
         y: 470,
         x: 710
     }));
-
-   //lifes.insert
   
 
-    stage.insert(new Q.Lifes(), lifes);
+    //stage.insert(new Q.Lifes(), lifes);
     stage.insert(power, container);
     stage.insert(new Q.UI.Button({
-        asset: 'kirby.png',
-        x: 20,
-        y: 20,
-        w: 0,
-        h: 0,
-        scaleToFit: true,
-        scale: 2.85
-
+        asset: "powersHUD.png",
+        x: 0,
+        y: 0,
+        scale: 1.5,
+        scaleToFit:true
     }), power);
 
+    //Aun queda... no toqueis
+    /*stage.insert(new Q.UI.Button({
+        label: "Another Button\n" + 
+        lifes.png,
+        scaleToFit: true
+        //asset: "lifes.png"
+    }, function(){
+        this.p.label =  "Another Button" + "lifes.png";
+    }), lifes);*/
 
 });
 
@@ -62,16 +66,30 @@ Q.scene("HUD", function(stage) {
 Q.UI.Text.extend("Lifes",{
     init: function(p){
         this._super({
-            label: "Lifes X ",
-            color: "blue",
+            label: "Lifes X            ",
+            color: "black",
+            asset: "kirby.png",
             x: 0,
             y: 0,
-            size: 18,
-            weight:80,
+            size: 20,
+            weight:800,
             family: 'myFirstFont',
         });
     },
-    score: function(){
-        this.p.label = "Dani mas gordito";
+    step: function(){
+       this.p.label = "Lifes X   " + "10";
+       this.trigger("cplay", "move");
     }
+});
+
+Q.animations("kirby", {
+    move:{frames: [4, 3, 2], 
+        rate:1 / 10,
+    }
+});
+
+Q.UI.Button.extend("AnimationLifes", {
+            asset: "kirby.png",
+            x:0,
+            y:0
 });

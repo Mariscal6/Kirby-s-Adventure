@@ -296,8 +296,8 @@ Q.Sprite.extend("Kirby", {
 
         if (this.state == KIRBY_STATE.BEND) {
             this.trigger("change_state", KIRBY_STATE.IDLE);
-            this.p.isStatue=false;
         }
+        this.p.isStatue=false;
 
     },
 

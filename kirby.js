@@ -508,7 +508,6 @@ Q.Sprite.extend("Kirby", {
 
                 }
                 
-                //this.trigger("change_state", KIRBY_STATE.IDLE);
 
             break;
         }

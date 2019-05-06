@@ -8,7 +8,7 @@
 
 /* Load Sprite */
 compiling.sheet.push({
-    "png_path": "kirby.png",
+    "png_path": "enemy.png",
     //"path_powers": "powersHUD.png",
     "json_path": "sprites.json"
 });
@@ -40,64 +40,9 @@ Q.animations("kirby", {
         rate:1 / 10,
         collision_box: {
             width: 30,
-            height: 30,
-        }
-    },
-    /* ABSORBING */
-    start_absorbing: {
-        frames: [12],
-        rate: 1 / 8,
-        collision_box: {
-            width: 30,
-            height: 30
-        },
-    },
     
-    absorbing: {
-        frames: [14],
-        collision_box: {
-            width: 30,
-            height: 40
-        },
-    },
-
-    /* SPIN */
-    spin: {
-        frames: [7, 8, 9, 0],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
         }
     },
-
-    /* FALLING */
-    falling_head: {
-        frames: [8],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-    falling: {
-        frames: [11],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-    bouncing_head:{
-        rames: [8],
-        rate: 1 / 16,
-        collision_box: {
-            width: 30,
-            height: 30,
-        }
-    },
-
-
     /*JUMPING */
     jumping: {
         frames: [7],
@@ -107,66 +52,6 @@ Q.animations("kirby", {
             height: 30,
         }
     },
-    
-    /* FLYING */
-    flying: {
-        frames: [13, 14, 21, 22],
-        rate: 1/6,
-        collision_box: {
-            width: 30,
-            height: 30
-        }
-    },
-    flying_static_down:{
-        frames: [22, 23],
-        rate: 1/3,
-        collision_box: {
-            width: 44,
-            height: 44
-        }
-    },
-    flying_static_up:{
-        frames: [22, 23],
-        rate: 1/8,
-        collision_box: {
-            width: 44,
-            height: 44
-        }
-    },
-
-    /* SKIDDING*/
-
-    skidding: {
-        frames: [10],
-        rate: 1/6,
-        collision_box: {
-            width: 30,
-            height: 30
-        }
-    },
-
-    /*Bending*/
-
-    bend: {
-        frames: [5],
-        rate: 1/6,
-        collision_box: {
-            width: 30,
-            height: 20
-        }
-    },
-
-    /*SLIDING*/
-
-    slide: {
-        frames: [6],
-        rate: 1/6,
-        collision_box: {
-            width: 30,
-            height: 20
-        }
-    },
-
 });
 
 /* Object */

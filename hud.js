@@ -130,19 +130,6 @@ Q.UI.Button.extend("AnimationLifes", {
             y:0
 });
 
-Q.UI.Text.extend("PruebaDos",{
-    init: function(p){
-        this.super({
-            lablel: "funciona",
-            size: 20,
-            weight: 800
-        });
-    },
-    step: function(){
-
-    }
-});
-
 Q.animations("kirby_moves", {
     move:{
         frames: [4, 3, 2],

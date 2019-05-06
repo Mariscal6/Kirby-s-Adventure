@@ -1,17 +1,18 @@
 /* Load Sprite */
 compiling.sheet.push({
-    "png_path": "waddle.png",
-    "json_path": "enemies.json"
+    "png_path": "waddle1.png",
+    "json_path": "waddle.json"
 });
 
 
 /* Animations */
-Q.animations("Waddle", {
+Q.animations("waddle", {
     idle: {
-        frames: [0],
+        frames: [0,1],
+        rate:1 / 10,
         collision_box: {
-            width: 19,
-            height: 16,
+            width: 38,
+            height: 32,
         }
     }
 });
@@ -20,17 +21,18 @@ Q.animations("Waddle", {
 
 
 Q.Sprite.extend("Waddle", {
-
+    
     init: function(p){
-
+       
         this._super(p, {
             sheet: "waddle",
             sprite: "waddle",
             isStatue: false,
+            vx: -20,
         });
 
 
-        this.add("platformerControls, Entity");
+        this.add("Entity, aiBounce");
 
         /* Events */
        
@@ -51,7 +53,7 @@ Q.Sprite.extend("Waddle", {
 
     // Update Step
     step: function(dt){
-       
+       this.trigger("cplay", "idle");
     },
 
 });

@@ -305,7 +305,7 @@ Q.Sprite.extend("Kirby", {
                 this.trigger("change_state", KIRBY_STATE.BEND);
                 this.p.gravity = 0.5;
                 this.p.isStatue=true;
-                 this.p.vx=0;
+                this.p.vx=0;
                 break;
         };
         

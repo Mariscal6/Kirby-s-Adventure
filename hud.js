@@ -7,28 +7,95 @@
 
 /**/
 compiling.sheet.push({
-    "png_path": "HUD/hudKirby.png",
+    "png_path": "HUD/hud.png",
     "json_path": "hud.json"
 }); 
 
 compiling.sheet.push({
     "png_path": "HUD/lifes.png",
+    "json_path": "lifes.json"
+});
+
+compiling.sheet.push({
+    "png_path": "HUD/powers.png",
+    "json_path": "powers.json"
+});
+
+/*compiling.sheet.push({
+    "png_path": "HUD/lifes.png",
     "json_path": "hud.json"
-});
+});*/
 
-Q.animations("kirby_moves", {
+Q.animations("lifesMove", {
     move:{
-        frames: [4, 3, 2],
+        frames: [0, 1, 2, 1],
         rate: 1/5
+    }
+})
+
+Q.animations("powersKirby", {
+    normal: {
+        frames: [0]
+    },
+    back_drop:{
+        frames:[1]
     }
 });
 
-Q.animations({
-    normal:{
-        frames: [0,1,2],
-        rate: 1/5
+
+Q.Sprite.extend("MainHUD", {
+    init: function(p){
+        this._super(p, {
+            sheet: "hud",
+            x:0,
+            y:0,
+            scaleToFit: true
+        });
+        this.add('animation');
+    },
+    step: function(){
     }
 });
+
+
+
+Q.Sprite.extend("LifesHUD", {
+    init: function(p){
+        this._super(p, {
+            sheet: "lifes",
+            sprite: "lifesMove",
+            x:185 + 38,
+            y:0,
+            h: 45,
+            w: 44
+        });
+        this.add('animation');
+    },
+    step: function(){
+        this.play("move");
+    }
+});
+
+Q.Sprite.extend("PowersHUD", {
+    init: function(p){
+        this._super(p, {
+            sheet: "powers",
+            sprite: "powersKirby",
+            x: 70,
+            y:0,
+            h: 114,
+            w: 16,
+            scaleToFit: true
+        });
+        this.add('animation');
+    },
+    step: function(){
+       // this.play("move");
+    }
+});
+
+
+
 /*
 Q.animations("powers_kirby", {
     normal:{
@@ -52,19 +119,6 @@ Q.Sprite.extend("Vidas", {
     }
 });
 ;*/
-Q.Sprite.extend("MainHUD", {
-    init: function(p){
-        this._super(p, {
-            sprite: "hud",
-            x:0,
-            y:0
-        });
-        this.add('animation');
-    },
-    step: function(){
-
-    }
-});
 
 
 
@@ -87,7 +141,7 @@ Q.Sprite.extend("MainHUD", {
 
 Q.scene("HUD", function(stage) {
     
-    var container = stage.insert(new Q.UI.Container({
+    var container = stage.insert(new Q.UI.Button({
         fill: "pink",
         border: 5,
         w: 800,
@@ -112,20 +166,24 @@ Q.scene("HUD", function(stage) {
         h: 120,
         y: 470,
         x: 560
-    }));
-
-    var lifes = stage.insert(new Q.UI.Container({
-        fill: "yellow",
-        border: 5,
-        w: 125,
-        h: 80,
-        y: 470,
-        x: 710
     }));*/
+
+    stage.insert(new Q.UI.Button({
+        border: 0,
+        w: 43,
+        h: 32,
+        y: 470,
+        x: 710,
+    }), container);
   
-    //stage.insert(new Q.MainHUD(), container);
-    //stage.insert(new Q.Vidas(), lifes);  
-   // stage.insert(new Q.Powers_Kirby(), power);
+  
+    stage.insert(new Q.MainHUD(), container);
+    //stage.insert(lifes, container);
+    stage.insert(new Q.LifesHUD(), container);
+    stage.insert(new Q.PowersHUD(), container);
+    //stage.insert(new Q.LifesHUD(), lifes);
+    //stage.insert(lifes, container);
+    
 
 });
 

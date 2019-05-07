@@ -2,14 +2,7 @@
     "hud":{
         "sx": 0,
         "sy": 0,
-        "tileW":800,
-        "tileH":150
-    },
-    "lifes":{
-        "sx": 0,
-        "sy": 0,
-        "tileW":24,
-        "tileH":24
+        "tileW": 800,
+        "tileH": 153
     }
-
 }

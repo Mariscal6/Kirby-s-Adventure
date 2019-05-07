@@ -134,6 +134,35 @@ Q.animations("kirby", {
         }
     },
 
+    /* BLOWING */
+
+    start_blowing:{
+        frames: [21],
+        rate: 1/16,
+        collision_box: {
+            width: 44,
+            height: 44
+        }
+    },
+
+    blowing1:{
+        frames: [14],
+        rate: 1/16,
+        collision_box: {
+            width: 44,
+            height: 44
+        }
+    },
+
+    blowing2:{
+        frames: [13],
+        rate: 1/16,
+        collision_box: {
+            width: 44,
+            height: 44
+        }
+    },
+
     /* SKIDDING*/
 
     skidding: {
@@ -257,7 +286,7 @@ Q.Sprite.extend("Kirby", {
 
         switch(this.state){
             case KIRBY_STATE.BALLOON:
-                this.trigger("change_state", KIRBY_STATE.IDLE);
+                this.trigger("change_state", KIRBY_STATE.BLOWING);
             break;
             case KIRBY_STATE.BEND:
                 this.trigger("change_state", KIRBY_STATE.SLIDING);
@@ -385,6 +414,7 @@ Q.Sprite.extend("Kirby", {
                     if(this.absorbTime < 1/8){
                         this.trigger("cplay", "start_absorbing");
                     }else{
+                        this.absorbTime = 0;
                         this.trigger("change_state", KIRBY_STATE.IDLE);
                         this.p.isStatue = false;
                     }
@@ -393,8 +423,28 @@ Q.Sprite.extend("Kirby", {
             break;
 
             case KIRBY_STATE.BLOWING:
+                this.p.vy = Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
+                this.blowingTime += dt;
 
-                this.blowingTime = 0;
+                if (this.blowingTime < 1 / 8) {
+
+                    this.trigger("cplay", "start_blowing");
+
+                } else if (this.blowingTime < 2 / 8) {
+                    
+                    this.trigger("cplay", "blowing1");
+
+                } else if (this.blowingTime < 3 / 8) {
+
+                    this.trigger("cplay", "blowing2");
+
+                } else {
+
+                    this.blowingTime = 0;
+                    this.trigger("cplay", "falling");
+                    this.trigger("change_state", KIRBY_STATE.FALLING);
+                    
+                }
 
             break;
 

@@ -13,7 +13,7 @@ const Q = window.Q = Quintus()
 // SetUp
 .setup("#quintus-kirby",{
     width: 800, // Set the default width to 800 pixels
-    height: 600 // Set the default height to 600 pixels
+    height: 600, // Set the default height to 600 pixels
 })
 .enableSound().controls();
 

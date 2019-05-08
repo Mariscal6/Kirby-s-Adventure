@@ -1,7 +1,7 @@
 compiling.level.push(
     {"level1": "level.tmx"}
 );
-
+Q.state.set({ score: 0, lives: 3 });
 Q.scene("level1", function(stage) {
     
     Q.stageTMX("level.tmx", stage);
@@ -11,4 +11,6 @@ Q.scene("level1", function(stage) {
         /*minY: 0, */
         /*maxY: 0,*/
     });
+    console.log(stage.options.gridH);
 });
+

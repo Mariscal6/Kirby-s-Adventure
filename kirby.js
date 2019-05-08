@@ -328,7 +328,6 @@ Q.Sprite.extend("Kirby", {
     bend: function(){
         // Si somos estatua, no nos debe dejar.
         if(this.p.isStatue) return;
-
         switch (this.state) {
             case KIRBY_STATE.IDLE:
                 this.trigger("change_state", KIRBY_STATE.BEND);
@@ -336,6 +335,13 @@ Q.Sprite.extend("Kirby", {
                 this.p.isStatue=true;
                 this.p.vx=0;
                 break;
+            case KIRBY_STATE.MOVING:
+                console.log(1);
+                this.trigger("change_state", KIRBY_STATE.BEND);
+                this.p.gravity = 0.5;
+                this.p.isStatue=true;
+                this.p.vx=0;
+            break;
         };
         
     },
@@ -358,8 +364,12 @@ Q.Sprite.extend("Kirby", {
     // Update Step
     step: function(dt){
         this.p.gravity = 0.5; // Reset Gravity
-
+        if(this.p.y <= 311){
+            console.log(this.p.collisions);
+        }
+        
         switch(this.state){
+            
             case KIRBY_STATE.IDLE:
 
                 this.p.speed = INITIAL_SPEED; // Reset Speed to initial
@@ -543,7 +553,6 @@ Q.Sprite.extend("Kirby", {
             case KIRBY_STATE.SLIDING:
 
                 this.slideTime+=dt;
-                console.log(this.slideTime);
                 if (this.slideTime < 0.5) {
 
                     this.p.vx = (this.p.direction === "left") ? -MAX_SPEED : MAX_SPEED;
@@ -552,7 +561,6 @@ Q.Sprite.extend("Kirby", {
                 } else {
                     this.p.vx=0;
                     this.slideTime = 0;
-                    console.log(this.slideTime);
                     this.trigger("change_state", KIRBY_STATE.BEND);
                     this.bend_end();
 

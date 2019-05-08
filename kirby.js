@@ -459,7 +459,7 @@ Q.Sprite.extend("Kirby", {
             break;
 
             case KIRBY_STATE.BALLOON:
-                this.p.vy =Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
+                this.p.vy = Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
                 this.flyingTime += dt;
                 if(this.flyingTime < 4/6){
                     this.flying_constant = false;

@@ -1,0 +1,15 @@
+{
+    "health":{
+        "sx": 0,
+        "sy": 0,
+        "tileW": 163,
+        "tileH": 53
+    },
+
+    "lessHealth":{
+        "sx": 301,
+        "sy": 0,
+        "tileW": 15,
+        "tileH": 53
+    }
+}

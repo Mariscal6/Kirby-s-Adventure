@@ -2,14 +2,14 @@
     "health":{
         "sx": 0,
         "sy": 0,
-        "tileW": 163,
+        "tileW": 27,
         "tileH": 53
     },
 
     "lessHealth":{
-        "sx": 301,
+        "sx": 61,
         "sy": 0,
-        "tileW": 15,
+        "tileW": 27,
         "tileH": 53
     }
 }

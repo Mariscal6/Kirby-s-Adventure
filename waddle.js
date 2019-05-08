@@ -26,7 +26,7 @@ Q.animations("waddle", {
         }
     },
     die:{
-        frames: [2,3],
+        frames: [2,3,4],
         rate:1 / 10,
         collision_box: {
             width: 38,
@@ -87,9 +87,10 @@ Q.Sprite.extend("Waddle", {
                 }
                 else{
                     //bajar la vida del kirby
-                this.p.vy=-500;
-                this.p.direction = (this.p.direction === "left") ? "right" : "left";
+                //this.p.vy=-500;
+                //this.p.direction = (this.p.direction === "left") ? "right" : "left";
                 }
+                this.trigger("change_state", WADDLE_STATE.DIE);
             }
         });
 
@@ -97,11 +98,15 @@ Q.Sprite.extend("Waddle", {
     attack: function(){
         //this.isStatue = true;
         this.p.vx=0;
-      /*  var fire = stage.insert(new Q.FireWaddle({
+        //console.log(Q.stage(0));
+        Q.stage(1);
+        /*
+       var fire = stage.insert(new Q.FireWaddle({
                     y:this.p.y,
                     x:this.p.x,
                     direction:this.p.direction
-         }));*/
+         }));
+        */
 
     },
         
@@ -136,7 +141,6 @@ Q.Sprite.extend("Waddle", {
                 this.gravity=false;
                 this.p.vx=0;
                 this.dieTime+=dt;
-                console.log(this.dieTime)
                 if(this.dieTime>=0.15){
                     this.destroy();
                 }

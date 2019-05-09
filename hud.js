@@ -123,8 +123,8 @@ Q.Sprite.extend("scoreNumbers", {
         this._super(p, {
             sheet: "numbers",
             sprite: "numbersLifes",
-            y: 28,
-            w: 300,
+            y: 30,
+            w: 0,
             h: 0
         });
         this.add('animation');
@@ -220,7 +220,7 @@ Q.scene("HUD", function(stage) {
     for(let index = 0; index < 7; ++index){
         
         stage.insert(new Q.scoreNumbers({
-            x:0 - index * 24,
+            x: 27 - index * 30,
             index: index
         }), container);
         

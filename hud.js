@@ -38,6 +38,7 @@ Q.animations("powersKirby", {
     back_drop:{
         frames:[1]
     }
+    
 });
 
 Q.animations("healthKirby", {
@@ -49,6 +50,7 @@ Q.animations("healthKirby", {
         frames: [2]
     }
 });
+
 
 Q.animations("numbersLifes", {
     0:{frames: [0]},
@@ -78,21 +80,6 @@ Q.Sprite.extend("MainHUD", {
     }
 });
 
-Q.Sprite.extend("NumberLifes", {
-    init: function(p){
-        this._super(p, {
-            sheet: "numbers",
-            sprite: "lifesMove",
-            x:289,
-            y:0
-        });
-    },
-    step: function(){
-
-    }
-})
-
-
 Q.Sprite.extend("LifesHUD", {
     init: function(p){
         this._super(p, {
@@ -110,29 +97,63 @@ Q.Sprite.extend("LifesHUD", {
     }
 });
 
+Q.Sprite.extend("lifesNumber", {
+    init: function(p){
+        this._super({
+            sheet: "numbers",
+            sprite: "numbersLifes",
+            x: p.x,
+            y: 0,
+            status: p.number,
+            w: 335,
+            h: 0
+        });
+        this.add('animation');
+    },
+    step: function(){
+        if(this.p.status == 'first')
+            this.play(0);
+        else
+            this.play(Q.state.get("lives"));
+    }
+});
 
+Q.Sprite.extend("scoreNumbers", {
+    init: function(p){
+        this._super(p, {
+            sheet: "numbers",
+            sprite: "numbersLifes",
+            y: 28,
+            w: 300,
+            h: 0
+        });
+        this.add('animation');
+    },
+    step: function(){
+        this.play(Math.floor(Q.state.get("score") / (10 ** this.p.index)) % 10);
+    }
+});
 
 Q.Sprite.extend("HealthBar", {
     init: function(p){
-        this._super({
+        this._super(p, {
             sheet: "health",
             sprite: "healthKirby",
-            x: p.x,
             y: 0,
             h: 111,
             w: 335,
-            status: p.status
         });
         this.add('animation');
+        console.log(this.p.index);
     },
     
     step: function(){
         
-        if(this.p.status == "nohit"){
-            this.play("shine");
-        }
-        else{
+        if(this.p.index >= Q.state.get("bar")){
             this.play("hyphen");
+        }
+        else  {
+            this.play("shine");
         }
     }
 });
@@ -152,6 +173,7 @@ Q.Sprite.extend("PowersHUD", {
         this.add('animation');
     },
     step: function(){
+        this.play(Q.state.get("power"));
     }
 });
 
@@ -167,27 +189,41 @@ Q.scene("HUD", function(stage) {
         y: 497,
         x: 400,
     }));
-  
+    var aux = 100000000;
+    aux.toString();
+    
     stage.insert(new Q.MainHUD(), container);
     stage.insert(new Q.LifesHUD(), container);
     stage.insert(new Q.PowersHUD(), container);
+
     for (let index = 0; index < 6; index++) {
         var aux = index * 27;
-        console.log(aux);
         stage.insert(new Q.HealthBar({
             x: aux, 
             y: 0,
-            status: "nohit"
+            status: "nohit", 
+            index: index
         }),container);
     }
-     /*for(let index = 6 - 5; index < 6; index++){
-        stage.insert(new Q.HealthBar({x:index*27, status: "hyphen"}), container);
-    }*/
-    for(let index = 0; index < 2; index++){
-        /*var lifes = 
-        stage.insert(new Q.NumberLifes({x: 289 + index * 29}), container);*/
-}
+    stage.insert(new Q.lifesNumber({
+        x: 295, 
+        number: 'first'
+    }), container);
     
-
+    stage.insert(new Q.lifesNumber({
+        x: 322,
+        number: 'second'
+    }), container);
+    
+    var scoreAux = Q.state.get("score");
+    
+    for(let index = 0; index < 7; ++index){
+        
+        stage.insert(new Q.scoreNumbers({
+            x:0 - index * 24,
+            index: index
+        }), container);
+        
+    }
 });
 

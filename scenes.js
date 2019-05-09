@@ -1,7 +1,7 @@
 compiling.level.push(
     {"level1": "level.tmx"}
 );
-Q.state.set({ score: 100, lives: 3,  bar: 5, power: "back_drop"});
+Q.state.set({ score: 999999, lives: 3,  bar: 1, power: "back_drop"});
 
 Q.scene("level1", function(stage) {
     

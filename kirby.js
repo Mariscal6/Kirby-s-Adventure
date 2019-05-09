@@ -323,26 +323,21 @@ Q.Sprite.extend("Kirby", {
     },
 
     /*BEND*/
-
     bend: function(){
         // Si somos estatua, no nos debe dejar.
-        var stage=Q.stage(0);
-        stage.insert(new Q.Absorb({
-            direction:this.p.direction
-        }));
         if(this.p.isStatue) return;
         switch (this.state) {
             case KIRBY_STATE.IDLE:
                 this.trigger("change_state", KIRBY_STATE.BEND);
                 this.p.gravity = 0.5;
-                this.p.isStatue=true;
-                this.p.vx=0;
+                this.p.isStatue = true;
+                this.p.vx = 0;
                 break;
             case KIRBY_STATE.MOVING:
                 this.trigger("change_state", KIRBY_STATE.BEND);
                 this.p.gravity = 0.5;
-                this.p.isStatue=true;
-                this.p.vx=0;
+                this.p.isStatue = true;
+                this.p.vx = 0;
             break;
         };
         
@@ -350,9 +345,9 @@ Q.Sprite.extend("Kirby", {
 
     bend_end: function () {
 
-        if (this.state == KIRBY_STATE.BEND ) {
+        if (this.state == KIRBY_STATE.BEND) {
             this.trigger("change_state", KIRBY_STATE.IDLE);
-            this.p.isStatue=false;
+            this.p.isStatue = false;
         }
 
     },
@@ -367,6 +362,8 @@ Q.Sprite.extend("Kirby", {
     step: function(dt){
         this.p.gravity = 0.5; // Reset Gravity
         
+        Q("Absorb").first().onScreen = false;
+
         switch(this.state){
             
             case KIRBY_STATE.IDLE:
@@ -418,6 +415,7 @@ Q.Sprite.extend("Kirby", {
                         this.trigger("cplay", "start_absorbing");
                     }else{
                         this.trigger("cplay", "absorbing");
+                        Q("Absorb").first().onScreen = true;
                     }
                 }else{
                     if(this.absorbTime < 1/8){

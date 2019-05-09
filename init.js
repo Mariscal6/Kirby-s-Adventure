@@ -2,7 +2,7 @@
 load(function(){
     
     // Modo Debug
-    Q.debug = true;
+    //Q.debug = true;
    
     Q.stageScene("level1", 0);
 

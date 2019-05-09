@@ -29,7 +29,8 @@ Q.Sprite.extend("Hill", {
     },
 
     "hilling": function(collision){
-        
+        if(collision.obj.isParticle) return; // If Particle, avoid
+
         if(collision.magnitude <= 0){
             const entity = collision.obj;
             const dir = (this.p.Direction === "Left" ? -1 : 1);

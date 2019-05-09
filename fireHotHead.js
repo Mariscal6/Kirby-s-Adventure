@@ -1,11 +1,10 @@
 /* Animations */
-Q.animations("fireWaddle", {
+Q.animations("fireHotHead", {
     fireL:{
         frames: [4],
         rate:1 / 10,
         flip:false,
         collision_box: {
-            x:10,
             width: 38,
             height: 22,
         },
@@ -22,18 +21,18 @@ Q.animations("fireWaddle", {
 });
 
 /* estados */
-const FIREWADDLE_STATE = {
+const FIREHOTHEAD_STATE = {
     IDLE: 0,
     DIE: -1,
 };
 
-Q.Sprite.extend("FireWaddle", {
+Q.Sprite.extend("FireHotHead", {
     
     init: function(p){
        
         this._super(p, {
-            sheet: "waddle",
-            sprite: "fireWaddle",
+            sheet: "hotHead",
+            sprite: "fireHotHead",
             frame: 4,
             isStatue: false,
             direction: "left",
@@ -44,7 +43,7 @@ Q.Sprite.extend("FireWaddle", {
         });
 
         //times
-        this.state=FIREWADDLE_STATE.IDLE;
+        this.state=FIREHOTHEAD_STATE.IDLE;
         this.fireTime = 0;
         this.touch=false;
         this.terminate=false;
@@ -54,10 +53,10 @@ Q.Sprite.extend("FireWaddle", {
         /* Events */
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
             if(collision.obj.isA("Kirby")){
-               this.trigger("change_state", FIREWADDLE_STATE.DIE);
+               this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
             }
             else if(collision.obj.isA("Hill")){
-                this.trigger("change_state", FIREWADDLE_STATE.DIE);
+                this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
             }
         });
 
@@ -72,15 +71,15 @@ Q.Sprite.extend("FireWaddle", {
     step: function(dt){
         if(this.touch) return
         if(this.fireTime > 2.5){
-            this.trigger("change_state", FIREWADDLE_STATE.DIE);
+            this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
         }
         switch(this.state){
-            case FIREWADDLE_STATE.DIE:
+            case FIREHOTHEAD_STATE.DIE:
                 this.terminate=true;
                 this.fireTime = 0;
                 this.destroy();
             break;
-            case FIREWADDLE_STATE.IDLE:
+            case FIREHOTHEAD_STATE.IDLE:
                 this.fireTime += dt;
             break;
         }

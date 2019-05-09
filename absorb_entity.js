@@ -1,47 +1,39 @@
 /* Load Sprite */
+
 compiling.sheet.push({
-    "png_path": "absorbing_particles.png",
-    "json_path": "absorbing_particles.json"
+    "png_path": "absorbing.png",
+    "json_path": "absorbing.json"
 });
 
-/* Animations */
-Q.animations("particulas", {
+Q.animations("particles", {
     absorb: {
-        frames: [0,1,2],
+        frames: [0, 1, 2],
+        rate: 1/8, 
         collision_box: {
-            width: 64,
-            height: 64,
+            width: 38,
+            height: 32,
         }
     },
 
 });
+
+
+/* Animations */
+
 
 Q.Sprite.extend("Absorb", {
 
     init: function(p){
         console.log(Q("Kirby").first().p.x);
         this._super(p, {
-            sheet: "particulas",
-            sprite: "particulas",
-            x:127,
-            y:350,
-            isStatue: false
+            sheet: "particles",
+            sprite: "particles",
+            gravity:0,
+            skipCollision: true,
+
         });
-        
-        // Flying
-        this.flyingTime = 0;
 
         this.add("Entity");
-
-        /* Events */
-        this.on("highJump", this, "highJump");
-        this.on("balloon", this, "balloon");
-    },
-
-    /* END ATTACK */
-    highJump: function(){
-        this.trigger("change_state", KIRBY_STATE.HIGHJUMP);
-        this.p.gravity = 0.5;
     },
 
     // Update
@@ -51,9 +43,11 @@ Q.Sprite.extend("Absorb", {
 
     // Update Step
     step: function(dt){
+        console.log(Q.animation("particles", "absorb"))
         this.trigger("cplay", "absorb");
-        var kirby = Q("Kirby");
-        this.p.x = kirby.first().p.x;
+        var kirby = Q("Kirby").first();
+        this.p.x = kirby.p.x + kirby.p.w-15;
+        this.p.y = kirby.p.y ;
     },
 
 });

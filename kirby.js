@@ -9,7 +9,6 @@
 /* Load Sprite */
 compiling.sheet.push({
     "png_path": "kirby.png",
-    //"path_powers": "powersHUD.png",
     "json_path": "sprites.json"
 });
 
@@ -328,9 +327,9 @@ Q.Sprite.extend("Kirby", {
     bend: function(){
         // Si somos estatua, no nos debe dejar.
         var stage=Q.stage(0);
-                var fire = stage.insert(new Q.Absorb({
-                    direction:this.p.direction
-                }));
+        stage.insert(new Q.Absorb({
+            direction:this.p.direction
+        }));
         if(this.p.isStatue) return;
         switch (this.state) {
             case KIRBY_STATE.IDLE:
@@ -340,7 +339,6 @@ Q.Sprite.extend("Kirby", {
                 this.p.vx=0;
                 break;
             case KIRBY_STATE.MOVING:
-                console.log(1);
                 this.trigger("change_state", KIRBY_STATE.BEND);
                 this.p.gravity = 0.5;
                 this.p.isStatue=true;

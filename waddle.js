@@ -4,22 +4,11 @@ compiling.sheet.push({
     "json_path": "waddle.json"
 });
 
-
 /* Animations */
 Q.animations("waddle", {
     idle: {
         frames: [0,1],
         rate: 1/ 3,
-        flip: false, 
-        collision_box: {
-            width: 38,
-            height: 32,
-        }
-    },
-    idleR: {
-        frames: [0,1],
-        rate:1 / 3,
-        flip: "x", 
         collision_box: {
             width: 38,
             height: 32,
@@ -59,18 +48,15 @@ Q.Sprite.extend("Waddle", {
             sheet: "waddle",
             sprite: "waddle",
             isStatue: false,
-            vx: 30,
-            direction: "left",
-            flip: false,
             skipCollision: false,
             gravity: 1,
-
         });
         this.state = WADDLE_STATE.IDLE;
 
         // primer ataque
         this.firstAttack=true;
         this.terminateAttack=false;
+        this.velAttack=0;
         //times
         this.dieTime = 0;
         this.attackTime=0;
@@ -82,6 +68,7 @@ Q.Sprite.extend("Waddle", {
         this.on("attack", this, "attack");
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
             if(collision.obj.isA("Kirby")){
+                this.attackTime=0;
                 if(collision.obj.state === KIRBY_STATE.SLIDING ){
                     this.trigger("change_state", WADDLE_STATE.DIE);
                 }
@@ -89,8 +76,10 @@ Q.Sprite.extend("Waddle", {
                     //bajar la vida del kirby
                 //this.p.vy=-500;
                 //this.p.direction = (this.p.direction === "left") ? "right" : "left";
-                }
                 this.trigger("change_state", WADDLE_STATE.DIE);
+                
+                }
+               
             }
         });
 
@@ -99,14 +88,12 @@ Q.Sprite.extend("Waddle", {
         //this.isStatue = true;
        
         var stage=Q.stage(0);
-       
-       var fire = stage.insert(new Q.FireWaddle({
-                    y:this.p.y,
-                    x:this.p.x,
-                    vx:this.p.vx,
-                    direction:this.direction
+        var fire = stage.insert(new Q.FireWaddle({
+            y:this.p.y,
+            x:this.p.x,
+            vx:this.p.vx,
+            direction:this.direction
          }));
-         var dir = this.direction
          this.p.vx=0;
         
 
@@ -125,17 +112,11 @@ Q.Sprite.extend("Waddle", {
         }
         switch(this.state){
             case WADDLE_STATE.IDLE:
-                this.p.direction = (this.p.vx > 0) ? "right" : "left";
-                if(this.p.direction === "left"){
-                    this.p.flip = "x";
-                    this.p.vx = -30;
-                    this.trigger("cplay", "idle");
-                }else{
-                    this.p.flip = false;
-                    this.p.vx = 30;
-                    this.trigger("cplay", "idleR");
-                }
-                break;
+                
+                this.p.vx = 30 * (this.p.direction === "left" ? -1 : 1);
+                this.trigger("cplay", "idle");
+
+            break;
 
             case  WADDLE_STATE.DIE:
                 this.trigger("cplay", "die");
@@ -146,10 +127,11 @@ Q.Sprite.extend("Waddle", {
                 if(this.dieTime>=0.15){
                     this.destroy();
                 }
-                break;
+            break;
 
             case WADDLE_STATE.ATTACK:
                 this.endAttackTime += dt;
+                this.velAttack=this.p.vx;
                 if(this.firstAttack){
                     this.trigger("cplay", "attack");
                     this.firstAttack=false;
@@ -158,6 +140,8 @@ Q.Sprite.extend("Waddle", {
                 if(this.endAttackTime>3){
                     this.trigger("change_state", WADDLE_STATE.IDLE);
                     //this.isStatue=false;
+                    this.p.vx=this.velAttack;
+                    console.log(this.velAttack);
                     this.endAttackTime = 0;
                     this.attackTime=0;
                     this.firstAttack=true;
@@ -167,6 +151,9 @@ Q.Sprite.extend("Waddle", {
              
 
         }
+
+        // Flip in movement
+        this.p.flip = (this.p.direction === "left") ? "x" : undefined;
     },
 
 });

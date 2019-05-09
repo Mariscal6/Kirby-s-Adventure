@@ -2,7 +2,7 @@
     "lifes": {
         "sx": 0,
         "sy": 0,
-        "tileW": 47,
-        "tileH": 47
+        "tileW": 26,
+        "tileH": 24
     }
 }

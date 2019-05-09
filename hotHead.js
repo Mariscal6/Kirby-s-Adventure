@@ -160,7 +160,6 @@ Q.Sprite.extend("HotHead", {
                     this.trigger("change_state", HOTHEAD_STATE.IDLE);
                     //this.isStatue=false;
                     this.p.vx=this.velAttack;
-                    console.log(this.velAttack);
                     this.endAttackTime = 0;
                     this.attackTime=0;
                     this.firstAttack=true;

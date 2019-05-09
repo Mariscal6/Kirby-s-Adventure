@@ -12,8 +12,8 @@ const Q = window.Q = Quintus()
 .include("Sprites, Scenes, Anim, 2D, TMX, Input, Audio, Touch, UI")
 // SetUp
 .setup("#quintus-kirby",{
-    width: 800, // Set the default width to 800 pixels
-    height: 600, // Set the default height to 600 pixels
+    width: 256 * 2, // Set the default width to 800 pixels
+    height: 240 * 2, // Set the default height to 600 pixels
 })
 .enableSound().controls();
 

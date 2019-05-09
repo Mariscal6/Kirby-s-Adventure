@@ -54,13 +54,13 @@ Q.Sprite.extend("Waddle", {
         this.state = WADDLE_STATE.IDLE;
 
         // primer ataque
-        this.firstAttack=true;
-        this.terminateAttack=false;
-        this.velAttack=0;
+        this.firstAttack = true;
+        this.terminateAttack = false;
+        this.velAttack = 0;
         //times
         this.dieTime = 0;
-        this.attackTime=0;
-        this.endAttackTime=0;
+        this.attackTime = 0;
+        this.endAttackTime = 0;
 
         this.add("Entity, aiBounce");
 
@@ -141,7 +141,6 @@ Q.Sprite.extend("Waddle", {
                     this.trigger("change_state", WADDLE_STATE.IDLE);
                     //this.isStatue=false;
                     this.p.vx=this.velAttack;
-                    console.log(this.velAttack);
                     this.endAttackTime = 0;
                     this.attackTime=0;
                     this.firstAttack=true;

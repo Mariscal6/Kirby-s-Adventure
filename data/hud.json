@@ -2,7 +2,7 @@
     "hud":{
         "sx": 0,
         "sy": 0,
-        "tileW": 800,
-        "tileH": 206
+        "tileW": 512,
+        "tileH": 165
     }
 }

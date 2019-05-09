@@ -56,8 +56,10 @@ Q.Sprite.extend("FireWaddle", {
         /* Events */
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
             if(collision.obj.isA("Kirby")){
+                console.log(this);
                this.touch = true;
                this.terminate=true;  
+               this.destroy();
             }
         });
 
@@ -70,10 +72,12 @@ Q.Sprite.extend("FireWaddle", {
 
     // Update Step
     step: function(dt){
-        if(touch) return
+        if(this.touch) return
         this.fireTime += dt;
         if(this.fireTime > 2){
             this.terminate=true;
+            this.fireTime = 0;
+            this.destroy();
         }
     },
 

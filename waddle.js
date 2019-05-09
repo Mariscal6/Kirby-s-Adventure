@@ -97,14 +97,17 @@ Q.Sprite.extend("Waddle", {
     },
     attack: function(){
         //this.isStatue = true;
-        this.p.vx=0;
+       
         var stage=Q.stage(0);
        
        var fire = stage.insert(new Q.FireWaddle({
                     y:this.p.y,
                     x:this.p.x,
-                    direction:this.p.direction
+                    vx:this.p.vx,
+                    direction:this.direction
          }));
+         var dir = this.direction
+         this.p.vx=0;
         
 
     },

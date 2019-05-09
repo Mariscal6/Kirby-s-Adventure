@@ -327,6 +327,10 @@ Q.Sprite.extend("Kirby", {
 
     bend: function(){
         // Si somos estatua, no nos debe dejar.
+        var stage=Q.stage(0);
+                var fire = stage.insert(new Q.Absorb({
+                    direction:this.p.direction
+                }));
         if(this.p.isStatue) return;
         switch (this.state) {
             case KIRBY_STATE.IDLE:
@@ -364,9 +368,6 @@ Q.Sprite.extend("Kirby", {
     // Update Step
     step: function(dt){
         this.p.gravity = 0.5; // Reset Gravity
-        if(this.p.y <= 311){
-            console.log(this.p.collisions);
-        }
         
         switch(this.state){
             

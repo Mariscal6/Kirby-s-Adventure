@@ -2,7 +2,7 @@
     "powers":{
         "sx": 0,
         "sy": 0,
-        "tileW": 64,
-        "tileH": 80
+        "tileW": 72,
+        "tileH": 92
     }
 }

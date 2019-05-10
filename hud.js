@@ -37,7 +37,7 @@ Q.Sprite.extend("MainHUD", {
         this._super(p, {
             sheet: "hud",
             sprite: "hud",
-            x: 0,
+            x: 8,
             y: 0,
             width: 256 * 2,
             height: 240 / 2
@@ -62,10 +62,10 @@ Q.Sprite.extend("LifesHUD", {
         this._super(p, {
             sheet: "lifes",
             sprite: "lifesMove",
-            x: 140,
+            x: 151,
             y: 0,
             w: 26,
-            h: 24,
+            h: 69,
         });
         this.add('animation');
     },
@@ -94,13 +94,13 @@ Q.Sprite.extend("lifesNumber", {
             sheet: "numbers",
             sprite: "numbersLifes",
             y: 0,
-            w: 214,
-            h: 0
+            w: 26,
+            h: 60
         });
         this.add('animation');
     },
     step: function(){
-        if(this.p.status == 'first')
+        if(this.p.number == 'first')
             this.play(0);
         else
             this.play(Q.state.get("lives"));
@@ -113,8 +113,8 @@ Q.Sprite.extend("scoreNumbers", {
             sheet: "numbers",
             sprite: "numbersLifes",
             y: 24,
-            w: 0,
-            h: 0,
+            w: 10,
+            h: 70,
         });
         this.add('animation');
     },
@@ -140,8 +140,8 @@ Q.Sprite.extend("HealthBar", {
         this._super(p, {
             sheet: "health",
             sprite: "healthKirby",
-            w: 214,
-            h: 89,
+            w: 210,
+            h: 110,
         });
         this.add('animation');
     },
@@ -160,13 +160,14 @@ Q.Sprite.extend("HealthBar", {
 /* "powersKirby" */
 
 Q.animations("powersKirby", {
-    normal: {
-        frames: [0]
-    },
-    back_drop:{
-        frames:[1]
-    }
-    
+    normal:{frames:[0]},
+    nothing:{frames:[1]},
+    sword:{frames:[2]},
+    spark:{frames:[3]},
+    fire:{frames:[4]},
+    beam:{frames:[5]},
+    ouch:{frames:[6]},
+    miss:{frames:[7]}
 });
 
 Q.Sprite.extend("PowersHUD", {
@@ -174,10 +175,10 @@ Q.Sprite.extend("PowersHUD", {
         this._super(p, {
             sheet: "powers",
             sprite: "powersKirby",
-            x: 60,
+            x: 78,
             y: 0,
             w: 64,
-            h: 80,
+            h: 135,
             scaleToFit: true
         });
         this.add('animation');
@@ -204,19 +205,19 @@ Q.scene("HUD", function(stage) {
 
     for (let index = 0; index < 6; index++) {
         stage.insert(new Q.HealthBar({
-            x: index * 16, 
+            x: 6 + index * 16, 
             y: 0,
             status: "nohit", 
             index: index
         }), container);
     }
     stage.insert(new Q.lifesNumber({
-        x: 189, 
+        x: 197, 
         number: 'first'
     }), container);
     
     stage.insert(new Q.lifesNumber({
-        x: 206,
+        x: 214,
         number: 'second'
     }), container);
     
@@ -225,7 +226,7 @@ Q.scene("HUD", function(stage) {
     for(let index = 0; index < 7; ++index){
         
         stage.insert(new Q.scoreNumbers({
-            x: 17 - index * 19,
+            x: 2 - index * 16,
             index: index
         }), container);
         

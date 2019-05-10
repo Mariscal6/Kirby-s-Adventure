@@ -58,13 +58,19 @@ Q.Sprite.extend("Absorb", {
     },
 
     absorbing: function(collide){
-        if(collide.obj.isParticle || collide.obj.isA("Kirby") ) return;
+        const entity = collide.obj;
+        if(entity.isParticle || entity.isA("Kirby")) return;
         
-        collide.obj.p.isStatue = true;
 
-        const direction = this.p.flip === "x" ? 1 : -1;
-        const ix = this.p.x + direction * this.sheet().w / 2;
-        collide.obj.p.vx = ix - collide.obj.p.x;
+        entity.p.isStatue = true;
+        const w = this.sheet().w;
+        const direction = this.p.flip === "x" ? -1 : 1;
+        const ix = this.p.x + direction * w / 2;
+        const ex = entity.p.x + direction * entity.sheet().w / 2;
+        
+        console.log((ix - ex) / w);
+
+        //entity.p.vx = (ix - ex) / w * 300;
     },
 
     // Update Step

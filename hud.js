@@ -17,6 +17,10 @@ compiling.sheet.push({
     "png_path": "HUD/health.png",
     "json_path": "health.json"
 });
+compiling.sheet.push({
+    "png_path": "HUD/bossHealth.png",
+    "json_path": "healthBoss.json"
+});
 
 compiling.sheet.push({
     "png_path": "HUD/numbers.png",
@@ -31,6 +35,11 @@ compiling.sheet.push({
 compiling.sheet.push({
     "png_path": "HUD/hudBoss.png",
     "json_path": "boss.json"
+});
+
+compiling.sheet.push({
+    "png_path": "HUD/miniHealth.png",
+    "json_path": "miniHealth.json"
 });
 
 
@@ -158,6 +167,31 @@ Q.Sprite.extend("HealthBar", {
     }
 });
 
+Q.animations("minihealth", {
+    nohit:{frames:[0]},
+    hit: {frames:[1]}
+});
+
+Q.Sprite.extend("miniHealth",{
+    init: function(p){
+        this._super(p, {
+            sprite: "minihealth",
+            w: 210,
+            h: 110,
+        });
+        this.add('animation');
+    },
+    step: function(){
+        if(this.p.index >= Q.state.get("bar")){
+            this.play("hit");
+        }
+        else  {
+            this.play("nohit");
+        }
+    }
+});
+
+
 Q.Sprite.extend("bossHealth",{
     init: function(p){
         this._super(p, {
@@ -169,7 +203,7 @@ Q.Sprite.extend("bossHealth",{
     },
     
     step: function(){
-        
+        //falta solamente esto, que me lo habeis borrado...
     }
 });
 
@@ -262,12 +296,13 @@ Q.scene("MENU", function(stage) {
     }));
     
     stage.insert(new Q.MainHUD({sheet: "hudMenu", sprite: "hud"}), container);
-    stage.insert(new Q.PowersHUD({sheet: "powers",  x: -190, y: -2, width: 60}), container);
+    stage.insert(new Q.PowersHUD({sheet: "powers",  x: -190, y: -6, width: 60}), container);
 
     for (let index = 0; index < 6; index++) {
-        stage.insert(new Q.HealthBar({
-            x: index * 16, 
-            y: 0,
+        stage.insert(new Q.miniHealth({
+            x: 86 + index * 21, 
+            y: 70,
+            sheet: "miniHealth",
             status: "nohit", 
             index: index
         }), container);
@@ -299,12 +334,22 @@ Q.scene("BOSS", function(stage) {
     stage.insert(new Q.MainHUD({sheet: "boss", sprite: "hud"}), container);
     stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: 18}), container);
     stage.insert(new Q.PowersHUD({sheet: "powers",  x: 78, y: 18, width: 64}), container);
-
+    
     for (let index = 0; index < 6; index++) {
         stage.insert(new Q.HealthBar({
             x: index * 16, 
             y: 18,
             sheet: "health",
+            status: "nohit", 
+            index: index
+        }), container);
+    }
+
+    for (let index = 0; index < 15; index++) {
+        stage.insert(new Q.bossHealth({
+            x: -100 + index * 9, 
+            y: 24,
+            sheet: "bossHealth",
             status: "nohit", 
             index: index
         }), container);

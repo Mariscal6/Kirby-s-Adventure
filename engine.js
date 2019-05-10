@@ -18,8 +18,7 @@ const Q = window.Q = Quintus()
 })
 .enableSound().controls();
 
-
-function load(callback){
+const load = (callback) => {
     Q.load(unroll(unroll(Object.values(compiling)).map(e => Object.values(e))).join(","), function() {
         // Loading Threads
         const promises = new Array(
@@ -33,7 +32,30 @@ function load(callback){
                 const all_levels = unroll(Object.values(compiling.level));
                 if(all_levels.length === 0) ok();
 
+                const init_global_entities = function(stage){
+                    stage.insert(new Q.Absorb());
+                };
+
                 Q.loadTMX(all_levels.join(","), function(){
+                    compiling.level.forEach(key => {
+                        const level_name = Object.keys(key)[0];
+                        Q.scene(level_name, function(stage) {
+                            const level = levels[level_name];
+                            Q.stageScene(level.hud, 1);
+                            Q.stageTMX(`${level_name}.tmx`, stage);
+                            init_global_entities(stage);
+                            
+                            console.log((stage.items[0].c.h - 125) / 2);
+                            console.log(Q('Kirby'));
+                            stage.add("viewport").follow(Q('Kirby').first(), {x: level.isDynamic || true, y: true},{
+                                minX: 32,
+                                maxX: stage.items[0].c.w - 32,
+                                minY: +225.5,
+                                maxY: 0,
+                            });
+                        });
+                    });
+
                     ok();
                 });
             }),

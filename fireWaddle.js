@@ -28,7 +28,6 @@ Q.Sprite.extend("FireWaddle", {
             isStatue: false,
             skipCollision: true,
             gravity: false,
-
         });
 
         //times

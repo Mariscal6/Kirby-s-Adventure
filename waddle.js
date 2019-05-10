@@ -1,6 +1,6 @@
 /* Load Sprite */
 compiling.sheet.push({
-    "png_path": "waddle1.png",
+    "png_path": "waddle.png",
     "json_path": "waddle.json"
 });
 
@@ -10,7 +10,7 @@ Q.animations("waddle", {
         frames: [0,1],
         rate: 1/ 3,
         collision_box: {
-            width: 38,
+            width: 32,
             height: 32,
         }
     },
@@ -18,7 +18,7 @@ Q.animations("waddle", {
         frames: [2,3,4],
         rate:1 / 10,
         collision_box: {
-            width: 38,
+            width: 32,
             height: 32,
         },
     },
@@ -26,7 +26,7 @@ Q.animations("waddle", {
         frames: [1,3],
         rate:1 / 10,
         collision_box: {
-            width: 38,
+            width: 32,
             height: 32,
         },
     }
@@ -54,7 +54,7 @@ Q.Sprite.extend("Waddle", {
         });
 
         this.state = WADDLE_STATE.IDLE;
-
+        this.flipActual=false;
         // primer ataque
         this.firstAttack = true;
         this.terminateAttack = false;
@@ -66,24 +66,30 @@ Q.Sprite.extend("Waddle", {
         this.add("Entity, aiBounce");
 
         /* Events */
+
+
         this.on("attack", this, "attack");
-        this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
-            if(collision.obj.isA("Kirby")){
-                this.attackTime=0;
-                if(collision.obj.state === KIRBY_STATE.SLIDING ){
-                    this.trigger("change_state", WADDLE_STATE.DIE);
-                }
-                else{
-                    if(!this.skipCollision){Q.state.set("bar", Q.state.get("bar") - 1);}
-                    this.trigger("change_state", WADDLE_STATE.DIE);
-                }
-            }
-            if(collision.obj.isA(!"FireWaddle")){
-                this.p.flip=this.flipActual;
-            }
-        });
+        this.on("bump", this, "collision");
 
     },
+
+    collision: function(collision){
+        if(collision.obj.isA("Kirby")){
+            this.attackTime=0;
+            if(collision.obj.state === KIRBY_STATE.SLIDING ){
+                this.trigger("change_state", WADDLE_STATE.DIE);
+            }
+            else{
+                if(!this.skipCollision){Q.state.set("bar", Q.state.get("bar") - 1);}
+                this.trigger("change_state", WADDLE_STATE.DIE);
+            }
+        }
+        if(collision.obj.isA("FireWaddle")){
+            this.p.flip=this.flipActual;
+        }
+    },
+
+
     attack: function(){
         //this.isStatue = true;
        
@@ -98,15 +104,9 @@ Q.Sprite.extend("Waddle", {
         
 
     },
-        
-    // Update
-    update: function(dt){
-        this._super(dt);
-    },
 
     // Update Step
     step: function(dt){
-        console.log(this.p.x);
         this.attackTime += dt;
         if(this.attackTime>=5){
             this.trigger("change_state", WADDLE_STATE.ATTACK);
@@ -135,13 +135,16 @@ Q.Sprite.extend("Waddle", {
             break;
 
             case WADDLE_STATE.ATTACK:
+
                 this.endAttackTime += dt;
                 if(this.firstAttack){
+                    this.flipActual=this.p.flip;
                     this.trigger("cplay", "attack");
                     this.firstAttack=false;
                     this.attack();
                 }
-                if(this.endAttackTime>3){
+                
+                if(this.endAttackTime > 3){
                     this.trigger("change_state", WADDLE_STATE.IDLE);
                     //this.isStatue=false;
                     this.endAttackTime = 0;

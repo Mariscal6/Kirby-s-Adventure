@@ -33,6 +33,10 @@ compiling.sheet.push({
     "json_path": "boss.json"
 });
 
+compiling.sheet.push({
+    "png_path": "HUD/bossHealth.png",
+    "json_path": "bossHealth.json"
+});
 
 Q.animations("hud", {
     hud:{
@@ -158,10 +162,20 @@ Q.Sprite.extend("HealthBar", {
     }
 });
 
+Q.animations("bossHealth", {
+    hitted:{
+        frames: [1]
+    },
+    intact:{
+        frames: [0]
+    }
+});
+
 Q.Sprite.extend("bossHealth",{
     init: function(p){
         this._super(p, {
-            sprite: "healthBoss",
+            sheet: "bossH",
+            sprite: "bossHealth",
             w: 19,
             h: 37,
         });
@@ -169,7 +183,13 @@ Q.Sprite.extend("bossHealth",{
     },
     
     step: function(){
-        
+        this.play("hitted");
+        if(this.p.index >= Q.state.get("bossHEALTH")){
+           this.play("hitted");
+        }
+        else  {
+            this.play("intact");
+        }
     }
 });
 
@@ -189,8 +209,6 @@ Q.Sprite.extend("PowersHUD", {
     init: function(p){
         this._super(p, {
             sprite: "powersKirby",
-           
-           // height: 135,
             height: 135,
             scaleToFit: true
         });
@@ -298,7 +316,7 @@ Q.scene("BOSS", function(stage) {
     
     stage.insert(new Q.MainHUD({sheet: "boss", sprite: "hud"}), container);
     stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: 18}), container);
-    stage.insert(new Q.PowersHUD({sheet: "powers",  x: 78, y: 18, width: 64}), container);
+    stage.insert(new Q.PowersHUD({sheet: "powers",  x: 82, y: -5, width: 64}), container);
 
     for (let index = 0; index < 6; index++) {
         stage.insert(new Q.HealthBar({
@@ -320,4 +338,13 @@ Q.scene("BOSS", function(stage) {
         y: -2,
         number: 'second',
     }), container);
+
+    for(let index = 0; index < Q.state.get("bossHEALTH"); ++index){
+        stage.insert(new Q.bossHealth({
+            x: -95 + index * 9,
+            y: 24,
+            index: index
+        }), container);
+        
+    }
 });

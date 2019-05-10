@@ -481,14 +481,14 @@ Q.Sprite.extend("Kirby", {
             case KIRBY_STATE.FALLING:
 
                 if (Math.abs(this.p.vy) < 0.01) {
-                    if (this.fallingSpeed >= 400) {
+                    if (this.fallingSpeed >= 300) {
                         this.trigger("change_state", KIRBY_STATE.BOUNCING);
                     } else {
                         this.trigger("change_state", KIRBY_STATE.IDLE);
                     }
                 } else if (this.p.vy > 1 && this.p.vy < 120) {
                     this.trigger("cplay", "falling");
-                } else if (this.p.vy >= 400) {
+                } else if (this.p.vy >= 300) {
                     this.trigger("cplay", "falling_head");
                 }
                 this.fallingSpeed = this.p.vy;

@@ -14,7 +14,7 @@ Q.Sprite.extend("Door", {
         this.add("Entity, aiBounce");
 
         this.on("bump", function(collision){
-            if(++this.time >= 70){
+            if(++this.time >= 400){
                 Q.state.inc("level", 1);
                 Q.stageScene(`level${Q.state.get("level")}`, 0);
             }

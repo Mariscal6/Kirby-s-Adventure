@@ -1,6 +1,6 @@
 compiling.sheet.push({
-    "png_path": "fireHotHead.png",
-    "json_path": "fireHotHead.json"
+    "png_path": "hotHead.png",
+    "json_path": "hotHead.json"
 });
 
 /* Animations */
@@ -26,7 +26,7 @@ Q.Sprite.extend("FireHotHead", {
     init: function(p){
        
         this._super(p, {
-            sheet: "fireHotHead",
+            sheet: "hotHead",
             sprite: "fireHotHead",
             frame: 4,
             isStatue: false,

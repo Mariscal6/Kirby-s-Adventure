@@ -3,8 +3,7 @@ load(function(){
     
     // Modo Debug
     //Q.debug = true;
-   
-    Q.stageScene("level1", 0);
+    Q.stageScene(Q.state.get("current_level"));
     //Q.debug = false;
 
 

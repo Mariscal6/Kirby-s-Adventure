@@ -2,7 +2,7 @@
     "waddle": {
         "sx": 0,
         "sy": 0,
-        "tileW": 190,
+        "tileW": 160,
         "tileH": 32
     }
 }

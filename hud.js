@@ -333,7 +333,7 @@ Q.scene("BOSS", function(stage) {
     
     stage.insert(new Q.MainHUD({sheet: "boss", sprite: "hud"}), container);
     stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: 18}), container);
-    stage.insert(new Q.PowersHUD({sheet: "powers",  x: 78, y: 18, width: 64}), container);
+    stage.insert(new Q.PowersHUD({sheet: "powers",  x: 82, y: -5, width: 64}), container);
     
     for (let index = 0; index < 6; index++) {
         stage.insert(new Q.HealthBar({

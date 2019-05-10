@@ -1,11 +1,16 @@
+compiling.sheet.push({
+    "png_path": "fireHotHead.png",
+    "json_path": "fireHotHead.json"
+});
+
 /* Animations */
 Q.animations("fireHotHead", {
     fire:{
-        frames: [4],
+        frames: [1,2,3],
         rate:1 / 10,
         collision_box: {
-            width: 38,
-            height: 22,
+            width: 96,
+            height: 64,
         },
     },
 });
@@ -21,7 +26,7 @@ Q.Sprite.extend("FireHotHead", {
     init: function(p){
        
         this._super(p, {
-            sheet: "hotHead",
+            sheet: "fireHotHead",
             sprite: "fireHotHead",
             frame: 4,
             isStatue: false,

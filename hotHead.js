@@ -36,7 +36,7 @@ Q.animations("hotHead", {
 
 const HOTHEAD_STATE = {
     IDLE: 0,
-    ATTACK: 2,
+    ATTACK: 1,
     DIE: -1,
 };
 
@@ -52,6 +52,7 @@ Q.Sprite.extend("HotHead", {
             skipCollision: false,
             gravity: 1,
         });
+
         this.state = HOTHEAD_STATE.IDLE;
 
         // primer ataque
@@ -74,9 +75,7 @@ Q.Sprite.extend("HotHead", {
                     this.trigger("change_state", HOTHEAD_STATE.DIE);
                 }
                 else{
-                    //bajar la vida del kirby
-                //this.p.vy=-500;
-                //this.p.direction = (this.p.direction === "left") ? "right" : "left";
+                if(!this.skipCollision){Q.state.set("bar", Q.state.get("bar") - 1);}
                 this.trigger("change_state", HOTHEAD_STATE.DIE);
                 } 
             }
@@ -122,6 +121,7 @@ Q.Sprite.extend("HotHead", {
             case  HOTHEAD_STATE.DIE:
 
                 this.trigger("cplay", "die");
+                this.skipCollision = true,
                 this.p.isStatue = true;
                 this.gravity=false;
                 this.p.vx=0;

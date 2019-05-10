@@ -10,8 +10,8 @@ Q.animations("particles", {
         frames: [0, 1, 2],
         rate: 1/8, 
         collision_box: {
-            width: 38,
-            height: 32,
+            width: 64,
+            height: 64,
         }
     },
 
@@ -58,7 +58,7 @@ Q.Sprite.extend("Absorb", {
     },
 
     absorbing: function(collide){
-        if(collide.obj.isParticle || collide.obj.isA("Kirby")) return;
+        if(collide.obj.isParticle || collide.obj.isA("Kirby") ) return;
         
         collide.obj.p.isStatue = true;
 
@@ -75,6 +75,8 @@ Q.Sprite.extend("Absorb", {
             this.p.x = kirby.p.x + (50) * (kirby.p.direction === "left" ? -1 : 1);
             this.p.y = kirby.p.y;
 
+            this.p.skipCollision = true;
+            this.p.gravity = false;
             this.p.flip = kirby.p.flip;
         }
     },

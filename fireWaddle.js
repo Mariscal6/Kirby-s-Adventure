@@ -1,3 +1,4 @@
+
 /* Animations */
 Q.animations("fireWaddle", {
     fire:{
@@ -50,7 +51,7 @@ Q.Sprite.extend("FireWaddle", {
             else if(collision.obj.isA("Hill")){
                 this.trigger("change_state", FIREWADDLE_STATE.DIE);
             }
-            
+
         });
 
     },
@@ -76,7 +77,6 @@ Q.Sprite.extend("FireWaddle", {
                 this.fireTime += dt;
             break;
         }
-        this.p.flip = (this.p.direction === "left") ? false : "x";
     },
 
 });

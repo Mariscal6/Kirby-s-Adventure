@@ -5,9 +5,8 @@ load(function(){
     //Q.debug = true;
    
     Q.stageScene("level1", 0);
+    //Q.debug = false;
 
-    Q.stageScene("HUD", 1);
-       
 
     /* Input Controller */
 

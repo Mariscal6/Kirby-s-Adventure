@@ -52,6 +52,7 @@ Q.Sprite.extend("Waddle", {
             skipCollision: false,
             gravity: 1,
         });
+
         this.state = WADDLE_STATE.IDLE;
 
         // primer ataque
@@ -73,11 +74,12 @@ Q.Sprite.extend("Waddle", {
                     this.trigger("change_state", WADDLE_STATE.DIE);
                 }
                 else{
-                    //bajar la vida del kirby
-                //this.p.vy=-500;
-                //this.p.direction = (this.p.direction === "left") ? "right" : "left";
-                this.trigger("change_state", WADDLE_STATE.DIE);
+                    if(!this.skipCollision){Q.state.set("bar", Q.state.get("bar") - 1);}
+                    this.trigger("change_state", WADDLE_STATE.DIE);
                 }
+            }
+            if(collision.obj.isA(!"FireWaddle")){
+                this.p.flip=this.flipActual;
             }
         });
 
@@ -104,6 +106,7 @@ Q.Sprite.extend("Waddle", {
 
     // Update Step
     step: function(dt){
+        console.log(this.p.x);
         this.attackTime += dt;
         if(this.attackTime>=5){
             this.trigger("change_state", WADDLE_STATE.ATTACK);
@@ -121,6 +124,7 @@ Q.Sprite.extend("Waddle", {
             case  WADDLE_STATE.DIE:
 
                 this.trigger("cplay", "die");
+                this.skipCollision = true,
                 this.p.isStatue = true;
                 this.gravity=false;
                 this.p.vx=0;

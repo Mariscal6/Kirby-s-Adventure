@@ -1,4 +1,3 @@
-
 compiling.sheet.push({
     "png_path": "HUD/hud-normal.png",
     "json_path": "hud.json"
@@ -24,6 +23,16 @@ compiling.sheet.push({
     "json_path": "numbers.json"
 });
 
+compiling.sheet.push({
+    "png_path": "HUD/hudMenu.png",
+    "json_path": "hudMenu.json"
+});
+
+compiling.sheet.push({
+    "png_path": "HUD/hudBoss.png",
+    "json_path": "boss.json"
+});
+
 
 Q.animations("hud", {
     hud:{
@@ -35,10 +44,9 @@ Q.animations("hud", {
 Q.Sprite.extend("MainHUD", {
     init: function(p){
         this._super(p, {
-            sheet: "hud",
-            sprite: "hud",
+            
             x: 8,
-            y: 0,
+            y: 18,
             width: 256 * 2,
             height: 240 / 2
         });
@@ -53,17 +61,13 @@ Q.Sprite.extend("MainHUD", {
 Q.animations("lifesMove", {
     move:{
         frames: [0, 1, 2, 1],
-        rate: 1/5
+        rate: 1/6
     }
 });
 
 Q.Sprite.extend("LifesHUD", {
     init: function(p){
         this._super(p, {
-            sheet: "lifes",
-            sprite: "lifesMove",
-            x: 151,
-            y: 0,
             w: 26,
             h: 69,
         });
@@ -93,9 +97,8 @@ Q.Sprite.extend("lifesNumber", {
         this._super(p, {
             sheet: "numbers",
             sprite: "numbersLifes",
-            y: 0,
-            w: 26,
-            h: 60
+            w: 20,
+            h: 20
         });
         this.add('animation');
     },
@@ -112,9 +115,8 @@ Q.Sprite.extend("scoreNumbers", {
         this._super(p, {
             sheet: "numbers",
             sprite: "numbersLifes",
-            y: 24,
-            w: 10,
-            h: 70,
+            w: 19,
+            h: 37,
         });
         this.add('animation');
     },
@@ -138,7 +140,6 @@ Q.animations("healthKirby", {
 Q.Sprite.extend("HealthBar", {
     init: function(p){
         this._super(p, {
-            sheet: "health",
             sprite: "healthKirby",
             w: 210,
             h: 110,
@@ -157,6 +158,21 @@ Q.Sprite.extend("HealthBar", {
     }
 });
 
+Q.Sprite.extend("bossHealth",{
+    init: function(p){
+        this._super(p, {
+            sprite: "healthBoss",
+            w: 19,
+            h: 37,
+        });
+        this.add('animation');
+    },
+    
+    step: function(){
+        
+    }
+});
+
 /* "powersKirby" */
 
 Q.animations("powersKirby", {
@@ -172,12 +188,10 @@ Q.animations("powersKirby", {
 Q.Sprite.extend("PowersHUD", {
     init: function(p){
         this._super(p, {
-            sheet: "powers",
             sprite: "powersKirby",
-            x: 78,
-            y: 0,
-            w: 64,
-            h: 135,
+           
+           // height: 135,
+            height: 135,
             scaleToFit: true
         });
         this.add('animation');
@@ -198,9 +212,57 @@ Q.scene("HUD", function(stage) {
         h: 240 / 2,
     }));
     
-    stage.insert(new Q.MainHUD(), container);
-    stage.insert(new Q.LifesHUD(), container);
-    stage.insert(new Q.PowersHUD(), container);
+    stage.insert(new Q.MainHUD({sheet: "hud", sprite: "hud"}), container);
+    stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: 18}), container);
+    stage.insert(new Q.PowersHUD({sheet: "powers",  x: 82, y: -5, width: 64}), container);
+
+    for (let index = 0; index < 6; index++) {
+        stage.insert(new Q.HealthBar({
+            x: index * 16, 
+            y: 18,
+            sheet: "health",
+            status: "nohit", 
+            index: index
+        }), container);
+    }
+    stage.insert(new Q.lifesNumber({
+        x: 197, 
+        y: -2,
+        number: 'first'
+    }), container);
+    
+    stage.insert(new Q.lifesNumber({
+        x: 214,
+        y: -2,
+        number: 'second',
+    }), container);
+    
+    var scoreAux = Q.state.get("score");
+    
+    for(let index = 0; index < 7; ++index){
+        
+        stage.insert(new Q.scoreNumbers({
+            x: 2 - index * 16,
+            y: 24,
+            index: index
+        }), container);
+        
+    }
+});
+
+
+
+Q.scene("MENU", function(stage) {
+    
+    var container = stage.insert(new Q.UI.Container({
+        x: 496 / 2,
+        y: 240 * 2 - 240 / 4,
+        w: 256 * 2,
+        h: 240 / 2,
+    }));
+    
+    stage.insert(new Q.MainHUD({sheet: "hudMenu", sprite: "hud"}), container);
+    stage.insert(new Q.PowersHUD({sheet: "powers",  x: -190, y: -2, width: 60}), container);
 
     for (let index = 0; index < 6; index++) {
         stage.insert(new Q.HealthBar({
@@ -211,24 +273,51 @@ Q.scene("HUD", function(stage) {
         }), container);
     }
     stage.insert(new Q.lifesNumber({
+        x: 180, 
+        y: 27,
+        number: 'first'
+    }), container);
+    
+    stage.insert(new Q.lifesNumber({
+        x: 197,
+        y: 27,
+        number: 'second'
+    }), container);
+});
+
+
+
+Q.scene("BOSS", function(stage) {
+    
+    var container = stage.insert(new Q.UI.Container({
+        x: 496 / 2,
+        y: 240 * 2 - 240 / 4,
+        w: 256 * 2,
+        h: 240 / 2,
+    }));
+    
+    stage.insert(new Q.MainHUD({sheet: "boss", sprite: "hud"}), container);
+    stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: 18}), container);
+    stage.insert(new Q.PowersHUD({sheet: "powers",  x: 78, y: 18, width: 64}), container);
+
+    for (let index = 0; index < 6; index++) {
+        stage.insert(new Q.HealthBar({
+            x: index * 16, 
+            y: 18,
+            sheet: "health",
+            status: "nohit", 
+            index: index
+        }), container);
+    }
+    stage.insert(new Q.lifesNumber({
         x: 197, 
+        y: -2,
         number: 'first'
     }), container);
     
     stage.insert(new Q.lifesNumber({
         x: 214,
-        number: 'second'
+        y: -2,
+        number: 'second',
     }), container);
-    
-    var scoreAux = Q.state.get("score");
-    
-    for(let index = 0; index < 7; ++index){
-        
-        stage.insert(new Q.scoreNumbers({
-            x: 2 - index * 16,
-            index: index
-        }), container);
-        
-    }
 });
-

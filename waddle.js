@@ -48,6 +48,7 @@ Q.Sprite.extend("Waddle", {
             sheet: "waddle",
             sprite: "waddle",
             isStatue: false,
+            direction: "left",
             skipCollision: false,
             gravity: 1,
         });
@@ -112,7 +113,7 @@ Q.Sprite.extend("Waddle", {
         }
         switch(this.state){
             case WADDLE_STATE.IDLE:
-                
+                console.log(this.p.direction);
                 this.p.vx = 30 * (this.p.direction === "left" ? -1 : 1);
                 this.trigger("cplay", "idle");
 
@@ -152,7 +153,7 @@ Q.Sprite.extend("Waddle", {
         }
 
         // Flip in movement
-        this.p.flip = (this.p.direction === "left") ? "x" : undefined;
+        this.p.flip = (this.p.direction === "left") ? undefined : "x";
     },
 
 });

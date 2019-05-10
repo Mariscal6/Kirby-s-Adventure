@@ -21,6 +21,6 @@ Q.scene("level1", function(stage) {
         /*minY: 0, */
         /*maxY: 0,*/
     });
-    console.log(stage.options.gridH);
+   // console.log(stage.options.gridH);
 });
 

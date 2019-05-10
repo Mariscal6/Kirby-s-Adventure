@@ -4,22 +4,11 @@ compiling.sheet.push({
     "json_path": "hotHead.json"
 });
 
-
 /* Animations */
 Q.animations("hotHead", {
     idle: {
         frames: [0,1],
         rate: 1/ 3,
-        flip: false, 
-        collision_box: {
-            width: 38,
-            height: 32,
-        }
-    },
-    idleR: {
-        frames: [0,1],
-        rate:1 / 3,
-        flip: "x", 
         collision_box: {
             width: 38,
             height: 32,
@@ -34,7 +23,7 @@ Q.animations("hotHead", {
         },
     },
     attack:{
-        frames: [2],
+        frames: [2,3],
         rate:1 / 10,
         collision_box: {
             width: 38,
@@ -47,7 +36,6 @@ Q.animations("hotHead", {
 
 const HOTHEAD_STATE = {
     IDLE: 0,
-    IDLER: 1,
     ATTACK: 2,
     DIE: -1,
 };
@@ -60,19 +48,16 @@ Q.Sprite.extend("HotHead", {
             sheet: "hotHead",
             sprite: "hotHead",
             isStatue: false,
-            vx: 30,
             direction: "left",
-            flip: "x",
             skipCollision: false,
             gravity: 1,
-
         });
         this.state = HOTHEAD_STATE.IDLE;
 
         // primer ataque
         this.firstAttack=true;
         this.terminateAttack=false;
-        this.velAttack=0;
+        this.flipActual=false;
         //times
         this.dieTime = 0;
         this.attackTime=0;
@@ -86,31 +71,31 @@ Q.Sprite.extend("HotHead", {
             if(collision.obj.isA("Kirby")){
                 this.attackTime=0;
                 if(collision.obj.state === KIRBY_STATE.SLIDING ){
-                    this.attackTime=0;
                     this.trigger("change_state", HOTHEAD_STATE.DIE);
                 }
                 else{
                     //bajar la vida del kirby
                 //this.p.vy=-500;
                 //this.p.direction = (this.p.direction === "left") ? "right" : "left";
-                }
                 this.trigger("change_state", HOTHEAD_STATE.DIE);
+                } 
+            }
+            if(collision.obj.isA("FireHotHead")){
+                this.p.flip=this.flipActual;
             }
         });
 
     },
     attack: function(){
         //this.isStatue = true;
-       // var stage=Q.stage(0);
-        /*var fire = stage.insert(new Q.FireHotHead({
+
+        var stage=Q.stage(0);
+        var fire = stage.insert(new Q.FireHotHead({
                     y:this.p.y,
                     x:this.p.x,
                     vx:this.p.vx,
-                    direction:this.direction
-         }));*/
-         this.p.vx=0;
-        
-
+                    direction:this.p.direction
+            }));
     },
         
     // Update
@@ -126,19 +111,16 @@ Q.Sprite.extend("HotHead", {
         }
         switch(this.state){
             case HOTHEAD_STATE.IDLE:
-                this.p.direction = (this.p.vx > 0) ? "right" : "left";
-                if(this.p.direction === "left"){
-                    this.p.flip = "x";
-                    this.p.vx = -30;
-                    this.trigger("cplay", "idle");
-                }else{
-                    this.p.flip = false;
-                    this.p.vx = 30;
-                    this.trigger("cplay", "idleR");
+                if(this.p.vx!==0){
+                    this.p.direction = (this.p.vx > 0) ? "right" : "left";
                 }
+                this.p.vx = 80*((this.p.direction === "left") ? -1 : 1);
+                this.trigger("cplay", "idle");
+
                 break;
 
             case  HOTHEAD_STATE.DIE:
+
                 this.trigger("cplay", "die");
                 this.p.isStatue = true;
                 this.gravity=false;
@@ -151,16 +133,17 @@ Q.Sprite.extend("HotHead", {
 
             case HOTHEAD_STATE.ATTACK:
                 this.endAttackTime += dt;
-                this.velAttack=this.p.vx;
+                
                 if(this.firstAttack){
+                    this.flipActual=this.p.flip;
                     this.trigger("cplay", "attack");
                     this.firstAttack=false;
                     this.attack();
+                    this.p.vx=0;
                 }
+             
                 if(this.endAttackTime>3){
                     this.trigger("change_state", HOTHEAD_STATE.IDLE);
-                    //this.isStatue=false;
-                    this.p.vx=this.velAttack;
                     this.endAttackTime = 0;
                     this.attackTime=0;
                     this.firstAttack=true;
@@ -168,9 +151,10 @@ Q.Sprite.extend("HotHead", {
                 
                 break;
              
-
         }
-    },
+        // Flip in movement
+        this.p.flip = (this.p.direction === "left") ? false : "x";
+        },
 });
 
 

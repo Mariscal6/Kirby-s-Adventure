@@ -1,24 +1,13 @@
 /* Animations */
 Q.animations("fireWaddle", {
-    fireL:{
+    fire:{
         frames: [4],
         rate:1 / 10,
-        flip:false,
         collision_box: {
-            x:10,
             width: 38,
             height: 22,
         },
     },
-    fireR:{
-        frames: [4],
-        rate:1 / 10,
-        flip:"x",
-        collision_box: {
-            width: 38,
-            height: 32,
-        },
-    }
 });
 
 /* estados */
@@ -36,8 +25,6 @@ Q.Sprite.extend("FireWaddle", {
             sprite: "fireWaddle",
             frame: 4,
             isStatue: false,
-            direction: "left",
-            flip: false,
             skipCollision: true,
             gravity: false,
 
@@ -53,12 +40,17 @@ Q.Sprite.extend("FireWaddle", {
 
         /* Events */
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
+            
+            if(!collision.obj.isA("Kirby")){
+                this.p.flip = (this.p.direction === "left") ? "x" : false;
+            }
             if(collision.obj.isA("Kirby")){
                this.trigger("change_state", FIREWADDLE_STATE.DIE);
             }
             else if(collision.obj.isA("Hill")){
                 this.trigger("change_state", FIREWADDLE_STATE.DIE);
             }
+            
         });
 
     },
@@ -84,7 +76,7 @@ Q.Sprite.extend("FireWaddle", {
                 this.fireTime += dt;
             break;
         }
-        
+        this.p.flip = (this.p.direction === "left") ? false : "x";
     },
 
 });

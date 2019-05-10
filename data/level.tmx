@@ -4764,7 +4764,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="81"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4790,7 +4790,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="81"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5332,7 +5332,7 @@
   <object id="92" gid="282" x="910.333" y="450.666" width="38" height="32"/>
  </objectgroup>
  <objectgroup id="28" name="HotHead">
-  <object id="94" gid="287" x="798" y="448" width="38" height="32"/>
+  <object id="94" gid="287" x="1220" y="452" width="38" height="32"/>
  </objectgroup>
  <objectgroup id="19" name="Hills">
   <object id="32" gid="7" x="352" y="480" width="32" height="32"/>

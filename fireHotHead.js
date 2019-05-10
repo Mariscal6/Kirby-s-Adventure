@@ -1,23 +1,13 @@
 /* Animations */
 Q.animations("fireHotHead", {
-    fireL:{
+    fire:{
         frames: [4],
         rate:1 / 10,
-        flip:false,
         collision_box: {
             width: 38,
             height: 22,
         },
     },
-    fireR:{
-        frames: [4],
-        rate:1 / 10,
-        flip:"x",
-        collision_box: {
-            width: 38,
-            height: 32,
-        },
-    }
 });
 
 /* estados */
@@ -35,8 +25,6 @@ Q.Sprite.extend("FireHotHead", {
             sprite: "fireHotHead",
             frame: 4,
             isStatue: false,
-            direction: "left",
-            flip: false,
             skipCollision: true,
             gravity: false,
 
@@ -52,12 +40,17 @@ Q.Sprite.extend("FireHotHead", {
 
         /* Events */
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
+
+            if(!collision.obj.isA("Kirby")){
+                this.p.flip = (this.p.direction === "left") ? "x" : false;
+            }
             if(collision.obj.isA("Kirby")){
                this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
             }
             else if(collision.obj.isA("Hill")){
                 this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
             }
+ 
         });
 
     },

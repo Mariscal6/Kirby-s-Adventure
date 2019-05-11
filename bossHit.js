@@ -1,12 +1,12 @@
 
 /* Animations */
-Q.animations("fireHotHead", {
+Q.animations("bossHit", {
     fire:{
         frames: [1,2],
         rate:1 / 10,
         collision_box: {
-            width: 36,
-            height: 32,
+            width: 70,
+            height: 72,
         },
     },
 });
@@ -17,22 +17,23 @@ const FIREHOTHEAD_STATE = {
     DIE: -1,
 };
 
-Q.Sprite.extend("FireHotHead", {
+Q.Sprite.extend("BossHit", {
     
     init: function(p){
        
         this._super(p, {
-            sheet: "fire",
-            sprite: "fireHotHead",
+            sheet: "bossHit",
+            sprite: "bossHit",
             frame: 4,
             isStatue: false,
             skipCollision: true,
             gravity: false,
+            vx:0,
 
         });
 
         //times
-        this.state=FIREHOTHEAD_STATE.IDLE;
+        this.state=BOSSHIT_STATE.IDLE;
         this.fireTime = 0;
         this.touch=false;
         this.terminate=false;
@@ -43,14 +44,10 @@ Q.Sprite.extend("FireHotHead", {
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
 
             if(!collision.obj.isA("Kirby")){
-                console.log("fireHotHead choca");
                 this.p.flip = (this.p.direction === "left") ? "x" : false;
             }
             if(collision.obj.isA("Kirby")){
-               this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
-            }
-            else if(collision.obj.isA("Hill")){
-                this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
+                //KIRBY PIERDE VIDA
             }
  
         });
@@ -65,16 +62,17 @@ Q.Sprite.extend("FireHotHead", {
     // Update Step
     step: function(dt){
         if(this.touch) return
-        if(this.fireTime > 2.5){
-            this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
+        this.p.vx=0;
+        if(this.fireTime > 3){
+            this.trigger("change_state", BOSSHIT_STATE.DIE);
         }
         switch(this.state){
-            case FIREHOTHEAD_STATE.DIE:
+            case BOSSHIT_STATE.DIE:
                 this.terminate=true;
                 this.fireTime = 0;
                 this.destroy();
             break;
-            case FIREHOTHEAD_STATE.IDLE:
+            case BOSSHIT_STATE.IDLE:
                 this.fireTime += dt;
             break;
         }

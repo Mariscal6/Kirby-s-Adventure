@@ -75,6 +75,7 @@ Q.Sprite.extend("Waddle", {
 
     collision: function(collision){
         if(collision.obj.isA("Kirby")){
+            console.log("choco");
             this.attackTime=0;
             if(collision.obj.state === KIRBY_STATE.SLIDING ){
                 this.trigger("change_state", WADDLE_STATE.DIE);
@@ -108,7 +109,7 @@ Q.Sprite.extend("Waddle", {
     // Update Step
     step: function(dt){
         this.attackTime += dt;
-        if(this.attackTime>=5){
+        if(this.attackTime>=7){
             this.trigger("change_state", WADDLE_STATE.ATTACK);
         }
         switch(this.state){

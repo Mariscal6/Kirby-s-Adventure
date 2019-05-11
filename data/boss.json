@@ -1,8 +1,44 @@
 {
-    "boss":{
+    "bossWalk":{
         "sx": 0,
+        "sy": 8,
+        "tileW": 96,
+        "tileH": 48
+    },
+    "bossAttack":{
+        "sx": 96,
+        "sy": 8,
+        "tileW": 256,
+        "tileH": 48
+    },
+    "bossJump":{
+        "sx": 352,
+        "sy": 8,
+        "tileW": 48,
+        "tileH": 58
+    },
+    "bossDie":{
+        "sx": 400,
+        "sy": 24,
+        "tileW": 96,
+        "tileH": 32
+    },
+    "bossHit":{
+        "sx": 500,
         "sy": 0,
-        "tileW": 512,
-        "tileH": 165
+        "tileW": 140,
+        "tileH": 72
+    },
+    "bossMusic":{
+        "sx": 640,
+        "sy": 24,
+        "tileW": 16,
+        "tileH": 32
+    },
+    "bossStar":{
+        "sx": 656,
+        "sy": 24,
+        "tileW": 32,
+        "tileH": 32
     }
 }

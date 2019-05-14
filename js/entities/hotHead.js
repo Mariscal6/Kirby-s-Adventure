@@ -78,8 +78,7 @@ Q.Sprite.extend("HotHead", {
         this.on("attack", this, "attack");
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
             if(collision.obj.isA("Kirby")){
-                console.log("choco");
-                this.attackTime=0;
+                this.attackTime = 0;
                 if(collision.obj.state === KIRBY_STATE.SLIDING ){
                     this.trigger("change_state", HOTHEAD_STATE.DIE);
                 }

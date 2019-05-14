@@ -114,10 +114,11 @@ Q.Sprite.extend("Waddle", {
         }
         switch(this.state){
             case WADDLE_STATE.IDLE:
-            if(this.p.vx!==0){
+            if(this.p.vx !== 0){
                 this.p.direction = (this.p.vx > 0) ? "right" : "left";
             }
-            this.p.vx = 40*((this.p.direction === "left") ? -1 : 1);
+            //this.p.vx = 40 * ((this.p.direction === "left") ? -1 : 1);
+            
             this.trigger("cplay", "idle");
 
             break;
@@ -127,8 +128,8 @@ Q.Sprite.extend("Waddle", {
                 this.trigger("cplay", "die");
                 this.skipCollision = true,
                 this.p.isStatue = true;
-                this.gravity=false;
-                this.p.vx=0;
+                this.p.gravity = false;
+                this.p.vx = 0;
                 this.dieTime+=dt;
                 if(this.dieTime>=0.15){
                     this.destroy();

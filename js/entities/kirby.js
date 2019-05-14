@@ -262,6 +262,10 @@ Q.Sprite.extend("Kirby", {
         //SLIDING TIME
         this.slideTime=0;
 
+        // Blow
+
+        this.hadBlown=false;
+
         this.add("platformerControls, Entity");
 
         /* Events */
@@ -361,7 +365,7 @@ Q.Sprite.extend("Kirby", {
     // Update Step
     step: function(dt){
         this.p.gravity = 0.5; // Reset Gravity
-        
+        //console.log("X:"+this.p.x+ "Y:" +this.p.y);
         Q("Absorb").first().onScreen = false;
 
         switch(this.state){
@@ -433,8 +437,10 @@ Q.Sprite.extend("Kirby", {
                 this.p.vy = Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
                 this.blowingTime += dt;
                 if (this.blowingTime < 1 / 8) {
-                    var stage=Q.stage(0);
-                    stage.insert(new Q.Blow({y:this.p.y, x:this.p.x,direction:this.p.direction}));
+                    if(!this.hadBlown){
+                        this.hadBlown=true;
+                        console.log(Q("Kirby").stage);
+                    } 
                     this.trigger("cplay", "start_blowing");
 
                 } else if (this.blowingTime < 2 / 8) {
@@ -446,6 +452,7 @@ Q.Sprite.extend("Kirby", {
                     this.trigger("cplay", "blowing2");
 
                 } else {
+                    this.hadBlown=true;
                     this.blowingTime = 0;
                     this.trigger("cplay", "falling");
                     this.trigger("change_state", KIRBY_STATE.FALLING);

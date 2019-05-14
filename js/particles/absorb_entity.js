@@ -24,6 +24,7 @@ Q.animations("particles", {
 Q.Sprite.extend("Absorb", {
 
     init: function(p){
+        console.log(p);
         this._super(p, {
             sheet: "particles",
             sprite: "particles",
@@ -60,7 +61,7 @@ Q.Sprite.extend("Absorb", {
 
     absorbing: function(collide){
         const entity = collide.obj;
-        if(entity.isParticle || entity.isA("Kirby")) return;
+        if(entity.isParticle || entity.isA("Kirby") || entity.isA("TileLayer")) return;
         
 
         entity.p.isStatue = true;
@@ -69,8 +70,8 @@ Q.Sprite.extend("Absorb", {
         const ix = this.p.x + direction * w / 2;
         const ex = entity.p.x;
         
-        //console.log((ix - ex) / w);
-        console.log(entity.className);
+        //console.log();
+        console.log((ix - ex) / w);
         //entity.p.vx = (ix - ex) / w * 300;
     },
 
@@ -78,8 +79,11 @@ Q.Sprite.extend("Absorb", {
     step: function(dt){
         if(this.onScreen){
             this.trigger("cplay", "absorb");
-            var kirby = Q("Kirby").first();
-            this.p.x = kirby.p.x + (50) * (kirby.p.direction === "left" ? -1 : 1);
+            const kirby = Q("Kirby").first();
+            const kirby_collision_width = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box.width;
+            const absorb_collision_width = Q.animation(this.p.sprite, this.p.animation).collision_box.width;
+
+            this.p.x = kirby.p.x + (absorb_collision_width + kirby_collision_width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
             this.p.y = kirby.p.y;
 
             this.p.skipCollision = true;

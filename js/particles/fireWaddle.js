@@ -31,27 +31,29 @@ Q.Sprite.extend("FireWaddle", {
         });
 
         //times
-        this.state=FIREWADDLE_STATE.IDLE;
+        this.state = FIREWADDLE_STATE.IDLE;
         this.fireTime = 0;
-        this.touch=false;
-        this.terminate=false;
+        this.touch = false;
+        this.terminate = false;
 
         this.add("Entity, aiBounce");
 
         /* Events */
-        this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
-            
-            if(!collision.obj.isA("Kirby")){
-                this.p.flip = (this.p.direction === "left") ? "x" : false;
-            }
-            if(collision.obj.isA("Kirby")){
-               this.trigger("change_state", FIREWADDLE_STATE.DIE);
-            }
-            else if(collision.obj.isA("Hill")){
-                this.trigger("change_state", FIREWADDLE_STATE.DIE);
-            }
+        this.on("bump", this, "collide");
 
-        });
+    },
+
+    collide: function(collision){
+        this.trigger("change_state", FIREWADDLE_STATE.DIE);
+        
+        if(!collision.obj.isA("Kirby")){
+            this.p.flip = (this.p.direction === "left") ? "x" : false;
+        }
+        if(collision.obj.isA("Kirby")){
+           this.trigger("change_state", FIREWADDLE_STATE.DIE);
+        }
+        else if(collision.obj.isA("Hill")){
+        }
 
     },
   
@@ -68,7 +70,7 @@ Q.Sprite.extend("FireWaddle", {
         }
         switch(this.state){
             case FIREWADDLE_STATE.DIE:
-                this.terminate=true;
+                this.terminate = true;
                 this.fireTime = 0;
                 this.destroy();
             break;

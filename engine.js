@@ -45,8 +45,6 @@ const load = (callback) => {
                             Q.stageTMX(`${level_name}.tmx`, stage);
                             init_global_entities(stage);
                             
-                            console.log((stage.items[0].c.h - 125) / 2);
-                            console.log(Q('Kirby'));
                             stage.add("viewport").follow(Q('Kirby').first(), {x: level.isDynamic || true, y: true},{
                                 minX: 32,
                                 maxX: stage.items[0].c.w - 32,

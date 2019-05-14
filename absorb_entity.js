@@ -46,6 +46,7 @@ Q.Sprite.extend("Absorb", {
         if(!this.onScreen) return;
         this._super(ctx);
     },
+
     // Update
     update: function(dt){
         // Set out of bound
@@ -66,10 +67,10 @@ Q.Sprite.extend("Absorb", {
         const w = this.sheet().w;
         const direction = this.p.flip === "x" ? -1 : 1;
         const ix = this.p.x + direction * w / 2;
-        const ex = entity.p.x + direction * entity.sheet().w / 2;
+        const ex = entity.p.x;
         
-        console.log((ix - ex) / w);
-
+        //console.log((ix - ex) / w);
+        console.log(entity.className);
         //entity.p.vx = (ix - ex) / w * 300;
     },
 

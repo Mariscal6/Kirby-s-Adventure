@@ -373,9 +373,8 @@ Q.Sprite.extend("Kirby", {
                 if (this.p.vy > 0 || this.last_state == KIRBY_STATE.BALLOON) {
                     this.trigger("change_state", KIRBY_STATE.FALLING);
                 } else {
-                    this.blinkTime = dt; (this.blinkTime + 1) % 100;
-                    this.trigger("cplay", ((this.blinkTime >= 70) && (this.blinkTime % 15) < 10) ? "blink" : "idle");
-
+                    this.blinkTime = (this.blinkTime + dt) % 3.0;
+                    this.trigger("cplay", ((this.blinkTime >= 1.0) && (this.blinkTime % (2/3)) < 1/3) ? "blink" : "idle");
                     // Transition if the lenght of the x velocity is greater than 0 (is moving or skid).
                     if (Math.abs(this.p.vx) > 0.1) {
                         this.trigger("change_state", KIRBY_STATE.MOVING);
@@ -501,6 +500,7 @@ Q.Sprite.extend("Kirby", {
                 if(Math.abs(this.p.vy) < 0.01){
                     // First Bounce
                     if (this.bounces++ === 0) {
+                        Q("Star").first().trigger("respawn");
                         this.p.vy = -150;
                         this.trigger("cplay", "falling_head");
                     }else{ // Last Bounce
@@ -552,7 +552,7 @@ Q.Sprite.extend("Kirby", {
                 this.slideTime+=dt;
                 if (this.slideTime < 0.5) {
                     //slideCloud
-                    Q("cloudExplosion").first().onScreen = true;
+                    Q("cloudExplosion").first().trigger("respawn");
                     this.p.vx = (this.p.direction === "left") ? -MAX_SPEED : MAX_SPEED;
                     this.trigger("cplay", "slide");
 

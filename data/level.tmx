@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="148" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="34" nextobjectid="96">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="148" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="34" nextobjectid="103">
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="../images/tiles.png" width="512" height="512"/>
   <tile id="6">
    <properties>
+    <property name="Angle" value="-45"/>
     <property name="Class" value="Hill"/>
-    <property name="Direction" value="Right"/>
    </properties>
    <objectgroup draworder="index">
     <object id="1" x="0" y="32">
@@ -15,13 +15,19 @@
   </tile>
   <tile id="7">
    <properties>
+    <property name="Angle" value="45"/>
     <property name="Class" value="Hill"/>
-    <property name="Direction" value="Left"/>
    </properties>
   </tile>
   <tile id="23">
    <properties>
     <property name="Class" value="Door"/>
+   </properties>
+  </tile>
+  <tile id="88">
+   <properties>
+    <property name="Angle" value="0"/>
+    <property name="Class" value="Hill"/>
    </properties>
   </tile>
  </tileset>
@@ -40,12 +46,12 @@
     <property name="Class" value="Waddle"/>
    </properties>
    <animation>
-    <frame tileid="0" duration="100"/>
-    <frame tileid="1" duration="100"/>
+    <frame tileid="1" duration="300"/>
+    <frame tileid="0" duration="200"/>
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="287" name="hotHead" tilewidth="38" tileheight="32" tilecount="8" columns="7">
+ <tileset firstgid="287" name="hotHead" tilewidth="32" tileheight="32" tilecount="9" columns="9">
   <properties>
    <property name="Class" value="HotHead"/>
   </properties>
@@ -55,15 +61,12 @@
     <property name="Class" value="HotHead"/>
    </properties>
    <animation>
-    <frame tileid="0" duration="100"/>
-    <frame tileid="1" duration="100"/>
-    <frame tileid="2" duration="100"/>
-    <frame tileid="3" duration="1"/>
-    <frame tileid="3" duration="1"/>
+    <frame tileid="0" duration="300"/>
+    <frame tileid="1" duration="300"/>
    </animation>
   </tile>
  </tileset>
- <layer id="32" name="Background" width="148" height="20">
+ <layer id="32" name="Background" width="148" height="20" visible="0">
   <data>
    <tile gid="24"/>
    <tile gid="24"/>
@@ -2152,10 +2155,10 @@
    <tile gid="21"/>
    <tile gid="46"/>
    <tile gid="21"/>
+   <tile gid="2"/>
    <tile gid="81"/>
-   <tile gid="81"/>
+   <tile gid="97"/>
    <tile gid="121"/>
-   <tile gid="71"/>
    <tile gid="123"/>
    <tile gid="71"/>
    <tile gid="71"/>
@@ -2299,12 +2302,12 @@
    <tile gid="123"/>
    <tile gid="21"/>
    <tile gid="81"/>
-   <tile gid="21"/>
-   <tile gid="81"/>
-   <tile gid="81"/>
-   <tile gid="81"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
    <tile gid="121"/>
-   <tile gid="123"/>
    <tile gid="87"/>
    <tile gid="87"/>
    <tile gid="87"/>
@@ -2452,7 +2455,7 @@
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
-   <tile gid="121"/>
+   <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
    <tile gid="2"/>
@@ -4972,8 +4975,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="89"/>
    <tile/>
+   <tile gid="89"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5119,8 +5122,8 @@
    <tile/>
    <tile/>
    <tile gid="89"/>
+   <tile gid="89"/>
    <tile/>
-   <tile gid="97"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5266,10 +5269,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="97"/>
-   <tile gid="97"/>
-   <tile gid="97"/>
-   <tile gid="97"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -5419,8 +5422,8 @@
    <tile gid="97"/>
    <tile gid="97"/>
    <tile gid="97"/>
-   <tile/>
-   <tile gid="89"/>
+   <tile gid="97"/>
+   <tile gid="47"/>
    <tile gid="89"/>
    <tile gid="89"/>
    <tile gid="89"/>
@@ -6008,13 +6011,16 @@
  </objectgroup>
  <objectgroup id="19" name="Hills">
   <object id="32" gid="7" x="384" y="512" width="32" height="32"/>
-  <object id="31" gid="7" x="416" y="480" width="32" height="32"/>
-  <object id="30" gid="7" x="480" y="448" width="32" height="32"/>
-  <object id="29" gid="8" x="544" y="448" width="32" height="32"/>
-  <object id="28" gid="8" x="576" y="480" width="32" height="32"/>
-  <object id="27" gid="8" x="608" y="512" width="32" height="32"/>
+  <object id="30" gid="7" x="512" y="448" width="32" height="32"/>
+  <object id="29" gid="8" x="576" y="448" width="32" height="32"/>
+  <object id="28" gid="8" x="608" y="480" width="32" height="32"/>
+  <object id="27" gid="8" x="640" y="512" width="32" height="32"/>
+  <object id="96" gid="89" x="448" y="480" width="32" height="32"/>
+  <object id="97" gid="89" x="544" y="448" width="32" height="32"/>
+  <object id="101" gid="7" x="416" y="480" width="32" height="32"/>
+  <object id="102" gid="89" x="480" y="480" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="3" name="Kirby" offsetx="0.0606061" offsety="0.666667">
-  <object id="18" name="Player" gid="257" x="181" y="456" width="64" height="64"/>
+  <object id="18" name="Player" gid="257" x="46" y="479.5" width="64" height="64"/>
  </objectgroup>
 </map>

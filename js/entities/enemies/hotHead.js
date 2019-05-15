@@ -99,13 +99,13 @@ Q.Sprite.extend("HotHead", {
 
     attack: function(){
         //this.isStatue = true;
-        var stage = Q.stage(0);
+        /*var stage = Q.stage(0);
         var fire = stage.insert(new Q.FireHotHead({
             y: this.p.y,
             x: this.p.x + (32 + 32) / 2 * (this.p.direction === "Left" ? -1 : 1),
             vx: this.p.vx,
             direction: this.p.direction
-        }));
+        }));*/
     },
         
     // Update

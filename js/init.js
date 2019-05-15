@@ -4,7 +4,7 @@ window.onload = function(){
     load(function(){
         
         // Modo Debug
-        Q.debug = true;
+        //Q.debug = true;
         Q.stageScene(Q.state.get("current_level"));
 
         /* Input Controller */

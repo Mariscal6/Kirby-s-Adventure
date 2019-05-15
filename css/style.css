@@ -13,5 +13,13 @@ body, html{
 }
 
 body{
-    background-color: rgb(68, 16, 42);
+    background-color: black;
 }
+
+#quintus-kirby_container{
+    background: url(../images/super-nintendo.png) no-repeat;
+    padding: 34px 146px 144px 76px;
+}
+
+
+#quintus-kirby_container > canvas{ display: block }

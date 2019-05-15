@@ -11,7 +11,7 @@ const Q = window.Q = Quintus()
 // Include Quintus Library
 .include("Sprites, Scenes, Anim, 2D, TMX, Input, Audio, Touch, UI")
 // SetUp
-.setup("#quintus-kirby",{
+.setup("quintus-kirby",{
     development: true,
     width: 256 * 2, // Set the default width to 800 pixels
     height: 240 * 2, // Set the default height to 600 pixels
@@ -36,6 +36,7 @@ const load = (callback) => {
                     stage.insert(new Q.Absorb());
                     stage.insert(new Q.Blow());
                     stage.insert(new Q.cloudExplosion());
+                    stage.insert(new Q.Star());
                 };
 
                 Q.loadTMX(all_levels.join(","), function(){

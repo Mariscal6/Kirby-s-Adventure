@@ -44,10 +44,10 @@ Q.Sprite.extend("Waddle", {
             isStatue: false,
             skipCollision: false,
             gravity: 1,
+            vx: 80,
         });
 
         this.attack_cycle = 2.0;
-
         /*
         // primer ataque
         this.firstAttack = true;
@@ -74,9 +74,9 @@ Q.Sprite.extend("Waddle", {
          this.p.vx=0;
         */
     },
-
+/*
     // Update Step
-    /*step: function(dt){
+    step: function(dt){
 
         this.attackTime += dt;
         if(this.attackTime>=7){

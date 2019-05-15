@@ -22,6 +22,7 @@ Q.component("Enemy", {
        this.entity.state = ENEMY_STATE.IDLE;
 
        this.entity.timeIdle = 0.0;
+       this.entity.timeAttack = 0;
    },
 
    collision: function(collision){
@@ -66,6 +67,13 @@ Q.component("Enemy", {
             case ENEMY_STATE.ATTACKING:
 
                 self.trigger("attack");
+                self.p.vx = 0.0;
+                self.timeAttack += dt;
+
+                if(self.timeAttack >= self.attackDuration){
+                    self.timeAttack = 0.0;
+                    self.trigger("change_state", ENEMY_STATE.IDLE);
+                }
 
             break;
             case ENEMY_STATE.ABSORBED:

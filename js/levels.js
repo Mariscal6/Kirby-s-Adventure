@@ -1,7 +1,7 @@
 const levels = {
     "level": { // Level 1
         next_level: "level1",
-        hud: "BOSS",
+        hud: "HUD",
         isDynamic: true
     },
 

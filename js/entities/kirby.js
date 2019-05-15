@@ -262,10 +262,6 @@ Q.Sprite.extend("Kirby", {
         //SLIDING TIME
         this.slideTime=0;
 
-        // Blow
-
-        this.hadBlown=false;
-
         this.add("platformerControls, Entity");
 
         /* Events */
@@ -437,15 +433,13 @@ Q.Sprite.extend("Kirby", {
                 this.p.vy = Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
                 this.blowingTime += dt;
                 if (this.blowingTime < 1 / 8) {
-                    if(!this.hadBlown){
-                        this.hadBlown=true;
-                        console.log(Q("Kirby").stage);
-                    } 
                     this.trigger("cplay", "start_blowing");
 
                 } else if (this.blowingTime < 2 / 8) {
                     
+                    Q("Blow").first().onScreen = true;
                     this.trigger("cplay", "blowing1");
+
 
                 } else if (this.blowingTime < 3 / 8) {
 
@@ -524,7 +518,7 @@ Q.Sprite.extend("Kirby", {
                 this.skiddingTime += dt;
                 if(this.skiddingTime <= 1/6){
                     this.p.speed *= 0.98;
-                    this.p.direction = (this.p.vx < 0) ? "right" : "left";        
+                    this.p.direction = (this.p.vx < 0) ? "right" : "left";
                     this.trigger("cplay", "skidding");
                 }else{
                     this.skiddingTime = 0;
@@ -557,7 +551,8 @@ Q.Sprite.extend("Kirby", {
 
                 this.slideTime+=dt;
                 if (this.slideTime < 0.5) {
-
+                    //slideCloud
+                    Q("cloudExplosion").first().onScreen = true;
                     this.p.vx = (this.p.direction === "left") ? -MAX_SPEED : MAX_SPEED;
                     this.trigger("cplay", "slide");
 

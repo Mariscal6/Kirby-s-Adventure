@@ -1,5 +1,5 @@
 {
-    "bossH":{
+    "bossHealth":{
         "sx": 0,
         "sy": 0,
         "tileW": 8,

@@ -1,8 +1,8 @@
 {
-    "blow": {
+    "slide": {
         "sx": 0,
         "sy": 0,
         "tileW": 32,
-        "tileH": 32
+        "tileH": 20
     }
 }

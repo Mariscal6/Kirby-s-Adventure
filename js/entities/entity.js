@@ -34,7 +34,7 @@ Q.component("Entity", {
             entity.last_animation = str;
             // left top
             const box = Q.animation(entity.p.sprite, str).collision_box;
-            console.log(box);
+            //console.log(box);
             const hw = box.width >> 1, hh = box.height >> 1;
 
             // Translate the height center to the new size.

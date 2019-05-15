@@ -34,7 +34,7 @@ compiling.sheet.push({
 
 compiling.sheet.push({
     "png_path": "HUD/hudBoss.png",
-    "json_path": "boss.json"
+    "json_path": "hudBoss.json"
 });
 
 compiling.sheet.push({
@@ -42,6 +42,10 @@ compiling.sheet.push({
     "json_path": "miniHealth.json"
 });
 
+compiling.sheet.push({
+    "png_path": "HUD/levels.png",
+    "json_path": "levelName.json"
+});
 
 Q.animations("hud", {
     hud:{
@@ -78,7 +82,7 @@ Q.Sprite.extend("LifesHUD", {
     init: function(p){
         this._super(p, {
             w: 26,
-            h: 69,
+            h: 24,
         });
         this.add('animation');
     },
@@ -124,8 +128,8 @@ Q.Sprite.extend("scoreNumbers", {
         this._super(p, {
             sheet: "numbers",
             sprite: "numbersLifes",
-            w: 19,
-            h: 37,
+            w: 16,
+            h: 17,
         });
         this.add('animation');
     },
@@ -150,8 +154,8 @@ Q.Sprite.extend("HealthBar", {
     init: function(p){
         this._super(p, {
             sprite: "healthKirby",
-            w: 210,
-            h: 110,
+            w: 16,
+            h: 28,
         });
         this.add('animation');
     },
@@ -164,6 +168,26 @@ Q.Sprite.extend("HealthBar", {
         else  {
             this.play("shine");
         }
+    }
+});
+
+Q.animations("levelNameAnim",{
+    level1: {frames:[0]},
+    level2: {frames: [1]}
+});
+
+Q.Sprite.extend("LevelName", {
+    init: function(p){
+        this._super(p, {
+            sprite: "levelNameAnim",
+            w:169,
+            h: 10
+        });
+        this.add('animation');
+    },
+    step:function(){
+        //console.log(Q.state.get('current_level'));
+       //this.play(Q.state.get('current_level'));
     }
 });
 
@@ -191,24 +215,26 @@ Q.Sprite.extend("miniHealth",{
     }
 });
 
+Q.animations("bossHealth",{
+    intact: {frames:[0]},
+    hitted: {frames:[1]}
+});
 
 Q.Sprite.extend("bossHealth",{
     init: function(p){
         this._super(p, {
-            sheet: "bossH",
             sprite: "bossHealth",
-            w: 19,
-            h: 37,
+            w: 7,
+            h: 21,
         });
         this.add('animation');
     },
 
     step: function(){
-        this.play("hitted");
         if(this.p.index >= Q.state.get("bossHEALTH")){
-           this.play("hitted");
+            this.play("hitted");
         }
-        else  {
+        else {
             this.play("intact");
         }
     }
@@ -252,13 +278,13 @@ Q.scene("HUD", function(stage) {
     }));
 
     stage.insert(new Q.MainHUD({sheet: "hud", sprite: "hud"}), container);
-    stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: 18}), container);
+    stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: -4}), container);
     stage.insert(new Q.PowersHUD({sheet: "powers",  x: 82, y: -5, width: 64}), container);
 
     for (let index = 0; index < 6; index++) {
         stage.insert(new Q.HealthBar({
-            x: index * 16,
-            y: 18,
+            x: -100 + index * 16,
+            y: -24,
             sheet: "health",
             status: "nohit",
             index: index
@@ -281,8 +307,8 @@ Q.scene("HUD", function(stage) {
     for(let index = 0; index < 7; ++index){
 
         stage.insert(new Q.scoreNumbers({
-            x: 2 - index * 16,
-            y: 24,
+            x: -4 - index * 16,
+            y: 15,
             index: index
         }), container);
 
@@ -312,15 +338,20 @@ Q.scene("MENU", function(stage) {
             index: index
         }), container);
     }
+    stage.insert(new Q.LevelName({
+        x: 100,
+        y: -10,
+        sheet: "levelName"
+    }), container);
     stage.insert(new Q.lifesNumber({
         x: 180,
-        y: 27,
+        y: 30,
         number: 'first'
     }), container);
 
     stage.insert(new Q.lifesNumber({
         x: 197,
-        y: 27,
+        y: 28,
         number: 'second'
     }), container);
 });
@@ -336,24 +367,24 @@ Q.scene("BOSS", function(stage) {
         h: 240 / 2,
     }));
 
-    stage.insert(new Q.MainHUD({sheet: "boss", sprite: "hud"}), container);
-    stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: 18}), container);
+    stage.insert(new Q.MainHUD({sheet: "hudBoss", sprite: "hud"}), container);
+    stage.insert(new Q.LifesHUD({ sheet: "lifes", sprite: "lifesMove", x: 151, y: -4}), container);
     stage.insert(new Q.PowersHUD({sheet: "powers",  x: 82, y: -5, width: 64}), container);
 
     for (let index = 0; index < 6; index++) {
         stage.insert(new Q.HealthBar({
-            x: index * 16,
-            y: 18,
+            x: -100 + index * 16,
+            y: -24,
             sheet: "health",
             status: "nohit",
             index: index
         }), container);
     }
 
-    for (let index = 0; index < 15; index++) {
+    for (let index = 0; index < 12; index++) {
         stage.insert(new Q.bossHealth({
-            x: -100 + index * 9,
-            y: 24,
+            x: -103 + index * 9,
+            y: 13,
             sheet: "bossHealth",
             status: "nohit",
             index: index
@@ -370,13 +401,4 @@ Q.scene("BOSS", function(stage) {
         y: -2,
         number: 'second',
     }), container);
-
-    for(let index = 0; index < Q.state.get("bossHEALTH"); ++index){
-        stage.insert(new Q.bossHealth({
-            x: -95 + index * 9,
-            y: 24,
-            index: index
-        }), container);
-
-    }
 });

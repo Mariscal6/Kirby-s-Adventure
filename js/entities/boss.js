@@ -64,7 +64,7 @@ Q.Sprite.extend("HotHead", {
             skipCollision: false,
             gravity: 1,
         });
-
+        this.lifes=3;
         this.state = BOSS_STATE.IDLE;
 
         // primer ataque
@@ -82,15 +82,14 @@ Q.Sprite.extend("HotHead", {
         this.on("attack", this, "attack");
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
             if(collision.obj.isA("Kirby")){
-                console.log("choco");
                 this.attackTime=0;
-                if(collision.obj.state === KIRBY_STATE.SLIDING ){
+                if(collision.obj.state === KIRBY_STATE.SLIDING && this.lifes <= 1 ){
                     this.trigger("change_state", BOSS_STATE.DIE);
                 }
-                else{
-                if(!this.skipCollision){Q.state.set("bar", Q.state.get("bar") - 1);}
-                this.trigger("change_state", BOSS_STATE.DIE);
-                } 
+                else if(collision.obj.state === KIRBY_STATE.SLIDING && this.lifes > 1){
+                    this.lifes--;
+                }
+                else if(!this.skipCollision){Q.state.set("bar", Q.state.get("bar") - 1);}
             }
             if(collision.obj.isA("FireHotHead")){
                 this.p.flip=this.flipActual;

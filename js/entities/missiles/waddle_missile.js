@@ -5,7 +5,7 @@ Q.animations("fireWaddle", {
         frames: [4],
         rate:1 / 10,
         collision_box: {
-            width: 38,
+            width: 32,
             height: 22,
         },
     },
@@ -28,6 +28,7 @@ Q.Sprite.extend("FireWaddle", {
             isStatue: false,
             skipCollision: true,
             gravity: false,
+            vx: 80,
         });
 
         //times

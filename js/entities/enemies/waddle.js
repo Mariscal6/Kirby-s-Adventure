@@ -34,12 +34,6 @@ Q.animations("waddle", {
 
 /* Object */
 
-const WADDLE_STATE = {
-    IDLE: 0,
-    ATTACK: 1,
-    DIE: -1,
-};
-
 Q.Sprite.extend("Waddle", {
     
     init: function(p){
@@ -48,78 +42,55 @@ Q.Sprite.extend("Waddle", {
             sheet: "waddle",
             sprite: "waddle",
             isStatue: false,
-            direction: "right",
             skipCollision: false,
             gravity: 1,
         });
 
-        this.state = WADDLE_STATE.IDLE;
-        this.flipActual=false;
+        this.attack_cycle = 2.0;
+
+        /*
         // primer ataque
         this.firstAttack = true;
         this.terminateAttack = false;
         //times
         this.dieTime = 0;
         this.attackTime = 0;
-        this.endAttackTime = 0;
+        this.endAttackTime = 0;*/
 
-        this.add("Entity, aiBounce");
-
-        /* Events */
-
-
-        this.on("attack", this, "attack");
-        this.on("bump", this, "collision");
-
+        this.add("Enemy");
     },
 
-    collision: function(collision){
-        if(collision.obj.isA("Kirby")){
-            console.log("choco");
-            this.attackTime=0;
-            if(collision.obj.state === KIRBY_STATE.SLIDING ){
-                this.trigger("change_state", WADDLE_STATE.DIE);
-            }
-            else{
-                if(!this.skipCollision){Q.state.set("bar", Q.state.get("bar") - 1);}
-                this.trigger("change_state", WADDLE_STATE.DIE);
-            }
-        }
-        if(collision.obj.isA("FireWaddle")){
-            this.p.flip=this.flipActual;
-        }
-    },
-
-
+    
     attack: function(){
+        
         //this.isStatue = true;
-       
+        /*
         var stage=Q.stage(0);
         var fire = stage.insert(new Q.FireWaddle({
             y:this.p.y,
             x:this.p.x,
-            vx:this.p.vx,
             direction:this.p.direction
          }));
          this.p.vx=0;
-        
-
+        */
     },
 
     // Update Step
-    step: function(dt){
+    /*step: function(dt){
+
         this.attackTime += dt;
         if(this.attackTime>=7){
             this.trigger("change_state", WADDLE_STATE.ATTACK);
         }
         switch(this.state){
             case WADDLE_STATE.IDLE:
-            if(this.p.vx !== 0){
-                this.p.direction = (this.p.vx > 0) ? "right" : "left";
-            }
-            //this.p.vx = 40 * ((this.p.direction === "left") ? -1 : 1);
-            
-            this.trigger("cplay", "idle");
+
+                if(this.p.vx !== 0){
+                    this.p.direction = (this.p.vx > 0) ? "right" : "left";
+                }
+                //this.p.vx = 40 * ((this.p.direction === "left") ? -1 : 1);
+                
+                this.trigger("cplay", "idle");
 
             break;
 
@@ -134,32 +105,16 @@ Q.Sprite.extend("Waddle", {
                 if(this.dieTime>=0.15){
                     this.destroy();
                 }
-            break;
 
+            break;
             case WADDLE_STATE.ATTACK:
 
-                this.endAttackTime += dt;
-                if(this.firstAttack){
-                    this.flipActual=this.p.flip;
-                    this.trigger("cplay", "attack");
-                    this.firstAttack=false;
-                    this.attack();
-                }
                 
-                if(this.endAttackTime > 3){
-                    this.trigger("change_state", WADDLE_STATE.IDLE);
-                    //this.isStatue=false;
-                    this.endAttackTime = 0;
-                    this.attackTime=0;
-                    this.firstAttack=true;
-                }
                 
-                break;
-             
+            break;
         }
         // Flip in movement
-        this.p.flip = (this.p.direction === "left") ? false : "x";
-         },
+    },*/
 });
 
 

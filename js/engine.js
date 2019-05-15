@@ -35,23 +35,29 @@ const load = (callback) => {
                 const init_global_entities = function(stage){
                     stage.insert(new Q.Absorb());
                     stage.insert(new Q.Blow());
+                    stage.insert(new Q.cloudExplosion());
                 };
 
                 Q.loadTMX(all_levels.join(","), function(){
                     compiling.level.forEach(key => {
                         const level_name = Object.keys(key)[0];
                         Q.scene(level_name, function(stage) {
+
                             const level = levels[level_name];
                             Q.stageScene(level.hud, 1);
-                            init_global_entities(stage);
                             Q.stageTMX(`${level_name}.tmx`, stage);
                             
                             stage.add("viewport").follow(Q('Kirby').first(), {x: level.isDynamic || true, y: true},{
                                 minX: 32,
-                                maxX: stage.items[0].c.w - 32,
+                                maxX: stage.items[1].c.w - 32,
                                 minY: +225.5,
                                 maxY: 0,
                             });
+
+                            
+                            init_global_entities(stage);
+
+                            //stage.items.forEach(entity => { console.log(entity.className); });
                         });
                     });
 

@@ -5,7 +5,7 @@ Q.animations("fireHotHead", {
         frames: [1,2],
         rate:1 / 10,
         collision_box: {
-            width: 36,
+            width: 32,
             height: 32,
         },
     },
@@ -28,7 +28,6 @@ Q.Sprite.extend("FireHotHead", {
             isStatue: false,
             skipCollision: true,
             gravity: false,
-
         });
 
         //times

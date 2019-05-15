@@ -8,33 +8,37 @@ compiling.sheet.push({
 Q.animations("hotHead", {
     idle: {
         frames: [0,1],
-        rate: 1/ 3,
+        rate: 1/3,
+        sheet: "hotHead",
         collision_box: {
-            width: 38,
+            width: 32,
             height: 32,
         }
     },
     die:{
-        frames: [2,3],
-        rate:1 / 10,
+        frames: [0,1],
+        rate:1/10,
+        sheet: "attack",
         collision_box: {
-            width: 38,
+            width: 32,
             height: 32,
         },
     },
     attackWait:{
-        frames: [2,3],
+        frames: [0,1],
         rate:1 / 10,
+        sheet: "attack",
         collision_box: {
-            width: 38,
+            width: 32,
             height: 32,
         },
     },
     attackAction:{
-        frames: [4,5],
+        frames: [2,3],
         rate:1 / 10,
+        sheet: "attack",
         collision_box: {
-            width: 38,
+            width: 32,
             height: 32,
         },
     }
@@ -64,45 +68,44 @@ Q.Sprite.extend("HotHead", {
         this.state = HOTHEAD_STATE.IDLE;
 
         // primer ataque
-        this.firstAttack=true;
-        this.terminateAttack=false;
-        this.flipActual=false;
+        this.firstAttack = true;
+        this.terminateAttack = false;
+        this.flipActual = false;
+
         //times
         this.dieTime = 0;
-        this.attackTime=0;
-        this.endAttackTime=0;
+        this.idleTime = 0;
+        this.endAttackTime = 0;
 
-        this.add("Entity, aiBounce");
+        this.add("Enemy");
 
         /* Events */
         this.on("attack", this, "attack");
-        this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
-            if(collision.obj.isA("Kirby")){
-                this.attackTime = 0;
-                if(collision.obj.state === KIRBY_STATE.SLIDING ){
-                    this.trigger("change_state", HOTHEAD_STATE.DIE);
-                }
-                else{
-                if(!this.skipCollision){Q.state.set("bar", Q.state.get("bar") - 1);}
-                this.trigger("change_state", HOTHEAD_STATE.DIE);
-                } 
-            }
-            if(collision.obj.isA("FireHotHead")){
-                this.p.flip=this.flipActual;
-            }
-        });
+        this.on("bump", this, "collision");
 
     },
+
+    collision: function(collision){
+        const entity = collision.obj;
+        
+        if(entity.isA("Kirby")){
+            if(!this.skipCollision && entity.state !== KIRBY_STATE.SLIDING){ 
+                Q.state.set("bar", Q.state.get("bar") - 1);
+            }
+
+            this.trigger("change_state", HOTHEAD_STATE.DIE);
+        }
+    },
+
     attack: function(){
         //this.isStatue = true;
-
-        var stage=Q.stage(0);
+        var stage = Q.stage(0);
         var fire = stage.insert(new Q.FireHotHead({
-                    y:this.p.y,
-                    x:this.p.x,
-                    vx:this.p.vx,
-                    direction:this.p.direction
-            }));
+            y: this.p.y,
+            x: this.p.x + (32 + 32) / 2 * (this.p.direction === "Left" ? -1 : 1),
+            vx: this.p.vx,
+            direction: this.p.direction
+        }));
     },
         
     // Update
@@ -112,48 +115,52 @@ Q.Sprite.extend("HotHead", {
 
     // Update Step
     step: function(dt){
-        this.attackTime += dt;
-        if(this.attackTime>=5){
-            this.trigger("change_state", HOTHEAD_STATE.ATTACK);
-        }
+
         switch(this.state){
             case HOTHEAD_STATE.IDLE:
-                if(this.p.vx!==0){
-                    this.p.direction = (this.p.vx > 0) ? "right" : "left";
-                }
-                this.p.vx = 80*((this.p.direction === "left") ? -1 : 1);
+
+            //console.log(this.p);
+                this.p.vx = 80 * ((this.p.direction === "left") ? -1 : 1);
                 this.trigger("cplay", "idle");
 
-                break;
+                this.idleTime += dt;
+                if(this.idleTime >= 5){
+                    this.trigger("change_state", HOTHEAD_STATE.ATTACK);
+                }
+
+            break;
 
             case  HOTHEAD_STATE.DIE:
 
                 this.trigger("cplay", "die");
                 this.skipCollision = true,
                 this.p.isStatue = true;
-                this.gravity=false;
-                this.p.vx=0;
-                this.dieTime+=dt;
-                if(this.dieTime>=0.15){
+                this.gravity = false;
+                this.p.vx = 0;
+
+                this.dieTime += dt;
+                if(this.dieTime >= 2/10){
                     this.destroy();
                 }
-                break;
+
+            break;
 
             case HOTHEAD_STATE.ATTACK:
+
                 this.endAttackTime += dt;
-                this.p.vx=0;
-                if(this.attackTime>6){
+                this.p.vx = 0;
+                if(this.attackTime > 6){
                     if(this.firstAttack){
                         this.flipActual=this.p.flip;
                         this.trigger("cplay", "attackAction");
                         this.firstAttack=false;
-                        this.attack();
+                        //this.attack();
                     }
                 
-                    if(this.endAttackTime>3){
+                    if(this.endAttackTime > 3){
                         this.trigger("change_state", HOTHEAD_STATE.IDLE);
                         this.endAttackTime = 0;
-                        this.attackTime=0;
+                        this.attackTime = 0;
                         this.firstAttack=true;
                     }
                 }
@@ -161,7 +168,7 @@ Q.Sprite.extend("HotHead", {
                     this.trigger("cplay", "attackWait");
                 }
                 
-                break;
+            break;
              
         }
         // Flip in movement

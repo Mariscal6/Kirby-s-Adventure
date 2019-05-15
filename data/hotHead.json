@@ -2,16 +2,22 @@
     "hotHead": {
         "sx": 0,
         "sy": 0,
-        "tileW": 36,
+        "tileW": 32,
         "tileH": 32,
-        "frames": 6
+        "frames": 2
+    },
+    "attack":{
+        "sx": 64,
+        "sy": 0,
+        "tileW": 32,
+        "tileH": 32,
+        "frames": 4
     },
     "fire": {
-        "sx": 163,
+        "sx": 192,
         "sy": 0,
-        "tileW": 36,
+        "tileW": 32,
         "tileH": 32,
-        "frames":2
+        "frames": 2
     }
- 
 }

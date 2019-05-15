@@ -7,7 +7,7 @@ const levels = {
 
     "level1": {
         next_level: "level2",
-        hud: "MENU",
+        hud: "BOSS",
     },
 
     "level2": {

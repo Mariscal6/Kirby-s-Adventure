@@ -11,7 +11,7 @@ Q.animations("cloudExplosion", {
         rate: 1/8, 
         collision_box: {
             width: 32,
-            height: 32,
+            height: 20,
         }
     },
 });
@@ -62,13 +62,14 @@ Q.Sprite.extend("cloudExplosion", {
             const kirby = Q("Kirby").first();
             const kirby_collision_width = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box.width;
             const absorb_collision_width = Q.animation(this.p.sprite, this.p.animation).collision_box.width;
-            this.p.x = kirby.p.x + (absorb_collision_width + kirby_collision_width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
-            this.p.y = kirby.p.y+5;
+            this.p.x = kirby.p.x - (absorb_collision_width + kirby_collision_width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
+            this.p.y = kirby.p.y + 5;
             this.p.skipCollision = true;
             this.p.gravity = false;
             this.p.flip = kirby.p.flip;
             this.cloudTime += dt;
             if(this.cloudTime >=0.5){
+                this.cloudTime = 0;
                 this.onScreen=false;
             }
         }

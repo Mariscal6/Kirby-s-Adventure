@@ -25,6 +25,7 @@ Q.component("Enemy", {
    },
 
    collision: function(collision){
+
        if(collision.obj.isA("TileLayer")) return;
 
        /*

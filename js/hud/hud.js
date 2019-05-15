@@ -180,13 +180,13 @@ Q.Sprite.extend("LevelName", {
     init: function(p){
         this._super(p, {
             sprite: "levelNameAnim",
-            w:169,
-            h: 10
+            w:325,
+            h: 19
         });
         this.add('animation');
     },
     step:function(){
-        //console.log(Q.state.get('current_level'));
+        this.play("level1");
        //this.play(Q.state.get('current_level'));
     }
 });
@@ -339,13 +339,13 @@ Q.scene("MENU", function(stage) {
         }), container);
     }
     stage.insert(new Q.LevelName({
-        x: 100,
-        y: -10,
+        x: 28,
+        y: -20,
         sheet: "levelName"
     }), container);
     stage.insert(new Q.lifesNumber({
         x: 180,
-        y: 30,
+        y: 28,
         number: 'first'
     }), container);
 
@@ -383,7 +383,7 @@ Q.scene("BOSS", function(stage) {
 
     for (let index = 0; index < 12; index++) {
         stage.insert(new Q.bossHealth({
-            x: -103 + index * 9,
+            x: -103 + index * 8,
             y: 13,
             sheet: "bossHealth",
             status: "nohit",

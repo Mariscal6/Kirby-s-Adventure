@@ -2,7 +2,7 @@
     "blow": {
         "sx": 0,
         "sy": 0,
-        "tileW": 32,
+        "tileW": 64,
         "tileH": 32
     }
 }

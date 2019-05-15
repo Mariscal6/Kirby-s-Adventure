@@ -43,7 +43,6 @@ Q.Sprite.extend("FireHotHead", {
         this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
 
             if(!collision.obj.isA("Kirby")){
-                console.log("fireHotHead choca");
                 this.p.flip = (this.p.direction === "left") ? "x" : false;
             }
             if(collision.obj.isA("Kirby")){

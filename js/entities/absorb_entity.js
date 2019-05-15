@@ -24,7 +24,6 @@ Q.animations("particles", {
 Q.Sprite.extend("Absorb", {
 
     init: function(p){
-        console.log(p);
         this._super(p, {
             sheet: "particles",
             sprite: "particles",
@@ -71,7 +70,6 @@ Q.Sprite.extend("Absorb", {
         const ex = entity.p.x;
         
         //console.log();
-        console.log((ix - ex) / w);
         //entity.p.vx = (ix - ex) / w * 300;
     },
 

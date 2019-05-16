@@ -31,14 +31,10 @@ Q.Sprite.extend("Absorb", {
             y: 450,
             skipCollision: true,
         });
-        //console.log(Q._animations);
-        //console.log(Q.animation(this.p.animation, this.p.sprite));
+        this.add("Entity");
 
         this.onScreen = false;
-
-        this.isParticle = true;
-
-        this.add("Entity");
+        this.isEntity = false;
 
         this.on("bump", this, "absorbing");
     },
@@ -59,20 +55,7 @@ Q.Sprite.extend("Absorb", {
         this._super(dt);
     },
 
-    absorbing: function(collide){
-        const entity = collide.obj;
-        if(entity.isParticle || entity.isA("Kirby") || entity.isA("TileLayer")) return;
-        
-
-        entity.p.isStatue = true;
-        const w = this.sheet().w;
-        const direction = this.p.flip === "x" ? -1 : 1;
-        const ix = this.p.x + direction * w / 2;
-        const ex = entity.p.x;
-        
-        //console.log();
-        //entity.p.vx = (ix - ex) / w * 300;
-    },
+    absorbing: function(collide){},
 
     // Update Step
     step: function(dt){

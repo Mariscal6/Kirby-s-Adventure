@@ -14,12 +14,18 @@ compiling.sheet.push({
 
 /* Constants */
 const INITIAL_SPEED = 130;
+const INITIAL_CHUBBY_SPEED = 65;
+
 const MAX_SPEED = 200;
+const MAX_CHUBBY_SPEED = 100;
+
+
 const BALLOON_MAX_SPEED_Y = 60;
 const BALLOON_MAX_SPEED_X = 160;
 
 /* Animations */
 Q.animations("kirby", {
+    /* Normal */
     idle: {
         frames: [0],
         collision_box: {
@@ -42,6 +48,32 @@ Q.animations("kirby", {
             height: 30,
         }
     },
+
+    /* Chubby */
+    chubby_idle: {
+        frames: [15],
+        collision_box: {
+            width: 44,
+            height: 44
+        }
+    },
+    chubby_blink: {
+        frames: [15],
+        rate: 1/3,
+        collision_box: {
+            width: 44,
+            height: 44
+        }
+    },
+    chubby_move: {
+        frames: [16, 17],
+        rate: 1/3,
+        collision_box: {
+            width: 44,
+            height: 44
+        }
+    },
+
     /* ABSORBING */
     start_absorbing: {
         frames: [12],
@@ -260,7 +292,10 @@ Q.Sprite.extend("Kirby", {
         this.flyingTime = 0;
 
         //SLIDING TIME
-        this.slideTime=0;
+        this.slideTime = 0;
+
+        // CHUBBY
+        this.isChubby = false;
 
         this.add("platformerControls, Entity");
 
@@ -274,6 +309,16 @@ Q.Sprite.extend("Kirby", {
         this.on("bend", this, "bend");
         this.on("bend_end", this, "bend_end");
 
+        this.on("bump", this, "collision");
+    },
+
+    collision: function(collide){
+        if(collide.obj.isA("TileLayer")) return;
+
+        if(this.state === KIRBY_STATE.ABSORBING && Q("Absorb").first().onScreen){
+            this.isChubby = true;
+            collide.obj.destroy();
+        }
     },
 
     /* ATTACK */
@@ -309,13 +354,15 @@ Q.Sprite.extend("Kirby", {
 
     /* END ATTACK */
     highJump: function(){
+        if(this.isChubby) return;
+
         this.trigger("change_state", KIRBY_STATE.HIGHJUMP);
         this.p.gravity = 0.5;
     },
 
     balloon: function(){
-        // Si somos estatua, no nos debe dejar.
-        if(this.p.isStatue) return;
+        // Si somos estatua, no nos debe dejar ni si somos gordos
+        if(this.p.isStatue || this.isChubby) return;
 
         this.trigger("change_state", KIRBY_STATE.BALLOON);
         this.p.vy = -220;
@@ -361,20 +408,21 @@ Q.Sprite.extend("Kirby", {
     // Update Step
     step: function(dt){
         this.p.gravity = 0.5; // Reset Gravity
-        //console.log("X:"+this.p.x+ "Y:" +this.p.y);
+
         Q("Absorb").first().onScreen = false;
+        const prefix = this.isChubby ? "chubby_" : "";
 
         switch(this.state){
             
             case KIRBY_STATE.IDLE:
 
-                this.p.speed = INITIAL_SPEED; // Reset Speed to initial
+                this.p.speed = this.isChubby ? INITIAL_CHUBBY_SPEED : INITIAL_SPEED; // Reset Speed to initial
 
-                if (this.p.vy > 0 || this.last_state == KIRBY_STATE.BALLOON) {
+                if (!this.isChubby && (this.p.vy > 0 || this.last_state == KIRBY_STATE.BALLOON)) {
                     this.trigger("change_state", KIRBY_STATE.FALLING);
                 } else {
-                    this.blinkTime = (this.blinkTime + dt) % 3.0;
-                    this.trigger("cplay", ((this.blinkTime >= 1.0) && (this.blinkTime % (2/3)) < 1/3) ? "blink" : "idle");
+                    this.blinkTime = (this.blinkTime + dt) % 2.0;
+                    this.trigger("cplay", prefix + (((this.blinkTime >= 1.0) && (this.blinkTime % (1/3)) < 1/6) ? "blink" : "idle"));
                     // Transition if the lenght of the x velocity is greater than 0 (is moving or skid).
                     if (Math.abs(this.p.vx) > 0.1) {
                         this.trigger("change_state", KIRBY_STATE.MOVING);
@@ -385,18 +433,18 @@ Q.Sprite.extend("Kirby", {
                 this.movingSpeed = this.p.speed;
                 
             break;
+
             case KIRBY_STATE.MOVING:
-
                 this.movingSpeed = this.p.speed;
-                this.p.speed = Math.min(this.p.speed * 1.02, MAX_SPEED); // Add speed until maximum
+                this.p.speed = Math.min(this.p.speed * 1.02, this.isChubby ? MAX_CHUBBY_SPEED : MAX_SPEED); // Add speed until maximum
 
-                if (this.p.vy > 0){
+                if (!this.isChubby && this.p.vy > 0){
                     this.trigger("change_state", KIRBY_STATE.FALLING);
                 }else{
-                    if (Math.abs(this.movingSpeed) >= MAX_SPEED && this.last_direction != this.p.direction) {
+                    if (!this.isChubby && Math.abs(this.movingSpeed) >= MAX_SPEED && this.last_direction != this.p.direction) {
                         this.trigger("change_state", KIRBY_STATE.SKID);
                     } else {
-                        this.trigger("cplay", "move");
+                        this.trigger("cplay", prefix + "move");
                         // Transition if the lenght of the x velocity is 0 (stop moving).
                         this.trigger("change_state", Math.abs(this.p.vx) < 0.1 ? KIRBY_STATE.IDLE : KIRBY_STATE.MOVING);
                     }                    
@@ -405,7 +453,12 @@ Q.Sprite.extend("Kirby", {
 
             break;
             case KIRBY_STATE.ABSORBING:
-                
+                // Something eaten
+                if(this.isChubby){
+                    this.p.isStatue = false;
+                    this.trigger("change_state", KIRBY_STATE.IDLE);
+                }
+
                 this.absorbTime += dt;
                 
                 if(this.absorbType == ABSORB_TYPE.ABSORBING){
@@ -549,7 +602,7 @@ Q.Sprite.extend("Kirby", {
 
             case KIRBY_STATE.SLIDING:
 
-                this.slideTime+=dt;
+                this.slideTime += dt;
                 if (this.slideTime < 0.5) {
                     //slideCloud
                     Q("cloudExplosion").first().trigger("respawn");
@@ -557,7 +610,7 @@ Q.Sprite.extend("Kirby", {
                     this.trigger("cplay", "slide");
 
                 } else {
-                    this.p.vx=0;
+                    this.p.vx = 0;
                     this.slideTime = 0;
                     this.trigger("change_state", KIRBY_STATE.BEND);
                     this.bend_end();

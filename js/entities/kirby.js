@@ -313,9 +313,15 @@ Q.Sprite.extend("Kirby", {
     },
 
     collision: function(collide){
-        if(collide.obj.isA("TileLayer")) return;
+        if(collide.obj.isA("TileLayer") || !collide.obj.isEntity) return;
 
-        if(this.state === KIRBY_STATE.ABSORBING && Q("Absorb").first().onScreen){
+        // If kirby collides with something while absorbing.
+        // TODO: Check if the collision directions is the same as the absorbing direction
+        if(
+            //this.state === KIRBY_STATE.ABSORBING &&
+            Q("Absorb").first().onScreen &&
+            ((this.p.direction === "left" ? 1 : -1) === collide.normalX && collide.normalY === 0)
+        ){
             this.isChubby = true;
             collide.obj.destroy();
         }
@@ -323,10 +329,10 @@ Q.Sprite.extend("Kirby", {
 
     /* ATTACK */
     attack: function(){
-        
-        if(this.absorbTime > 0) return;
+        if(this.p.isStatue) return;
 
         this.flyingTime = 0;
+        
 
         switch(this.state){
             case KIRBY_STATE.BALLOON:
@@ -335,12 +341,15 @@ Q.Sprite.extend("Kirby", {
             case KIRBY_STATE.BEND:
                 this.trigger("change_state", KIRBY_STATE.SLIDING);
             break;
-            case KIRBY_STATE.SLIDING:
-            break;
+            case KIRBY_STATE.SLIDING:break;
             default:
-                this.p.isStatue = true;
-                this.absorbType = ABSORB_TYPE.ABSORBING;
-                this.trigger("change_state", KIRBY_STATE.ABSORBING);
+                if(this.isChubby){
+                    this.isChubby = false;
+                }else{
+                    this.p.isStatue = true;
+                    this.absorbType = ABSORB_TYPE.ABSORBING;
+                    this.trigger("change_state", KIRBY_STATE.ABSORBING);
+                }
             break;
         };
         
@@ -373,6 +382,7 @@ Q.Sprite.extend("Kirby", {
     bend: function(){
         // Si somos estatua, no nos debe dejar.
         if(this.p.isStatue) return;
+
         switch (this.state) {
             case KIRBY_STATE.IDLE:
                 this.trigger("change_state", KIRBY_STATE.BEND);
@@ -484,25 +494,17 @@ Q.Sprite.extend("Kirby", {
             case KIRBY_STATE.BLOWING:
                 this.p.vy = Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
                 this.blowingTime += dt;
-                if (this.blowingTime < 1 / 8) {
+                if(this.blowingTime < 1/8){
                     this.trigger("cplay", "start_blowing");
-
-                } else if (this.blowingTime < 2 / 8) {
-                    
+                }else if(this.blowingTime < 2/8){
                     Q("Blow").first().onScreen = true;
                     this.trigger("cplay", "blowing1");
-
-
-                } else if (this.blowingTime < 3 / 8) {
-
+                }else if(this.blowingTime < 3 / 8){
                     this.trigger("cplay", "blowing2");
-
-                } else {
-                    this.hadBlown=true;
+                }else{
                     this.blowingTime = 0;
                     this.trigger("cplay", "falling");
                     this.trigger("change_state", KIRBY_STATE.FALLING);
-                    
                 }
 
             break;

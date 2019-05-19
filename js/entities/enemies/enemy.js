@@ -41,8 +41,8 @@ Q.component("Enemy", {
    collision: function(collision){
 		if(collision.obj.isA("TileLayer")) return;
 
-		const entity = collision.obj;
-		if(entity.isA("Absorb")){
+        const entity = collision.obj;
+		if(entity.isA("Absorb") && collision.normalY === 0){
 			this.entity.trigger("change_state", ENEMY_STATE.ABSORBED);
 
 			/*const direction = this.entity.p.flip === "x" ? -1 : 1;

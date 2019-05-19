@@ -68,11 +68,6 @@ Q.Sprite.extend("HotHead", {
             direction: this.p.direction
         }));*/
     },
-
-    // Update Step
-    step: function(dt){
-
-    },
 });
 
 

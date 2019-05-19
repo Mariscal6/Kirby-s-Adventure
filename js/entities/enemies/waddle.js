@@ -49,7 +49,6 @@ Q.Sprite.extend("Waddle", {
         this._super(p, {
             sheet: "waddle",
             sprite: "waddle",
-            gravity: 0.87,
         });
         this.add("Enemy");
 

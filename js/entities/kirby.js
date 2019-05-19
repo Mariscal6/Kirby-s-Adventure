@@ -297,6 +297,9 @@ Q.Sprite.extend("Kirby", {
         // CHUBBY
         this.isChubby = false;
 
+        // Attack
+        this.isAttackSwitch = false;
+
         this.add("platformerControls, Entity");
 
         /* Events */
@@ -323,13 +326,14 @@ Q.Sprite.extend("Kirby", {
             ((this.p.direction === "left" ? 1 : -1) === collide.normalX && collide.normalY === 0)
         ){
             this.isChubby = true;
+            this.isAttackSwitch = true;
             collide.obj.destroy();
         }
     },
 
     /* ATTACK */
     attack: function(){
-        if(this.p.isStatue) return;
+        if(this.p.isStatue || this.isAttackSwitch) return;
 
         this.flyingTime = 0;
         
@@ -358,6 +362,7 @@ Q.Sprite.extend("Kirby", {
     attack_end: function(){
 
         this.absorbType = ABSORB_TYPE.BLOWING;
+        this.isAttackSwitch = false;
 
     },
 

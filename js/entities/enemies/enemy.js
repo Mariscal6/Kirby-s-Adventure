@@ -19,6 +19,12 @@ Q.component("Enemy", {
         // Global events
         this.entity.on("attack", this.entity, "attack");
 
+        // Properties
+         // Remove initial velocity
+        this.entity.p.vy = 0.0;
+        this.entity.p.vx = 0.0;
+        this.entity.p.gravity = false;
+
         // States
         this.entity.state = ENEMY_STATE.IDLE;
 
@@ -42,7 +48,7 @@ Q.component("Enemy", {
 		if(collision.obj.isA("TileLayer")) return;
 
         const entity = collision.obj;
-		if(entity.isA("Absorb") && collision.normalY === 0){
+		if(entity.isA("Absorb")){
 			this.entity.trigger("change_state", ENEMY_STATE.ABSORBED);
 
 			/*const direction = this.entity.p.flip === "x" ? -1 : 1;
@@ -68,15 +74,18 @@ Q.component("Enemy", {
         */
     },
 
-   step: function(dt){
+    step: function(dt){
 		const self = this.entity;
 
+        self.p.gravity = 0.89;
+        self.p.skipCollision = false;
+        
         switch(self.state){
 			case ENEMY_STATE.IDLE:
                 self.trigger("cplay", "idle");
 
-                self.p.direction = (self.p.vx >= 0) ? "right" : "left";
-                self.p.vx = 40 * ((self.p.direction === "left") ? -1 : 1);
+                //self.p.direction = (self.p.vx >= 0) ? "right" : "left";
+                //self.p.vx = 40 * ((self.p.direction === "left") ? -1 : 1);
 
                 self.time_idle += dt;
                 self.time_jump += dt;
@@ -127,17 +136,24 @@ Q.component("Enemy", {
 					const ce = Q.animation(absorb.p.sprite, absorb.p.animation).collision_box;
 					
 					const dir = (absorb.p.flip === "x" ? 1 : -1);
-					const mouth = absorb.p.x - ce.width * dir / 2;
+					const mouth = absorb.p.x + ce.width * dir / 2;
 					const side = self.p.x + ct.width * dir / 2;
 
 					const ivelocity = 0.3;
-					const dx = Math.abs(side - mouth) / ct.width + ivelocity;
-					const dy = (absorb.p.y - self.p.y) / ct.height;
-					const v = 200;
+					let dx = (mouth - side); // / ct.width + ivelocity
+                    let dy = (absorb.p.y - self.p.y); // / ct.height
+                    const ds = Math.sqrt(dx * dx + dy * dy);
 
-					self.p.skipCollision = true;
-					self.p.vx = dir * dx * v; //ds;
-					self.p.vy = dy * v; //ds;
+                    dx /= ds;
+                    dy /= ds;
+
+                    
+                    const v = (1 - 1 / (1 + ds*ds)) * 200 + 100;
+                    self.p.skipCollision = true;
+                    self.p.gravity = false;
+                    
+                    self.p.vx = dx * v;
+					self.p.vy = dy * v;
 				}
 
 			break;

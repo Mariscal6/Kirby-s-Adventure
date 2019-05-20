@@ -48,7 +48,7 @@ Q.component("Enemy", {
 		if(collision.obj.isA("TileLayer")) return;
 
         const entity = collision.obj;
-		if(entity.isA("Absorb")){
+		if(entity.isA("AbsorbMissile")){
 			this.entity.trigger("change_state", ENEMY_STATE.ABSORBED);
 
 			/*const direction = this.entity.p.flip === "x" ? -1 : 1;
@@ -126,7 +126,7 @@ Q.component("Enemy", {
 
 				self.trigger("cplay", "idle");
 
-				const absorb = Q("Absorb").first();
+				const absorb = Q("AbsorbMissile").first();
 
 				if(!absorb.onScreen){
 					self.p.skipCollision = false;

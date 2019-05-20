@@ -8,21 +8,6 @@ Q.Sprite.extend("Hill", {
             gravity: false
         });
 
-        this.p.points = [
-            [-16, -16],
-            [-16, +16],
-            [+16, +16],
-            [+16, -16],
-        ];
-
-        /*if(this.p.Direction === "Right"){
-            this.p.points[0][0] -= 10;
-            this.p.points[1][0] -= 10;
-        }else{
-            this.p.points[2][0] += 10;
-            this.p.points[3][0] += 10;
-        }*/
-
         this.add('2d, animation');
         
         this.on("bump", this, "hilling");
@@ -58,11 +43,10 @@ Q.Sprite.extend("Hill", {
             const floor = Math.abs(f(hx));
             //console.log(floor, hy);
 
-            console.log();
+            if(floor < hy && entity.isClimbing) return;
 
-            if(floor < hy) return;
-
-            entity.p.y = base - (floor + sprite.width / 2);
+            entity.isClimbing = true;
+            entity.p.y = base - (floor + sprite.height / 2);
             entity.p.vy = 0;
 
             //const floor = f();

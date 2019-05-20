@@ -18,7 +18,8 @@ const INITIAL_CHUBBY_SPEED = 65;
 
 const MAX_SPEED = 200;
 const MAX_CHUBBY_SPEED = 100;
-
+const MAX_CHUBBY_RUNNING_SPEED = 200;
+const MAX_RUNNING_SPEED = 300;
 
 const BALLOON_MAX_SPEED_Y = 60;
 const BALLOON_MAX_SPEED_X = 160;
@@ -42,7 +43,15 @@ Q.animations("kirby", {
     },
     move: {
         frames: [4, 3, 2], 
-        rate:1 / 10,
+        rate: 1/10,
+        collision_box: {
+            width: 30,
+            height: 30,
+        }
+    },
+    running: {
+        frames: [4, 3, 2], 
+        rate: 1/20,
         collision_box: {
             width: 30,
             height: 30,
@@ -71,6 +80,14 @@ Q.animations("kirby", {
         collision_box: {
             width: 44,
             height: 44
+        }
+    },
+    chubby_running: {
+        frames: [16, 17], 
+        rate: 1/9,
+        collision_box: {
+            width: 44,
+            height: 44,
         }
     },
 
@@ -167,7 +184,7 @@ Q.animations("kirby", {
 
     /* BLOWING */
 
-    start_blowing:{
+    start_blowing: {
         frames: [21],
         rate: 1/16,
         collision_box: {
@@ -176,7 +193,7 @@ Q.animations("kirby", {
         }
     },
 
-    blowing1:{
+    blowing1: {
         frames: [14],
         rate: 1/16,
         collision_box: {
@@ -185,8 +202,17 @@ Q.animations("kirby", {
         }
     },
 
-    blowing2:{
+    blowing2: {
         frames: [13],
+        rate: 1/16,
+        collision_box: {
+            width: 44,
+            height: 44
+        }
+    },
+
+    star_blowing: {
+        frames: [19, 20, 14],
         rate: 1/16,
         collision_box: {
             width: 44,
@@ -238,12 +264,13 @@ const KIRBY_STATE = {
     BALLOONING: 3,
     ABSORBING: 4,
     BLOWING: 5,
-    SKID: 6,
-    FALLING: 7,
-    BOUNCING: 8,
-    HILLING: 9,
-    BEND: 10,
-    SLIDING: 11,
+    BLOWING_STAR: 6,
+    SKID: 7,
+    FALLING: 8,
+    BOUNCING: 9,
+    HILLING: 10,
+    BEND: 11,
+    SLIDING: 12,
     DIE: -1,
 };
 
@@ -276,7 +303,7 @@ Q.Sprite.extend("Kirby", {
         // MOVING
         this.movingSpeed = 0;
         this.skiddingTime = 0;
-        this.last_direction=0;
+        this.last_direction = 0;
 
         // Bouncing
         this.bounces = 0;
@@ -287,6 +314,7 @@ Q.Sprite.extend("Kirby", {
 
         // Blowing
         this.blowingTime = 0;
+        this.startTime = 0;
 
         // Flying
         this.flyingTime = 0;
@@ -296,6 +324,9 @@ Q.Sprite.extend("Kirby", {
 
         // CHUBBY
         this.isChubby = false;
+
+        // Running
+        this.isRunning = false;
 
         // Attack
         this.isAttackSwitch = false;
@@ -313,6 +344,8 @@ Q.Sprite.extend("Kirby", {
         this.on("bend_end", this, "bend_end");
 
         this.on("bump", this, "collision");
+
+        this.on("run", this, "run");
     },
 
     collision: function(collide){
@@ -322,7 +355,7 @@ Q.Sprite.extend("Kirby", {
         // TODO: Check if the collision directions is the same as the absorbing direction
         if(
             //this.state === KIRBY_STATE.ABSORBING &&
-            Q("Absorb").first().onScreen &&
+            Q("AbsorbMissile").first().onScreen &&
             ((this.p.direction === "left" ? 1 : -1) === collide.normalX && collide.normalY === 0)
         ){
             this.isChubby = true;
@@ -333,10 +366,9 @@ Q.Sprite.extend("Kirby", {
 
     /* ATTACK */
     attack: function(){
-        if(this.p.isStatue || this.isAttackSwitch) return;
-
+        if(this.isAttackSwitch) return;
+        this.isRunning = false;
         this.flyingTime = 0;
-        
 
         switch(this.state){
             case KIRBY_STATE.BALLOON:
@@ -348,7 +380,7 @@ Q.Sprite.extend("Kirby", {
             case KIRBY_STATE.SLIDING:break;
             default:
                 if(this.isChubby){
-                    this.isChubby = false;
+                    this.trigger("change_state", KIRBY_STATE.BLOWING_STAR);
                 }else{
                     this.p.isStatue = true;
                     this.absorbType = ABSORB_TYPE.ABSORBING;
@@ -369,7 +401,7 @@ Q.Sprite.extend("Kirby", {
     /* END ATTACK */
     highJump: function(){
         if(this.isChubby) return;
-
+        this.isRunning = false;
         this.trigger("change_state", KIRBY_STATE.HIGHJUMP);
         this.p.gravity = 0.5;
     },
@@ -377,7 +409,7 @@ Q.Sprite.extend("Kirby", {
     balloon: function(){
         // Si somos estatua, no nos debe dejar ni si somos gordos
         if(this.p.isStatue || this.isChubby) return;
-
+        this.isRunning = false;
         this.trigger("change_state", KIRBY_STATE.BALLOON);
         this.p.vy = -220;
         this.p.gravity = 0.5;
@@ -387,7 +419,7 @@ Q.Sprite.extend("Kirby", {
     bend: function(){
         // Si somos estatua, no nos debe dejar.
         if(this.p.isStatue) return;
-
+        this.isRunning = false;
         switch (this.state) {
             case KIRBY_STATE.IDLE:
                 this.trigger("change_state", KIRBY_STATE.BEND);
@@ -401,17 +433,24 @@ Q.Sprite.extend("Kirby", {
                 this.p.isStatue = true;
                 this.p.vx = 0;
             break;
+            
         };
         
     },
 
     bend_end: function () {
-
+        this.isRunning = false;
         if (this.state == KIRBY_STATE.BEND) {
             this.trigger("change_state", KIRBY_STATE.IDLE);
             this.p.isStatue = false;
         }
 
+    },
+
+    run: function(){
+        if(this.p.isStatue || this.state !== KIRBY_STATE.IDLE) return;
+        this.isRunning = true;
+        this.trigger("change_state", KIRBY_STATE.MOVING);
     },
 
 
@@ -423,15 +462,15 @@ Q.Sprite.extend("Kirby", {
     // Update Step
     step: function(dt){
         this.p.gravity = 0.5; // Reset Gravity
+        this.p.speed = INITIAL_SPEED;
 
-        Q("Absorb").first().onScreen = false;
+        Q("AbsorbMissile").first().onScreen = false;
         const prefix = this.isChubby ? "chubby_" : "";
 
         switch(this.state){
             
             case KIRBY_STATE.IDLE:
-
-                this.p.speed = this.isChubby ? INITIAL_CHUBBY_SPEED : INITIAL_SPEED; // Reset Speed to initial
+                this.p.speed = /*this.isChubby ? INITIAL_CHUBBY_SPEED : */INITIAL_SPEED; // Reset Speed to initial
 
                 if (!this.isChubby && (this.p.vy > 0 || this.last_state == KIRBY_STATE.BALLOON)) {
                     this.trigger("change_state", KIRBY_STATE.FALLING);
@@ -451,12 +490,23 @@ Q.Sprite.extend("Kirby", {
 
             case KIRBY_STATE.MOVING:
                 this.movingSpeed = this.p.speed;
-                this.p.speed = Math.min(this.p.speed * 1.02, this.isChubby ? MAX_CHUBBY_SPEED : MAX_SPEED); // Add speed until maximum
+                
+                let max_speed = MAX_SPEED;
+                
+                if(this.isRunning && this.isChubby) max_speed = MAX_CHUBBY_RUNNING_SPEED;
+                else if(this.isRunning) max_speed = MAX_RUNNING_SPEED;
+                else if(this.isChubby) max_speed = MAX_CHUBBY_SPEED;
+
+                this.p.speed = max_speed;
+
+                if(this.isRunning && this.p.speed >= max_speed * 0.8){
+                    Q("CloudParticle").first().trigger("respawn");
+                }
 
                 if (!this.isChubby && this.p.vy > 0){
                     this.trigger("change_state", KIRBY_STATE.FALLING);
                 }else{
-                    if (!this.isChubby && Math.abs(this.movingSpeed) >= MAX_SPEED && this.last_direction != this.p.direction) {
+                    if (!this.isChubby && Math.abs(this.p.vx) >= max_speed*0.8 && this.last_direction != this.p.direction) {
                         this.trigger("change_state", KIRBY_STATE.SKID);
                     } else {
                         this.trigger("cplay", prefix + "move");
@@ -467,7 +517,9 @@ Q.Sprite.extend("Kirby", {
                 this.last_direction = this.p.direction;
 
             break;
+
             case KIRBY_STATE.ABSORBING:
+
                 // Something eaten
                 if(this.isChubby){
                     this.p.isStatue = false;
@@ -482,7 +534,7 @@ Q.Sprite.extend("Kirby", {
                         this.trigger("cplay", "start_absorbing");
                     }else{
                         this.trigger("cplay", "absorbing");
-                        Q("Absorb").first().onScreen = true;
+                        Q("AbsorbMissile").first().onScreen = true;
                     }
                 }else{
                     if(this.absorbTime < 1/8){
@@ -495,26 +547,39 @@ Q.Sprite.extend("Kirby", {
                 }
 
             break;
-
             case KIRBY_STATE.BLOWING:
+
                 this.p.vy = Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
                 this.blowingTime += dt;
                 if(this.blowingTime < 1/8){
                     this.trigger("cplay", "start_blowing");
                 }else if(this.blowingTime < 2/8){
-                    Q("Blow").first().onScreen = true;
+                    Q("BlowMissile").first().trigger("respawn");
                     this.trigger("cplay", "blowing1");
-                }else if(this.blowingTime < 3 / 8){
+                }else if(this.blowingTime < 3/8){
                     this.trigger("cplay", "blowing2");
                 }else{
                     this.blowingTime = 0;
-                    this.trigger("cplay", "falling");
                     this.trigger("change_state", KIRBY_STATE.FALLING);
                 }
 
             break;
+            case KIRBY_STATE.BLOWING_STAR:
 
+                this.startTime += dt;
+
+                if(this.startTime <= 3/16){
+                    this.trigger("cplay", "star_blowing");
+                }else{
+                    this.isChubby = false;
+                    this.startTime = 0;
+                    this.trigger("change_state", KIRBY_STATE.IDLE);
+                    Q("StarMissile").first().trigger("respawn");
+                }
+
+            break;
             case KIRBY_STATE.BALLOON:
+
                 this.p.vy = Math.min(this.p.vy, BALLOON_MAX_SPEED_Y);
                 this.flyingTime += dt;
                 if(this.flyingTime < 4/6){
@@ -526,7 +591,7 @@ Q.Sprite.extend("Kirby", {
 
             break;
             case KIRBY_STATE.HIGHJUMP:
-
+                this.p.speed = this.movingSpeed;
                 // TO DO: Crear estado "falling head"
                 if (Math.abs(this.p.vy) < 50) {
                     this.trigger("cplay", "spin");
@@ -560,7 +625,7 @@ Q.Sprite.extend("Kirby", {
                 if(Math.abs(this.p.vy) < 0.01){
                     // First Bounce
                     if (this.bounces++ === 0) {
-                        Q("Star").first().trigger("respawn");
+                        Q("StarParticle").first().trigger("respawn");
                         this.p.vy = -150;
                         this.trigger("cplay", "falling_head");
                     }else{ // Last Bounce
@@ -577,8 +642,10 @@ Q.Sprite.extend("Kirby", {
                 this.fallingSpeed = 0;
                 this.skiddingTime += dt;
                 if(this.skiddingTime <= 1/6){
+                    console.log(1);
                     this.p.speed *= 0.98;
                     this.p.direction = (this.p.vx < 0) ? "right" : "left";
+                    Q("CloudParticle").first().trigger("respawn");
                     this.trigger("cplay", "skidding");
                 }else{
                     this.skiddingTime = 0;
@@ -612,7 +679,7 @@ Q.Sprite.extend("Kirby", {
                 this.slideTime += dt;
                 if (this.slideTime < 0.5) {
                     //slideCloud
-                    Q("cloudExplosion").first().trigger("respawn");
+                    Q("CloudParticle").first().trigger("respawn");
                     this.p.vx = (this.p.direction === "left") ? -MAX_SPEED : MAX_SPEED;
                     this.trigger("cplay", "slide");
 
@@ -628,6 +695,9 @@ Q.Sprite.extend("Kirby", {
             break;
         }
         
+        // Reset Climbing
+        this.isClimbing = false;
+
         // Flip in movement
         this.p.flip = (this.p.direction === "left") ? "x" : undefined;
     },

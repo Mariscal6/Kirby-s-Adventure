@@ -20,15 +20,13 @@ Q.animations("absorb_missile", {
 /* Animations */
 
 
-Q.Sprite.extend("Absorb", {
+Q.Sprite.extend("AbsorbMissile", {
 
     init: function(p){
         this._super(p, {
             sheet: "absorb",
             sprite: "absorb_missile",
-            gravity: 0,
-            x: 100,
-            y: 450,
+            gravity: false,
             skipCollision: true,
         });
         this.add("Entity");
@@ -68,8 +66,6 @@ Q.Sprite.extend("Absorb", {
             this.p.x = kirby.p.x + (absorb_collision_width + kirby_collision_width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
             this.p.y = kirby.p.y;
 
-            this.p.skipCollision = true;
-            this.p.gravity = false;
             this.p.flip = kirby.p.flip;
         }
     },

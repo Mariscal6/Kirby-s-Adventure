@@ -1,8 +1,8 @@
 /* Load Sprite */
 
 compiling.sheet.push({
-    "png_path": "star.png",
-    "json_path": "star.json"
+    "png_path": "star_particle.png",
+    "json_path": "star_particle.json"
 });
 
 /*var brujula = {
@@ -103,11 +103,11 @@ Q.animations("star", {
 
 
 /* Animations */
-Q.Sprite.extend("Star", {
+Q.Sprite.extend("StarParticle", {
 
     init: function(p){
         this._super(p, {
-            sheet: "star",
+            sheet: "star_particle",
             sprite: "star",
             gravity: false,
             skipCollision: true,

@@ -9,6 +9,8 @@ Q.component("Entity", {
         
         this.entity.on("change_state", this, "change_state");
         this.entity.on("cplay", this, "play");
+
+        this.entity.isClimbing = false;
     },
 
     change_state: function(state){

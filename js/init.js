@@ -13,6 +13,8 @@ window.onload = function(){
         Q.input.bindKey("X", "highJump");
         Q.input.bindKey("UP", "balloon");
         Q.input.bindKey("DOWN", "bend");
+        Q.input.bindKey("LEFT", "left");
+        Q.input.bindKey("RIGHT", "right");
 
     });
 }

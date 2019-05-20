@@ -1,8 +1,8 @@
 /* Load Sprite */
 
 compiling.sheet.push({
-    "png_path": "cloud_explosion.png",
-    "json_path": "cloud_explosion.json"
+    "png_path": "cloud_particle.png",
+    "json_path": "cloud_particle.json"
 });
 
 Q.animations("cloudExplosion", {
@@ -18,7 +18,7 @@ Q.animations("cloudExplosion", {
 
 
 /* Animations */
-Q.Sprite.extend("cloudExplosion", {
+Q.Sprite.extend("CloudParticle", {
 
     init: function(p){
         this._super(p, {
@@ -35,9 +35,9 @@ Q.Sprite.extend("cloudExplosion", {
 
     respawn: function(){
         const kirby = Q("Kirby").first();
-        const kirby_collision_width = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box.width;
-        this.p.x = kirby.p.x - (16 + kirby_collision_width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
-        this.p.y = kirby.p.y + 5;
+        const animation = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box;
+        this.p.x = kirby.p.x - (16 + animation.width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
+        this.p.y = kirby.p.y + animation.height / 2;
     },
 
     // Update Step

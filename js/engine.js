@@ -33,10 +33,11 @@ const load = (callback) => {
                 if(all_levels.length === 0) ok();
 
                 const init_global_entities = function(stage){
-                    stage.insert(new Q.Absorb());
-                    stage.insert(new Q.Blow());
-                    stage.insert(new Q.cloudExplosion());
-                    stage.insert(new Q.Star());
+                    stage.insert(new Q.AbsorbMissile());
+                    stage.insert(new Q.BlowMissile());
+                    stage.insert(new Q.StarMissile());
+                    stage.insert(new Q.CloudParticle());
+                    stage.insert(new Q.StarParticle());
                 };
 
                 Q.loadTMX(all_levels.join(","), function(){

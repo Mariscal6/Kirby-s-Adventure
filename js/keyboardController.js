@@ -42,3 +42,29 @@ Q.input.on("bendUp", function(){
     Q.inputs['down'] = false;
     Q("Kirby").first().trigger("bend_end");
 });
+
+// Override Left / Right
+const DOUBLECLICK_TIMESPAN = 100;
+let delta = 0;
+let ldir = "";
+
+function isDoubleClick(dir){
+    const current = new Date().getTime();
+    if(ldir == dir && (current - delta) < DOUBLECLICK_TIMESPAN){
+        // Double click
+        Q("Kirby").first().trigger("run");
+    }
+
+    ldir = dir;
+}
+
+function isDoubleClickUp(){
+    Q("Kirby").first().isRunning = false;
+    delta = new Date().getTime();
+}
+
+Q.input.on("left", _ => isDoubleClick("left"));
+Q.input.on("leftUp", isDoubleClickUp);
+
+Q.input.on("right", _ => isDoubleClick("right"));
+Q.input.on("rightUp", isDoubleClickUp);

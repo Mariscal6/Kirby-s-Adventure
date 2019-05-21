@@ -44,7 +44,7 @@ const load = (callback) => {
                     compiling.level.forEach(key => {
                         const level_name = Object.keys(key)[0];
                         Q.scene(level_name, function(stage) {
-
+                            console.log(1);
                             const level = levels[level_name];
                             Q.stageScene(level.hud, 1);
                             Q.stageTMX(`${level_name}.tmx`, stage);

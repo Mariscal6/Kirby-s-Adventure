@@ -331,6 +331,9 @@ Q.Sprite.extend("Kirby", {
         // Attack
         this.isAttackSwitch = false;
 
+        //Last climb
+        this.wasClimbing = false;
+
         this.add("platformerControls, Entity");
 
         /* Events */
@@ -463,7 +466,9 @@ Q.Sprite.extend("Kirby", {
     step: function(dt){
         this.p.gravity = 0.5; // Reset Gravity
         this.p.speed = INITIAL_SPEED;
-
+        this.wasClimbing=this.p.collisions;
+        //console.log(this.wasClimbing);
+        //console.log(this);
         Q("AbsorbMissile").first().onScreen = false;
         const prefix = this.isChubby ? "chubby_" : "";
 
@@ -503,7 +508,7 @@ Q.Sprite.extend("Kirby", {
                     Q("CloudParticle").first().trigger("respawn");
                 }
 
-                if (!this.isChubby && this.p.vy > 0){
+                if (!this.isChubby && this.p.vy > 0 && this.wasClimbing.length != 0){
                     this.trigger("change_state", KIRBY_STATE.FALLING);
                 }else{
                     if (!this.isChubby && Math.abs(this.p.vx) >= max_speed*0.8 && this.last_direction != this.p.direction) {

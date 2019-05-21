@@ -43,7 +43,7 @@ Q.Sprite.extend("Hill", {
             const floor = Math.abs(f(hx));
             //console.log(floor, hy);
 
-            if(floor < hy && entity.isClimbing) return;
+            if(floor < hy) return;
 
             entity.isClimbing = true;
             entity.p.y = base - (floor + sprite.height / 2);

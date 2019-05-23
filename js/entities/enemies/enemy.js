@@ -40,14 +40,19 @@ Q.component("Enemy", {
         this.entity.jump_cycle = 0.0;
         this.entity.jump_high = 0.0;
 
+        // Velocity
+        this.entity.p.speed = 50;
+
+        // Dead
+        this.entity.time_dead = 0.0;
 
         this.entity.isEnemy = true;
    },
 
    collision: function(collision){
-		if(collision.obj.isA("TileLayer")) return;
-
         const entity = collision.obj;
+		if(collision.obj.isA("TileLayer") || entity.state === ENEMY_STATE.ABSORBED || entity.state === ENEMY_STATE.DIE) return;
+
 		if(entity.isA("AbsorbMissile")){
 			this.entity.trigger("change_state", ENEMY_STATE.ABSORBED);
 
@@ -55,7 +60,9 @@ Q.component("Enemy", {
 			const ix = this.p.x + direction * w / 2;
 			const ex = this.entity.p.x;*/
 			//this.p.vx = 
-		}
+		}else if(entity.isA("Kirby")){
+			this.entity.trigger("change_state", ENEMY_STATE.DIE);
+        }
        /*
         if(collision.obj.isA("Kirby")){
 
@@ -84,8 +91,8 @@ Q.component("Enemy", {
 			case ENEMY_STATE.IDLE:
                 self.trigger("cplay", "idle");
 
-                //self.p.direction = (self.p.vx >= 0) ? "right" : "left";
-                //self.p.vx = 40 * ((self.p.direction === "left") ? -1 : 1);
+                self.p.direction = (self.p.vx >= 0) ? "right" : "left";
+                self.p.vx = self.p.speed * ((self.p.direction === "left") ? -1 : 1);
 
                 self.time_idle += dt;
                 self.time_jump += dt;
@@ -159,6 +166,21 @@ Q.component("Enemy", {
 			break;
             case ENEMY_STATE.DIE:
                 
+                self.p.vx = 0;
+                self.p.skipCollision = true;
+                self.p.gravity = false;
+                if(self.time_dead === 0){
+                    let stars = Q("StarParticle").items;
+                    for(let i = 1; i < stars.length; ++i){
+                        stars[i].respawn(self, 0.1, 400.0);
+                    }
+
+                }else if(self.time_dead >= 0.2){
+                    self.destroy();
+                }
+
+                self.time_dead += dt;
+
             break;
         }
 

@@ -271,6 +271,7 @@ const KIRBY_STATE = {
     HILLING: 10,
     BEND: 11,
     SLIDING: 12,
+    HIT: 13,
     DIE: -1,
 };
 
@@ -331,8 +332,11 @@ Q.Sprite.extend("Kirby", {
         // Attack
         this.isAttackSwitch = false;
 
-        //Last climb
+        // Last climb
         this.wasClimbing = false;
+
+        // Hit
+        this.hitTime = 0.0;
 
         this.add("platformerControls, Entity");
 
@@ -352,8 +356,7 @@ Q.Sprite.extend("Kirby", {
     },
 
     collision: function(collide){
-        if(collide.obj.isA("TileLayer") || !collide.obj.isEntity) return;
-
+        if(!collide.obj.isEntity) return;
         // If kirby collides with something while absorbing.
         // TODO: Check if the collision directions is the same as the absorbing direction
         if(
@@ -364,6 +367,9 @@ Q.Sprite.extend("Kirby", {
             this.isChubby = true;
             this.isAttackSwitch = true;
             collide.obj.destroy();
+        }else{
+            this.p.isStatue = true;
+            this.trigger("change_state", KIRBY_STATE.HIT);
         }
     },
 
@@ -630,7 +636,7 @@ Q.Sprite.extend("Kirby", {
                 if(Math.abs(this.p.vy) < 0.01){
                     // First Bounce
                     if (this.bounces++ === 0) {
-                        Q("StarParticle").first().trigger("respawn");
+                        Q("StarParticle").first().trigger("respawn", this);
                         this.p.vy = -150;
                         this.trigger("cplay", "falling_head");
                     }else{ // Last Bounce
@@ -647,7 +653,6 @@ Q.Sprite.extend("Kirby", {
                 this.fallingSpeed = 0;
                 this.skiddingTime += dt;
                 if(this.skiddingTime <= 1/6){
-                    console.log(1);
                     this.p.speed *= 0.98;
                     this.p.direction = (this.p.vx < 0) ? "right" : "left";
                     Q("CloudParticle").first().trigger("respawn");
@@ -696,6 +701,21 @@ Q.Sprite.extend("Kirby", {
 
                 }
                 
+            break;
+            case KIRBY_STATE.HIT:
+
+                this.trigger("cplay", "spin");
+                this.hitTime += dt;
+                if(this.hitTime < 0.1){
+
+                    this.p.vx = (this.p.direction === "left" ? 1 : -1) * 400;
+
+                }else if(this.hitTime < 0.6){
+                    
+                    this.hitTime = 0.0;
+                    this.p.isStatue = false;
+                    this.trigger("change_state", KIRBY_STATE.IDLE);
+                }
 
             break;
         }

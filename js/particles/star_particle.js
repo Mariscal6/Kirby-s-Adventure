@@ -117,10 +117,9 @@ Q.Sprite.extend("StarParticle", {
         this.max_life = 0.5;
     },
 
-    respawn: function(){
-        
-        const kirby = Q("Kirby").first();
-        const kirby_collision_width = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box.width;
+    respawn: function(entity, life = 0.5, vx = 50){
+
+        const collision_width = Q.animation(entity.p.sprite, entity.p.animation).collision_box.width;
 
         const direction = Math.round(Math.random() * 8);
         const angle = direction * (Math.PI * 2 / 8);
@@ -128,15 +127,16 @@ Q.Sprite.extend("StarParticle", {
         const dy = Math.sin(angle);
 
         const parity = (direction & 0x1);
-        const radius = (kirby_collision_width + 1 * parity);
+        const radius = (collision_width + 1 * parity);
         const rx = dx * radius;
         const ry = dy * radius;
 
-        this.p.vx = dx * 50;
-        this.p.vy = dy * 50;
+        this.p.vx = dx * vx;
+        this.p.vy = dy * vx;
 
-        this.p.x = kirby.p.x + rx;
-        this.p.y = kirby.p.y + ry;
+        this.p.x = entity.p.x + rx;
+        this.p.y = entity.p.y + ry;
+        this.max_life = life;
     },
 
     // Update Step

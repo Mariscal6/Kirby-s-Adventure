@@ -10,17 +10,23 @@ Q.Sprite.extend("Door", {
             skipCollision: true,
             gravity: 0,
         });
-        this.time = 0;
-        this.add("Entity, aiBounce");
 
-        this.on("bump", function(collision){
-            if(++this.time >= 400){
-                Q.state.inc("level", 1);
-                Q.stageScene(`level${Q.state.get("level")}`, 0);
-            }
-        });
+        this.add("Entity");
+
+        this.isEntity = false;
+
+        this.on("bump", this, "collision");
 
     },
+
+    collision: function(collide){
+        if(collide.obj.isA("Kirby") && Q.inputs["balloon"]){
+            this.destroy();
+            Q.state.inc("level", 1);
+            Q.stageScene(`level${Q.state.get("level")}`, 0);
+            
+        }
+    }
 });
 
 

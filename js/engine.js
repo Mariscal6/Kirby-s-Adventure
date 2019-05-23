@@ -36,28 +36,30 @@ const load = (callback) => {
                     stage.insert(new Q.AbsorbMissile());
                     stage.insert(new Q.BlowMissile());
                     stage.insert(new Q.StarMissile());
+
+                    for(let i = 0; i <= 5; ++i){
+                        stage.insert(new Q.StarParticle());
+                    }
+                    
                     stage.insert(new Q.CloudParticle());
-                    stage.insert(new Q.StarParticle());
                 };
 
                 Q.loadTMX(all_levels.join(","), function(){
                     compiling.level.forEach(key => {
                         const level_name = Object.keys(key)[0];
+
                         Q.scene(level_name, function(stage) {
-                            console.log(1);
                             const level = levels[level_name];
+                            console.log(stage);
                             Q.stageScene(level.hud, 1);
                             Q.stageTMX(`${level_name}.tmx`, stage);
-                            
+                            init_global_entities(stage);
                             stage.add("viewport").follow(Q('Kirby').first(), {x: level.isDynamic || true, y: true},{
                                 minX: 32,
-                                maxX: stage.items[1].c.w - 32,
+                                maxX: Q("TileLayer").first().c.w - 32,
                                 minY: +225.5,
                                 maxY: 0,
                             });
-
-                            
-                            init_global_entities(stage);
 
                             //stage.items.forEach(entity => { console.log(entity.className); });
                         });

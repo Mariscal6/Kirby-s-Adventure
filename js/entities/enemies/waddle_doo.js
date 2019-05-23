@@ -1,14 +1,14 @@
 /* Load Sprite */
 compiling.sheet.push({
-    "png_path": "waddle.png",
-    "json_path": "waddle.json"
+    "png_path": "waddle_doo.png",
+    "json_path": "waddle_doo.json"
 });
 
 /* Animations */
-Q.animations("waddle", {
+Q.animations("WaddleDoo", {
     idle: {
         frames: [0, 1],
-        rate: 1 / 3,
+        rate: 1/3,
         collision_box: {
             width: 32,
             height: 32,
@@ -16,7 +16,7 @@ Q.animations("waddle", {
     },
     jump: {
         frames: [0, 1],
-        rate: 1 / 10,
+        rate: 1/10,
         collision_box: {
             width: 32,
             height: 32,
@@ -24,7 +24,7 @@ Q.animations("waddle", {
     },
     die:{
         frames: [2, 3, 4],
-        rate:1 / 10,
+        rate: 1/10,
         collision_box: {
             width: 32,
             height: 32,
@@ -32,7 +32,7 @@ Q.animations("waddle", {
     },
     attack:{
         frames: [1, 3],
-        rate:1 / 10,
+        rate: 1/10,
         collision_box: {
             width: 32,
             height: 32,
@@ -42,13 +42,13 @@ Q.animations("waddle", {
 
 /* Object */
 
-Q.Sprite.extend("Waddle", {
+Q.Sprite.extend("WaddleDoo", {
     
     init: function(p){
        
         this._super(p, {
-            sheet: "waddle",
-            sprite: "waddle",
+            sheet: "waddle_doo",
+            sprite: "WaddleDoo",
         });
         this.add("Enemy");
 

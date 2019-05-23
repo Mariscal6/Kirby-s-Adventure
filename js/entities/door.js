@@ -17,14 +17,12 @@ Q.Sprite.extend("Door", {
 
         this.on("bump", this, "collision");
 
+        this.time = 0;
     },
 
     collision: function(collide){
         if(collide.obj.isA("Kirby") && Q.inputs["balloon"]){
-            this.destroy();
-            Q.state.inc("level", 1);
-            Q.stageScene(`level${Q.state.get("level")}`, 0);
-            
+            collide.obj.trigger("change_state", KIRBY_STATE.BYE);
         }
     }
 });

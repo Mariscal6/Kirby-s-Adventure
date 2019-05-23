@@ -2,7 +2,7 @@
     "intro": {
         "sx": 0,
         "sy": 0,
-        "tileW": 224,
-        "tileH": 224
+        "tileW": 500,
+        "tileH": 493
     }
 }

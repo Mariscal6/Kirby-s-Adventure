@@ -253,6 +253,17 @@ Q.animations("kirby", {
         }
     },
 
+
+    /*Byebye*/
+    bye:{
+        frames: [27,26,25,24],
+        rate: 1/6,
+        collision_box: {
+            width: 30,
+            height: 30
+        }
+    },
+
 });
 
 /* Object */
@@ -272,6 +283,7 @@ const KIRBY_STATE = {
     BEND: 11,
     SLIDING: 12,
     HIT: 13,
+    BYE: 14,
     DIE: -1,
 };
 
@@ -338,6 +350,9 @@ Q.Sprite.extend("Kirby", {
         // Hit
         this.hitTime = 0.0;
 
+        //bye 
+        this.byeTime = 0;
+
         this.add("platformerControls, Entity");
 
         /* Events */
@@ -401,7 +416,8 @@ Q.Sprite.extend("Kirby", {
     },
 
     attack_end: function(){
-
+        
+        Q("AbsorbMissile").first().trigger("die");
         this.absorbType = ABSORB_TYPE.BLOWING;
         this.isAttackSwitch = false;
 
@@ -475,7 +491,6 @@ Q.Sprite.extend("Kirby", {
         this.wasClimbing=this.p.collisions;
         //console.log(this.wasClimbing);
         //console.log(this);
-        Q("AbsorbMissile").first().onScreen = false;
         const prefix = this.isChubby ? "chubby_" : "";
 
         switch(this.state){
@@ -545,7 +560,7 @@ Q.Sprite.extend("Kirby", {
                         this.trigger("cplay", "start_absorbing");
                     }else{
                         this.trigger("cplay", "absorbing");
-                        Q("AbsorbMissile").first().onScreen = true;
+                        Q("AbsorbMissile").first().trigger("respawn");
                     }
                 }else{
                     if(this.absorbTime < 1/8){
@@ -718,6 +733,20 @@ Q.Sprite.extend("Kirby", {
                 }
 
             break;
+
+            case KIRBY_STATE.BYE:
+                this.byeTime += dt;
+                this.trigger("cplay", "bye");
+                this.p.isStatue = false;
+                if(this.byeTime >= 0.67){
+                    Q("Door").first().destroy();
+                    const next_level = levels[Q.state.get("current_level")].next_level;
+                    Q.stageScene(next_level, 0);
+                    Q.state.set("current_level", next_level);
+                }
+
+            break;
+
         }
         
         // Reset Climbing

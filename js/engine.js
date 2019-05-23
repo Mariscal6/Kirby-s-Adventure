@@ -7,7 +7,7 @@ const compiling = {
   level: new Array()
 };
 
-const Q = window.Q = Quintus()
+const Q = window.Q = Quintus({audioSupporter:["mp3", "ogg"]})
 // Include Quintus Library
 .include("Sprites, Scenes, Anim, 2D, TMX, Input, Audio, Touch, UI")
 // SetUp
@@ -50,7 +50,7 @@ const load = (callback) => {
 
                         Q.scene(level_name, function(stage) {
                             const level = levels[level_name];
-                            console.log(stage);
+
                             Q.stageScene(level.hud, 1);
                             Q.stageTMX(`${level_name}.tmx`, stage);
                             init_global_entities(stage);
@@ -73,7 +73,8 @@ const load = (callback) => {
                 if(Object.keys(compiling.audio).length === 0) ok();
 
                 // TODO: NO FUNCIONA
-                const assets = Object.assign({}, ...compiling.audio);
+                const assets = unroll(Object.values(compiling.audio));
+                //const assets = Object.assign({}, ...compiling.audio);
                 Q.load(assets, function(){
                     ok();
                 });

@@ -1,33 +1,92 @@
 // ------- Kirby Intro
-/*compiling.sheet.push({
-    "png_path": "kirby_intro_animation.png",
+compiling.sheet.push({
+    "png_path": "introAnimation.png",
     "json_path": "intro.json"
-});*/
+});
+var aux = new Array(62);
+for (let i =0; i < 63; i++){
+    aux[i] = i;
+}
 Q.animations("intro", {
-    idle: {
-        frames: (new Array(56)).fill(0).map((e, i) => i),
-        rate: 5,
-        collision_box: {
-            width: 224,
-            height: 224,
-        }
+    intro1: {
+        frames: aux, 
+        rate: 1/6,
+    },
+    fin: {
+        frames: [10]
     }
 });
+
 Q.Sprite.extend("introEntity", {
     init: function(p) {
         this._super(p, {
-            //asset: "kirby_intro_animation/kirby_0.png",
-            x: 292,
-            y: 224,
-            gravity: 0,
-            scale: 1.1,
-            opacity: 0
+            x: 55,
+            y: 55,
+            sheet: "intro",
+            sprite: "intro",
+            drawed: false
         });
         this.add("animation");
-        this.frameTime = 0;
         this.totalTime = 0;
     },
     step: function (dt){
-        this.play("intro");
+        if (this.totalTime == 0) {
+            this.play("intro1");
+        }else if(this.totalTime > 10.3){
+            this.play("fin");
+        }
     }
+});
+
+Q.animations("menuChoicesAnim",{
+    initial: {  
+        frames: [0,1,2,3,4,5,6,7,8,9,10,11], 
+        rate:1/2
+    },
+    static: {  
+        frames: [11]
+    }
+    
+});
+
+Q.Sprite.extend("menuChoice", {
+    init: function(){
+        this._super(p, {
+            x: 0,
+            y: 0,
+            h: 10,
+            w: 10, 
+            //sheet: "menuChoices",
+            //sprite: "menuChoicesAnim",
+            ready: false,
+        }); 
+        this.add("animation");  
+    },
+    step: function(dt){
+        if(this.p.ready){
+             this.play("initial");
+             this.p.ready = false;
+        }
+        else{
+            this.play("static");
+        }
+    }
+});
+
+Q.scene('introScene',function(stage) {
+    var container = stage.insert(new Q.UI.Container({
+        //asset:  "InitScreen/KirbyNES04.png",
+        x: 200,
+        y: 200,
+        h: 180,
+        w: 180,
+
+    }));
+
+    stage.insert(new Q.introEntity(), container);
+    Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
+        //Q.audio.stop("sonido_logotipo_intro.ogg");
+        Q.clearStages();
+        Q.stageScene('level');
+    });
 });

@@ -1,8 +1,13 @@
 
+compiling.sheet.push({
+    "png_path": "hotHead.png",
+    "json_path": "hotHead.json"
+});
+
 /* Animations */
 Q.animations("fireHotHead", {
     fire:{
-        frames: [1,2],
+        frames: [0, 1],
         rate:1 / 10,
         collision_box: {
             width: 32,
@@ -11,12 +16,6 @@ Q.animations("fireHotHead", {
     },
 });
 
-/* estados */
-const FIREHOTHEAD_STATE = {
-    IDLE: 0,
-    DIE: -1,
-};
-
 Q.Sprite.extend("FireHotHead", {
     
     init: function(p){
@@ -24,22 +23,17 @@ Q.Sprite.extend("FireHotHead", {
         this._super(p, {
             sheet: "fire",
             sprite: "fireHotHead",
-            frame: 4,
             isStatue: false,
             skipCollision: true,
             gravity: false,
         });
 
-        //times
-        this.state=FIREHOTHEAD_STATE.IDLE;
-        this.fireTime = 0;
-        this.touch=false;
-        this.terminate=false;
-
-        this.add("Entity, aiBounce");
+        this.add("Entity, Particle");
+        this.isEntity = false;
+        this.max_life = 0.4;
 
         /* Events */
-        this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
+        /*this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
 
             if(!collision.obj.isA("Kirby")){
                 this.p.flip = (this.p.direction === "left") ? "x" : false;
@@ -51,32 +45,26 @@ Q.Sprite.extend("FireHotHead", {
                 this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
             }
  
-        });
+        });*/
 
     },
   
-    // Update
-    update: function(dt){
-        this._super(dt);
+    respawn: function(entity){
+        const collision_width = Q.animation(entity.p.sprite, entity.p.animation).collision_box.width;
+        this.p.x = entity.p.x + (32 + collision_width) / 2 * (entity.p.direction === "left" ? -1 : 1);
+        this.p.y = entity.p.y;
+        this.p.vx = 300 * (entity.p.direction === "left" ? -1 : 1) + entity.p.vx;
+        this.p.skipCollision = true;
+        this.p.gravity = false;
+        this.p.flip = entity.p.flip;
     },
 
     // Update Step
+    // Update Step
     step: function(dt){
-        if(this.touch) return
-        if(this.fireTime > 2.5){
-            this.trigger("change_state", FIREHOTHEAD_STATE.DIE);
+        if(this.onScreen){
+            this.play("fire");
         }
-        switch(this.state){
-            case FIREHOTHEAD_STATE.DIE:
-                this.terminate=true;
-                this.fireTime = 0;
-                this.destroy();
-            break;
-            case FIREHOTHEAD_STATE.IDLE:
-                this.fireTime += dt;
-            break;
-        }
-        
     },
 
 });

@@ -51,7 +51,7 @@ Q.component("Enemy", {
 
    collision: function(collision){
         const entity = collision.obj;
-		if(collision.obj.isA("TileLayer") || entity.state === ENEMY_STATE.ABSORBED || entity.state === ENEMY_STATE.DIE) return;
+		if(collision.obj.isA("TileLayer") || this.entity.state === ENEMY_STATE.ABSORBED || this.entity.state === ENEMY_STATE.DIE) return;
 
 		if(entity.isA("AbsorbMissile")){
 			this.entity.trigger("change_state", ENEMY_STATE.ABSORBED);
@@ -90,7 +90,7 @@ Q.component("Enemy", {
         switch(self.state){
 			case ENEMY_STATE.IDLE:
                 self.trigger("cplay", "idle");
-
+                
                 self.p.direction = (self.p.vx >= 0) ? "right" : "left";
                 self.p.vx = self.p.speed * ((self.p.direction === "left") ? -1 : 1);
 
@@ -110,8 +110,11 @@ Q.component("Enemy", {
                 
                 self.trigger("cplay", "attack");
 
-                self.trigger("attack");
                 self.p.vx = 0.0;
+                if(self.time_attack === 0){
+                    self.trigger("attack");
+                }
+                
                 self.time_attack += dt;
                 if(self.time_attack >= self.attack_duration){
                     self.time_attack = 0.0;

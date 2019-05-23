@@ -1,7 +1,14 @@
 const levels = {
+    "intro": {
+    },
+
+    "level_selector": {
+    },
+
     "level": { // Level 1
         next_level: "level1",
         hud: "HUD",
+        keys: [],
         isDynamic: true
     },
 

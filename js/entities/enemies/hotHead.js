@@ -54,19 +54,15 @@ Q.Sprite.extend("HotHead", {
         this.add("Enemy");
 
         this.attack_cycle = 4.0;
-        this.attack_duration = 2.0;
+        this.attack_duration = 0.4;
         this.jump_cycle = Number.MAX_SAFE_INTEGER;
+
+        this.fireEntity = new Q.FireHotHead();
+        Q.stage(0).insert(this.fireEntity);
     },
 
     attack: function(){
-        //this.isStatue = true;
-        /*var stage = Q.stage(0);
-        var fire = stage.insert(new Q.FireHotHead({
-            y: this.p.y,
-            x: this.p.x + (32 + 32) / 2 * (this.p.direction === "Left" ? -1 : 1),
-            vx: this.p.vx,
-            direction: this.p.direction
-        }));*/
+        this.fireEntity.trigger("respawn", this);
     },
 });
 

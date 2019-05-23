@@ -5,8 +5,10 @@ window.onload = function(){
         
         // Modo Debug
         Q.debug = true;
-        Q.stageScene(Q.state.get("current_level"));
-
+        //Q.stageScene(Q.state.get("current_level"));
+        Q.clearStages();
+        Q.stageScene("introScene", 0);
+        
         /* Input Controller */
 
         Q.input.bindKey("Z", "attack");

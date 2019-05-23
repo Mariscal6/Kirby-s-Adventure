@@ -22,4 +22,7 @@ body{
 }
 
 
-#quintus-kirby_container > canvas{ display: block }
+#quintus-kirby_container > canvas{
+    display: block;
+    background-color: white;
+}

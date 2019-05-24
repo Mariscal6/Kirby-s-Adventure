@@ -417,7 +417,7 @@ Q.Sprite.extend("Kirby", {
         // TODO: Check if the collision directions is the same as the absorbing direction
         if(
             //this.state === KIRBY_STATE.ABSORBING &&
-            Q("AbsorbMissile").first().onScreen &&
+            Q("AbsorbMissile").first().onScreen && collide.obj.isEnemy &&
             ((this.p.direction === "left" ? 1 : -1) === collide.normalX && collide.normalY === 0)
         ){
             this.isChubby = true;
@@ -805,6 +805,7 @@ Q.Sprite.extend("Kirby", {
                     const next_level = levels[Q.state.get("current_level")].next_level;
                     Q.state.set("current_level", next_level);
                     Q.clearStages();
+                    Q.audio.stop();
                     Q.stageScene("introScene3", 0);
                    
                 }

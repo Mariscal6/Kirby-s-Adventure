@@ -16,6 +16,7 @@ Q.component("Enemy", {
         this.entity.on("step", this, "step");
         this.entity.on("bump", this, "collision");
         this.entity.on("draw", this, "draw");
+        this.entity.on("destroy", this, "destroy");
 
         // Global events
         this.entity.on("attack", this.entity, "attack");
@@ -84,6 +85,10 @@ Q.component("Enemy", {
             this.p.flip=this.flipActual;
         }
         */
+    },
+
+    destroy: function(){
+        console.log(1);
     },
 
     step: function(dt){

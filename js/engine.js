@@ -77,8 +77,7 @@ const load = (callback) => {
                 if(Object.keys(compiling.audio).length === 0) ok();
 
                 // TODO: NO FUNCIONA
-                const assets = unroll(Object.values(compiling.audio));
-                //const assets = Object.assign({}, ...compiling.audio);
+                const assets = Object.assign({}, ...compiling.audio);
                 Q.load(assets, function(){
                     ok();
                 });

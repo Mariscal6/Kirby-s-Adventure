@@ -6,4 +6,4 @@ compiling.level.push(
     {"bossLevel": "levelBoss.tmx"}
 );
 
-Q.state.set({ score: 0, lifes:6, bar: 6, power: "normal", sceneState: "HUD",  bossHEALTH: 12, current_level: "preBoss"});
+Q.state.set({ score: 0, lifes:6, bar: 6, power: "normal", sceneState: "HUD",  bossHEALTH: 12, current_level: "level2"});

@@ -1,30 +1,32 @@
 // ------- Kirby Intro
+compiling.audio.push(
+    {"title_screen": "TitleScreen.mp3"},
+    {"bossBattle": "BossBattle.mp3"},
+    {"level": "VegetableValley.mp3"},
+    {"level1": "IceCreamIsland.mp3"},
+    {"level2": "Grape_Garden.mp3"},
+    {"level3": "Butter_Building.mp3"},
+    {"gameOver": "GameOver.mp3"},
+    {"lostLife": "LostLife.mp3"},
+    {"hit": "Hit.mp3"}
+);
+
 compiling.sheet.push({
     "png_path": "introAnimation.png",
     "json_path": "intro.json"
-});
-
-compiling.sheet.push({
+}, {
     "png_path": "story.png",
     "json_path": "story.json"
-});
-
-compiling.sheet.push({
+}, {
     "png_path": "pressEnter.png",
     "json_path": "pressEnter.json"
-});
-
-compiling.sheet.push({
+}, {
     "png_path": "transition1.png",
     "json_path": "transitions.json"
-});
-
-compiling.sheet.push({
+}, {
     "png_path": "hand.png",
     "json_path": "hand.json"
-});
-
-compiling.sheet.push({
+}, {
     "png_path": "deathScreen.png",
     "json_path": "deathScreen.json"
 });
@@ -90,15 +92,14 @@ Q.Sprite.extend("enter", {
 Q.Sprite.extend("transitionLevel", {
     init: function(p){
         this._super(p, {
-            x: p.x,
-            y: p.y,
+            x: 55,
+            y: 40,
             sheet: "transition",
             sprite: "transitions",         
         });
         this.add('animation');
     },
     step: function(dt){
-        //const aux = levels[Q.state.get("current_level")].next_level;
         this.play(Q.state.get("current_level"));
     }
 });
@@ -209,6 +210,9 @@ Q.scene('introScene',function(stage) {
         h: 180,
         w: 180,
     }));
+
+    Q.audio.play("title_screen");
+    
     stage.insert(new Q.introEntity(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
@@ -230,9 +234,9 @@ Q.scene('introScene2',function(stage) {
     stage.insert(new Q.story(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
-        //Q.audio.stop("sonido_logotipo_intro.ogg");
+        Q.audio.stop();
         Q.clearStages();
-        Q.stageScene('deathScene');
+        Q.stageScene('introScene3');
     });
 });
 
@@ -243,10 +247,10 @@ Q.scene('introScene3',function(stage) {
         h: 180,
         w: 180, 
     }));
-    stage.insert(new Q.transitionLevel({ x: 55, y: 40}), container);
+    Q.audio.play(Q.state.get("current_level"));
+    stage.insert(new Q.transitionLevel(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
-        //Q.audio.stop("sonido_logotipo_intro.ogg");
         Q.clearStages();
         Q.inputKeys = true;
         Q.stageScene(Q.state.get("current_level"));
@@ -261,14 +265,16 @@ Q.scene('deathScene',function(stage) {
         h: 180,
         w: 180,
     }));
+    //Q.audio.play("gameOver");
     stage.insert(new Q.deathScene(), container);
     stage.insert(new Q.hand({x:-42, y:-60}), container);
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
-        //Q.audio.stop("sonido_logotipo_intro.ogg");
         if(Q("hand").first().continue){
+            Q.audio.stop();
             Q.clearStages();
             Q.inputKeys = true;
             Q.handSelection = false;
+            //Q.audio.play("vegetableValley");
             Q.stageScene(Q.state.get("current_level"));
         }else{
             Q.clearStages();
@@ -286,6 +292,7 @@ Q.scene('deathScene2',function(stage) {
         h: 180,
         w: 180,
     }));
+    //Q.audio.play("gameOver");
     stage.insert(new Q.gameOver(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla

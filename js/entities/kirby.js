@@ -282,8 +282,8 @@ Q.animations("kirby", {
         }
     },
 
-    /*Byebye*/
-    fire_start:{
+     /*Fire*/
+     fire_start:{
         frames: [31, 32, 31, 32],
         rate: 1/4,
         collision_box: {
@@ -292,14 +292,14 @@ Q.animations("kirby", {
         }
     },
     fire_red:{
-        frames: [29],
+        frames: [29,29,29,29],
         rate: 1/4,
         collision_box: {
             width: 30,
             height: 30
         }
     },
-    fire_redchubby:{
+    chubby_fire_red:{
         frames: [30],
         rate: 1/4,
         collision_box: {
@@ -456,7 +456,8 @@ Q.Sprite.extend("Kirby", {
             this.isAttackSwitch = true;
             collide.obj.destroy();
             Q.state.inc("score",1000);
-        }else{
+        }
+        else{
 
             this.p.isStatue = true;
             decShield(Q);
@@ -853,26 +854,31 @@ Q.Sprite.extend("Kirby", {
             break;
 
             case KIRBY_STATE.FIRE:
-                console.log("estado fuego");
-                if(this.bounces++ == 0){
-                    this.invencibleTime = INVENCIBILITY_TIME;
-                    this.p.vy = -150;
-                    this.p.vx = 20 * (this.p.direction === "left" ? 1 : -1);
-                    this.trigger("cplay", "fire_start");
-                }else if(Math.abs(this.p.vy) < 0.01){
-                    // First Bounce
-                    if (this.bounces++ <= 2) {
-                        Q("StarParticle").first().trigger("respawn", this);
-                        this.p.vy = -150;
-                        (this.bounces == 2)? this.trigger("cplay", "fire_start"):this.trigger("cplay", "fire_red");
-                    }else{ // Last Bounce
-                        this.p.isStatue = false;
-                        this.bounces = 0;
-                        this.trigger("change_state", KIRBY_STATE.IDLE);
+                    console.log("estado fuego");
+                    this.p.isStatue = true;
+                    if(this.bounces == 0){
+                        this.bounces++;
+                        this.invencibleTime = INVENCIBILITY_TIME;
+                        this.p.vy = -250;
+                        this.p.vx = 20 * (this.p.direction === "left" ? 1 : -1);
+                        this.trigger("cplay", "fire_start");
+                    }else if(Math.abs(this.p.vy) < 0.01){
+                        // First Bounce
+                        console.log(this.bounces);
+                        if (this.bounces <= 1) {
+                            this.bounces++;
+                            Q("StarParticle").first().trigger("respawn", this);
+                            console.log(this.bounces);
+                            this.p.vy = -200;
+                            (this.bounces == 1)? this.trigger("cplay", "fire_start"): this.trigger("cplay", prefix + "fire_red");
+                        }else{ // Last Bounce
+                            this.p.isStatue = false;
+                            this.bounces = 0;
+                            this.trigger("change_state", KIRBY_STATE.IDLE);
+                        }
                     }
-                }
-
-            break;
+    
+                break;
 
         }
         

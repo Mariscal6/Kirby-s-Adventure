@@ -50,6 +50,9 @@ Q.component("Enemy", {
         // Dead
         this.entity.timeDead = 0.0;
 
+        //Hit booss
+        this.entity.hitBossTime = 30;
+
         this.entity.isEnemy = true;
     },
 
@@ -58,8 +61,9 @@ Q.component("Enemy", {
 
     collision: function(collision){
         const entity = collision.obj;
-		if(collision.obj.isA("TileLayer") || this.entity.state === ENEMY_STATE.ABSORBED || this.entity.state === ENEMY_STATE.DIE) return;
-		if(entity.isA("AbsorbMissile")){
+        this.entity.hitBossTime++;
+        if(collision.obj.isA("TileLayer") || this.entity.state === ENEMY_STATE.ABSORBED || this.entity.state === ENEMY_STATE.DIE) return;
+        if(entity.isA("AbsorbMissile") && !this.entity.isBoss){
 			this.entity.trigger("change_state", ENEMY_STATE.ABSORBED);
 
 			/*const direction = this.entity.p.flip === "x" ? -1 : 1;
@@ -67,8 +71,18 @@ Q.component("Enemy", {
 			const ex = this.entity.p.x;*/
 			//this.p.vx = 
 		}else if(entity.killEnemy){
-            Q.state.inc("score", 1000);
-			this.entity.trigger("change_state", ENEMY_STATE.DIE);
+            console.log("paso");
+            if(this.entity.isBoss && this.entity.hitBossTime > 30){
+                Q.state.dec("bossHEALTH", 1);
+                if(Q.state.get("bossHEALTH")<=0){
+                    this.entity.hitBossTime = 0;
+                    Q.clearStages();
+                    Q.stageScene("win");
+                }
+            }else{
+                Q.state.inc("score", 1000);
+                this.entity.trigger("change_state", ENEMY_STATE.DIE);
+            }
         }
        /*
         if(collision.obj.isA("Kirby")){

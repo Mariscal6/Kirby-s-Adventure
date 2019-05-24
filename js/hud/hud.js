@@ -258,27 +258,23 @@ Q.Sprite.extend("PowersHUD", {
         this._super(p, {
             sprite: "powersKirby",
             height: 135,
-            lastPower: "normal",
             time: 0
         });
         this.add('animation');
-        this.time = 0;
     },
     step: function(dt){
-        /*if(this.p.lastPower != Q.state.get("power")){
-            this.p.time += dt;
-            while(this.p.time < 2){
-                this.play(Q.state.get("power"));
-                this.time += dt;
+        
+        if(Q.state.get("power") === "ouch"){
+            if(this.p.time >= 0.8){
+               Q.state.set("power", "normal");
+               this.p.time = 0;
             }
-            this.time = 0;
-            Q.state.set("power", "normal");
-        }*/
+            this.p.time += dt;
+        }
         this.play(Q.state.get("power"));
+        
     }
 });
-
-
 
 Q.scene("HUD", function(stage) {
 

@@ -5,65 +5,81 @@ compiling.sheet.push({
 });
 
 /* Animations */
-Q.animations("Sparky", {
+Q.animations("Boss", {
     idle: {
-        frames: [1, 2],
+        frames: [0, 1],
         rate: 1/3,
         collision_box: {
-            width: 25,
-            height: 25,
+            width: 50,
+            height: 50,
         }
     },
     jump:{
-        frames: [0],
+        frames: [6],
         rate:1/8,
         collision_box: {
-            width: 25,
-            height: 25,
+            width: 50,
+            height: 50,
         },
     },
     attack:{
-        frames: [4],
+        frames: [3, 4, 5, 6],
         rate:1/8,
         collision_box: {
-            width: 25,
-            height: 25,
+            width: 50,
+            height: 50,
         },
     },
     die:{
-        frames: [5, 6],
+        frames: [7, 8],
         rate:1/8,
         collision_box: {
-            width: 25,
-            height: 25,
+            width: 50,
+            height: 50,
         },
     },
 });
 
-Q.Sprite.extend("Sparky", {
+Q.Sprite.extend("Boss", {
     
     init: function(p){
        
         this._super(p, {
-            sheet: "sparky",
-            sprite: "Sparky"
+            sheet: "boss",
+            sprite: "Boss"
         });
         this.add("Enemy");
 
-        this.attack_cycle = 2.0;
-        this.attack_duration = 0.5;
-        this.num_attacks = 4;
+        this.attack_cycle = 1.0;
+        this.attack_duration = 1.5;
+        this.num_attacks = 1;
 
-        this.jump_cycle = 0.4;
-        this.jump_high = 300;
+        this.jump_cycle = 2.0;
+        this.jump_high = 500;
 
-        this.sparkEntity = new Array(6).fill(0).map(e => new Q.SparkyMissile());
-        this.sparkEntity.forEach(e => Q.stage(0).insert(e));
+        this.bossEntity = new Array(3).fill(0).map((e,i) => new Q.BossMissile(i));
+        this.bossEntity.forEach(e => Q.stage(0).insert(e));
+
+        this.isBoss = true;
     },
 
     attack: function(dt){
-        this.sparkEntity.forEach(e => e.trigger("respawn", this, dt));
+        if(Math.random() < 0.6){
+            this.bossEntity.forEach(e => e.trigger("respawn", this, dt));
+        }else{
+
+            Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: 0}));
+            Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: Math.PI}));
+            Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: Math.PI/2}));
+        }
     },
+
+    step: function(){
+        if(this.time_attack > 0) return;
+
+        this.p.vx = Math.sign(Q("Kirby").first().p.x - this.p.x) * 50;
+
+    }
 });
 
 

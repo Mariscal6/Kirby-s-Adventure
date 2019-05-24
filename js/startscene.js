@@ -1,6 +1,7 @@
 // ------- Kirby Intro
 compiling.audio.push(
     {"title_screen": "TitleScreen.mp3"},
+    {"level": "Level1.mp3"},
     {"level1": "VegetableValley.mp3"},
     {"level2": "IceCreamIsland.mp3"},
     {"levelPreBoss": "Grape_Garden.mp3"},
@@ -28,6 +29,9 @@ compiling.sheet.push({
 }, {
     "png_path": "deathScreen.png",
     "json_path": "deathScreen.json"
+},{
+    "png_path": "win.png",
+    "json_path": "win.json"
 });
 
 var aux = new Array(60);
@@ -50,6 +54,7 @@ Q.animations("storyAnim", {
 });
 
 Q.animations("transitions", {
+    level: {frames: [0]},
     //level 1
     level1: {frames:[0]},
     //level 2
@@ -66,6 +71,10 @@ Q.animations("enter", {
 
 Q.animations("handSelect", {
     select: {frames:[0]}
+});
+
+Q.animations("winAnim", {
+    win: {frames:[0]}
 });
 
 Q.animations("deathAnim", {
@@ -137,6 +146,25 @@ Q.Sprite.extend("gameOver", {
     step: function(dt){
         this.p.time += dt;
             this.play("gameOver");
+    }
+});
+
+
+Q.Sprite.extend("win", {
+    init: function(p){
+        this._super(p, {
+            x: 55,
+            y: 40,
+            sheet: "win",
+            sprite: "winAnim",
+            time: 0
+        });
+        this.add('animation');
+        
+    },
+    step: function(dt){
+        console.log("entra");
+        this.play("win");
     }
 });
 
@@ -246,6 +274,7 @@ Q.scene('introScene3',function(stage) {
         h: 180,
         w: 180, 
     }));
+    
     Q.audio.play(Q.state.get("current_level"));
     stage.insert(new Q.transitionLevel(), container);
     stage.insert(new Q.enter());
@@ -264,6 +293,7 @@ Q.scene('deathScene',function(stage) {
         h: 180,
         w: 180,
     }));
+    Q.audio.stop();
     Q.audio.play("gameOver");
     stage.insert(new Q.deathScene(), container);
     stage.insert(new Q.hand({x:-42, y:-60}), container);
@@ -291,13 +321,34 @@ Q.scene('deathScene2',function(stage) {
         h: 180,
         w: 180,
     }));
-    //Q.audio.play("gameOver");
+    Q.audio.play("gameOver");
     stage.insert(new Q.gameOver(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() {  Q.audio.stop();
         Q.clearStages();
         Q.inputKeys = true;
         Q.handSelection = false;
-        Q.stageScene(Q.state.get("introScene"));
+        Q.stageScene("introScene");
+    });
+});
+
+
+Q.scene('win',function(stage) {
+    Q.handSelection = true;
+    var container = stage.insert(new Q.UI.Container({
+        x: 200,
+        y: 200,
+        h: 180,
+        w: 180,
+    }));
+    //Q.audio.play("gameOver");
+    stage.insert(new Q.win(), container);
+    //stage.insert(new Q.enter());
+    Q.input.on("confirm",stage,function() {  
+        Q.audio.stop();
+        Q.clearStages();
+        Q.inputKeys = true;
+        Q.handSelection = false;
+        //Q.stageScene("introScene");
     });
 });

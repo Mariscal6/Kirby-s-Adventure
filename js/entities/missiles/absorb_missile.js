@@ -7,8 +7,8 @@ compiling.sheet.push({
 
 Q.animations("absorb_missile", {
     absorb: {
-        frames: [0, 1, 2, 3, 4, 5],
-        rate: 1/16, 
+        frames: [0, 1, 2],
+        rate: 1/8, 
         collision_box: {
             width: 64,
             height: 64,
@@ -29,32 +29,42 @@ Q.Sprite.extend("AbsorbMissile", {
             gravity: false,
             skipCollision: true,
         });
-        this.add("Entity, Particle");
+        this.add("Entity");
 
+        this.onScreen = false;
         this.isEntity = false;
 
     },
 
-    respawn: function(){
-        const kirby = Q("Kirby").first();
-        const kirby_collision_width = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box.width;
+    draw: function(ctx){
+        if(!this.onScreen) return;
+        this._super(ctx);
+    },
 
-        this.p.x = kirby.p.x + (64 + kirby_collision_width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
-        this.p.y = kirby.p.y;
-
-        this.p.flip = kirby.p.flip;
+    // Update
+    update: function(dt){
+        // Set out of bound
+        if(!this.onScreen){
+            this.p.x = -1000;
+            this.p.y = -1000;
+            return;
+        }
+        this._super(dt);
     },
 
     // Update Step
     step: function(dt){
         if(this.onScreen){
-            this.play("absorb");
+            this.trigger("cplay", "absorb");
+            const kirby = Q("Kirby").first();
+            const kirby_collision_width = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box.width;
+            const absorb_collision_width = Q.animation(this.p.sprite, this.p.animation).collision_box.width;
+
+            this.p.x = kirby.p.x + (absorb_collision_width + kirby_collision_width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
+            this.p.y = kirby.p.y;
+
+            this.p.flip = kirby.p.flip;
         }
     },
 
 });
-
-
-
-
-

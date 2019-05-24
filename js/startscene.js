@@ -20,13 +20,13 @@ compiling.sheet.push({
 });
 
 var aux = new Array(60);
-for (let i =0; i < 61; i++){
+for (let i = 0; i < 59; i++){
     aux[i] = i;
 }
 Q.animations("intro", {
     intro1: {
         frames: aux, 
-        rate: 1/8,
+        rate: 1/10,
     },
     fin: {
         frames: [59]
@@ -53,7 +53,6 @@ Q.Sprite.extend("enter", {
             y: 450,
             sheet: "press",
             sprite: "enter",
-            scale: 2.1  
         });
         this.add('animation');
     },
@@ -69,7 +68,6 @@ Q.Sprite.extend("transitionLevel", {
             y: 55,
             sheet: "transition",
             sprite: "transitions",
-            scale: 2.1  
         });
         this.add('animation');
     },
@@ -85,8 +83,6 @@ Q.Sprite.extend("story", {
             y: 55,
             sheet: "story",
             sprite: "storyAnim",
-            scaleToFit: true,
-            scale: 2.1,
             time: 0
         });
         this.add('animation');
@@ -117,7 +113,7 @@ Q.Sprite.extend("introEntity", {
     },
     step: function (dt){
         this.p.totalTime += dt;
-        if (this.p.totalTime < 7.5) {
+        if (this.p.totalTime < 59/10) {
             this.play("intro1");
         }else{
             this.play("fin");
@@ -132,8 +128,8 @@ Q.scene('introScene',function(stage) {
         y: 200,
         h: 180,
         w: 180,
-
-}));
+    }));
+    
     stage.insert(new Q.introEntity(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
@@ -150,8 +146,8 @@ Q.scene('introScene2',function(stage) {
         y: 200,
         h: 180,
         w: 180,
+    }));
 
-}));
     stage.insert(new Q.story(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
@@ -185,7 +181,7 @@ Q.scene('introScene3',function(stage) {
 Q.animations("menuChoicesAnim",{
     initial: {  
         frames: [0,1,2,3,4,5,6,7,8,9,10,11], 
-        rate:1/2
+        rate: 1/2
     },
     static: {  
         frames: [11]

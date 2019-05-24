@@ -23,7 +23,7 @@ Q.Sprite.extend("FireHotHead", {
         this._super(p, {
             sheet: "fire",
             sprite: "fireHotHead",
-            isStatue: false,
+            animation: "fire",
             skipCollision: true,
             gravity: false,
         });
@@ -50,21 +50,12 @@ Q.Sprite.extend("FireHotHead", {
     },
   
     respawn: function(entity){
+        this.onScreen = true;
         const collision_width = Q.animation(entity.p.sprite, entity.p.animation).collision_box.width;
         this.p.x = entity.p.x + (32 + collision_width) / 2 * (entity.p.direction === "left" ? -1 : 1);
         this.p.y = entity.p.y;
         this.p.vx = 300 * (entity.p.direction === "left" ? -1 : 1) + entity.p.vx;
-        this.p.skipCollision = true;
-        this.p.gravity = false;
         this.p.flip = entity.p.flip;
-    },
-
-    // Update Step
-    // Update Step
-    step: function(dt){
-        if(this.onScreen){
-            this.play("fire");
-        }
     },
 
 });

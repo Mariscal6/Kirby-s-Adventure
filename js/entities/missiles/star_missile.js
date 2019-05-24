@@ -45,12 +45,18 @@ Q.Sprite.extend("StarMissile", {
 
         this.time_death = 0;
 
+        this.killEnemy = true;
+
         this.on("bump", this, "collision");
     },
 
-    collision: function(collide){},
+    collision: function(collide){
+        if(!collide.obj.isEnemy) return;
+        this.p.vx = 0.0;
+    },
     
     respawn: function(){
+        this.onScreen = true;
         const kirby = Q("Kirby").first();
         const kirby_collision_width = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box.width;
 
@@ -64,9 +70,8 @@ Q.Sprite.extend("StarMissile", {
     // Update Step
     step: function(dt){
         if(this.onScreen){
-            
             if(this.p.vx === 0){
-                this.play("die")
+                this.play("die");
                 this.time_death += dt;
                 if(this.time_death >= 2/16){
                     this.time_death = 0.0;

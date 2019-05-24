@@ -10,32 +10,32 @@ Q.animations("WaddleDoo", {
         frames: [0, 1],
         rate: 1/3,
         collision_box: {
-            width: 32,
-            height: 32,
+            width: 30,
+            height: 30,
         }
     },
     jump: {
         frames: [0, 1],
-        rate: 1/10,
+        rate: 1/8,
         collision_box: {
-            width: 32,
-            height: 32,
+            width: 30,
+            height: 30,
         }
-    },
-    die:{
-        frames: [2, 3, 4],
-        rate: 1/10,
-        collision_box: {
-            width: 32,
-            height: 32,
-        },
     },
     attack:{
         frames: [1, 3],
-        rate: 1/10,
+        rate: 1/8,
         collision_box: {
-            width: 32,
-            height: 32,
+            width: 30,
+            height: 30,
+        },
+    },
+    die:{
+        frames: [2],
+        rate: 1/8,
+        collision_box: {
+            width: 30,
+            height: 30,
         },
     }
 });

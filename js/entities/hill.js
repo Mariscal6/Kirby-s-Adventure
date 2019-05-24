@@ -15,7 +15,7 @@ Q.Sprite.extend("Hill", {
 
     "hilling": function(collision){
         const entity = collision.obj;
-        if(!entity.isEntity || entity.isA("TileLayer") || entity.isA("Hill")) return; // If Particle, avoid
+        if(!entity.isEntity || entity.p.skipCollision) return; // If Particle, avoid
 
         if(collision.magnitude <= 0){
 

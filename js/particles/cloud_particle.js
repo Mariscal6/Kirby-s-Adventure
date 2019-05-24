@@ -30,10 +30,11 @@ Q.Sprite.extend("CloudParticle", {
 
         this.add("Particle");
 
-        this.max_life = 0.1;
+        this.max_life = Number.MAX_SAFE_INTEGER;
     },
 
     respawn: function(){
+        this.onScreen = true;
         const kirby = Q("Kirby").first();
         const animation = Q.animation(kirby.p.sprite, kirby.p.animation).collision_box;
         this.p.x = kirby.p.x - (16 + animation.width) / 2 * (kirby.p.direction === "left" ? -1 : 1);
@@ -42,9 +43,7 @@ Q.Sprite.extend("CloudParticle", {
 
     // Update Step
     step: function(dt){
-        if(this.onScreen){
-            this.play("slide");
-        }
+        this.play("slide");
     },
 
 });

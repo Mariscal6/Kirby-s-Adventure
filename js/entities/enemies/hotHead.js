@@ -15,33 +15,25 @@ Q.animations("hotHead", {
             height: 32,
         }
     },
-    die:{
-        frames: [0,1],
-        rate:1/10,
+    attack:{
+        frames: [2,3],
+        rate:1/8,
         sheet: "attack",
         collision_box: {
             width: 32,
             height: 32,
         },
     },
-    attack:{
-        frames: [2,3],
-        rate:1 / 10,
+    die:{
+        frames: [3],
+        rate:1/8,
         sheet: "attack",
         collision_box: {
             width: 32,
             height: 32,
         },
-    }
+    },
 });
-
-/* Object */
-
-const HOTHEAD_STATE = {
-    IDLE: 0,
-    ATTACK: 1,
-    DIE: -1,
-};
 
 Q.Sprite.extend("HotHead", {
     

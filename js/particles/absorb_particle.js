@@ -24,7 +24,6 @@ Q.Sprite.extend("StarParticle", {
         this._super(p, {
             sheet: "star_particle",
             sprite: "star",
-            animation: "star",
             gravity: false,
             skipCollision: true,
         });
@@ -38,7 +37,7 @@ Q.Sprite.extend("StarParticle", {
         const collision_width = Q.animation(entity.p.sprite, entity.p.animation).collision_box.width;
 
         const direction = Math.round(Math.random() * 8);
-        const angle = direction * (Math.PI * 2 / 8);
+        const angle = direction * (Math.PI * 2/8);
         const dx = Math.cos(angle);
         const dy = Math.sin(angle);
 
@@ -46,14 +45,21 @@ Q.Sprite.extend("StarParticle", {
         const radius = (collision_width + 1 * parity);
         const rx = dx * radius;
         const ry = dy * radius;
-
+        
         this.onScreen = true;
-        this.max_life = life;
         this.p.vx = dx * vx;
         this.p.vy = dy * vx;
 
         this.p.x = entity.p.x + rx;
         this.p.y = entity.p.y + ry;
+        this.max_life = life;
+    },
+
+    // Update Step
+    step: function(dt){
+        if(this.onScreen){
+            this.play('star');
+        }
     },
 
 });

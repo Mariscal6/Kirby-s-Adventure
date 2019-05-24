@@ -10,11 +10,12 @@ const ENEMY_STATE = {
 
 Q.component("Enemy", {
     //Hill
-   added: function(){
+    added: function(){
         this.entity.add("Entity, aiBounce");
 
         this.entity.on("step", this, "step");
         this.entity.on("bump", this, "collision");
+        this.entity.on("draw", this, "draw");
 
         // Global events
         this.entity.on("attack", this.entity, "attack");
@@ -44,15 +45,17 @@ Q.component("Enemy", {
         this.entity.p.speed = 50;
 
         // Dead
-        this.entity.time_dead = 0.0;
+        this.entity.timeDead = 0.0;
 
         this.entity.isEnemy = true;
-   },
+    },
 
-   collision: function(collision){
+	draw: function(){
+	},
+
+    collision: function(collision){
         const entity = collision.obj;
 		if(collision.obj.isA("TileLayer") || this.entity.state === ENEMY_STATE.ABSORBED || this.entity.state === ENEMY_STATE.DIE) return;
-
 		if(entity.isA("AbsorbMissile")){
 			this.entity.trigger("change_state", ENEMY_STATE.ABSORBED);
 
@@ -60,7 +63,7 @@ Q.component("Enemy", {
 			const ix = this.p.x + direction * w / 2;
 			const ex = this.entity.p.x;*/
 			//this.p.vx = 
-		}else if(entity.isA("Kirby")){
+		}else if(entity.killEnemy){
 			this.entity.trigger("change_state", ENEMY_STATE.DIE);
         }
        /*
@@ -101,7 +104,7 @@ Q.component("Enemy", {
                     self.time_idle = 0.0;
                     self.trigger("change_state", ENEMY_STATE.ATTACKING);
                 }else if(self.time_jump >= self.jump_cycle){
-                    self.time_idle = 0.0;
+                    self.time_jump = 0.0;
                     self.p.vy -= self.jump_high;
                     self.trigger("change_state", ENEMY_STATE.JUMPING);
                 }
@@ -111,6 +114,8 @@ Q.component("Enemy", {
                 self.trigger("cplay", "attack");
 
                 self.p.vx = 0.0;
+                self.p.vy = 0.0;
+                
                 if(self.time_attack === 0){
                     self.trigger("attack");
                 }
@@ -168,27 +173,29 @@ Q.component("Enemy", {
 
 			break;
             case ENEMY_STATE.DIE:
+
+				self.trigger("cplay", "die");
                 
                 self.p.vx = 0;
+                self.p.vy = 0;
                 self.p.skipCollision = true;
                 self.p.gravity = false;
-                if(self.time_dead === 0){
+                if(self.timeDead === 0){
                     let stars = Q("StarParticle").items;
                     for(let i = 1; i < stars.length; ++i){
                         stars[i].respawn(self, 0.1, 400.0);
                     }
 
-                }else if(self.time_dead >= 0.2){
+                }else if(self.timeDead >= 1/8){
                     self.destroy();
                 }
-
-                self.time_dead += dt;
+                self.timeDead += dt;
 
             break;
         }
 
         self.p.flip = (self.p.direction === "left") ? false : "x";
 
-   }
+    }
 
 });

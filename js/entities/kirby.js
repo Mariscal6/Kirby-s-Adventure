@@ -57,6 +57,14 @@ Q.animations("kirby", {
             height: 30,
         }
     },
+    hit: {
+        frames: [7, 8, 9, 0],
+        rate: 1 / 16,
+        collision_box: {
+            width: 30,
+            height: 30,
+        }
+    },
 
     /* Chubby */
     chubby_idle: {
@@ -85,6 +93,14 @@ Q.animations("kirby", {
     chubby_running: {
         frames: [16, 17], 
         rate: 1/9,
+        collision_box: {
+            width: 44,
+            height: 44,
+        }
+    },
+    chubby_hit: {
+        frames: [24],
+        rate: 1 / 16,
         collision_box: {
             width: 44,
             height: 44,
@@ -256,8 +272,8 @@ Q.animations("kirby", {
 
     /*Byebye*/
     bye:{
-        frames: [27,26,25,24],
-        rate: 1/6,
+        frames: [28, 27, 26, 25],
+        rate: 1/16,
         collision_box: {
             width: 30,
             height: 30
@@ -306,6 +322,7 @@ Q.Sprite.extend("Kirby", {
         this.state = KIRBY_STATE.IDLE;
         this.last_animation = "";
         this.last_state = null;
+        this.killEnemy = true;
 
         // idle
         this.blinkTime = 0;
@@ -371,7 +388,7 @@ Q.Sprite.extend("Kirby", {
     },
 
     collision: function(collide){
-        if(!collide.obj.isEntity) return;
+        if(!collide.obj.isEntity || collide.obj.timeDead > 0) return;
         // If kirby collides with something while absorbing.
         // TODO: Check if the collision directions is the same as the absorbing direction
         if(
@@ -380,10 +397,13 @@ Q.Sprite.extend("Kirby", {
             ((this.p.direction === "left" ? 1 : -1) === collide.normalX && collide.normalY === 0)
         ){
             this.isChubby = true;
+            Q.inputs["attack"] = false; //attack_end
             this.isAttackSwitch = true;
             collide.obj.destroy();
         }else{
             this.p.isStatue = true;
+            console.log(Q.state.dec("bar", 1));
+            this.p.direction = (this.p.x - collide.obj.p.x > 0) ? "left" : "right";
             this.trigger("change_state", KIRBY_STATE.HIT);
         }
     },
@@ -406,6 +426,7 @@ Q.Sprite.extend("Kirby", {
                 if(this.isChubby){
                     this.trigger("change_state", KIRBY_STATE.BLOWING_STAR);
                 }else{
+                    this.isAttackSwitch = true;
                     this.p.isStatue = true;
                     this.absorbType = ABSORB_TYPE.ABSORBING;
                     this.trigger("change_state", KIRBY_STATE.ABSORBING);
@@ -416,8 +437,7 @@ Q.Sprite.extend("Kirby", {
     },
 
     attack_end: function(){
-        
-        Q("AbsorbMissile").first().trigger("die");
+
         this.absorbType = ABSORB_TYPE.BLOWING;
         this.isAttackSwitch = false;
 
@@ -488,7 +508,11 @@ Q.Sprite.extend("Kirby", {
     step: function(dt){
         this.p.gravity = 0.5; // Reset Gravity
         this.p.speed = INITIAL_SPEED;
-        this.wasClimbing=this.p.collisions;
+        this.wasClimbing = this.p.collisions;
+        
+        Q("AbsorbMissile").first().onScreen = false;
+        Q("CloudParticle").first().trigger("die");
+
         //console.log(this.wasClimbing);
         //console.log(this);
         const prefix = this.isChubby ? "chubby_" : "";
@@ -559,8 +583,8 @@ Q.Sprite.extend("Kirby", {
                     if(this.absorbTime < 1/8){
                         this.trigger("cplay", "start_absorbing");
                     }else{
+                        Q("AbsorbMissile").first().onScreen = true;
                         this.trigger("cplay", "absorbing");
-                        Q("AbsorbMissile").first().trigger("respawn");
                     }
                 }else{
                     if(this.absorbTime < 1/8){
@@ -617,6 +641,7 @@ Q.Sprite.extend("Kirby", {
 
             break;
             case KIRBY_STATE.HIGHJUMP:
+
                 this.p.speed = this.movingSpeed;
                 // TO DO: Crear estado "falling head"
                 if (Math.abs(this.p.vy) < 50) {
@@ -719,27 +744,27 @@ Q.Sprite.extend("Kirby", {
             break;
             case KIRBY_STATE.HIT:
 
-                this.trigger("cplay", "spin");
+                this.trigger("cplay", `${prefix}hit`);
                 this.hitTime += dt;
                 if(this.hitTime < 0.1){
 
                     this.p.vx = (this.p.direction === "left" ? 1 : -1) * 400;
 
-                }else if(this.hitTime < 0.6){
-                    
+                }else if(this.hitTime < 0.6){   
                     this.hitTime = 0.0;
                     this.p.isStatue = false;
                     this.trigger("change_state", KIRBY_STATE.IDLE);
                 }
 
             break;
-
             case KIRBY_STATE.BYE:
+
                 this.byeTime += dt;
                 this.trigger("cplay", "bye");
-                this.p.isStatue = false;
-                if(this.byeTime >= 0.67){
-                    Q("Door").first().destroy();
+                this.p.isStatue = true;
+                this.p.vy = 0;
+                if(this.byeTime >= 4/16){
+                    this.trigger("change_state", KIRBY_STATE.IDLE);
                     const next_level = levels[Q.state.get("current_level")].next_level;
                     Q.stageScene(next_level, 0);
                     Q.state.set("current_level", next_level);

@@ -67,7 +67,6 @@ Q.Sprite.extend("Boss", {
         if(Math.random() < 0.6){
             this.bossEntity.forEach(e => e.trigger("respawn", this, dt));
         }else{
-
             Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: 0}));
             Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: Math.PI}));
             Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: -Math.PI/2}));

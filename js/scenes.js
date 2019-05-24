@@ -2,7 +2,7 @@ compiling.level.push(
     {"level": "level.tmx"},
     {"level1": "level1.tmx"},
     {"level2" : "level2.tmx"},
-    {"levelPreBoss": "levelPreBoss.tmx"},
+    {"level3": "level3.tmx"},
     {"levelBoss": "levelBoss.tmx"}
 );
 

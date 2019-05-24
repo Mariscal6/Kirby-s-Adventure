@@ -70,7 +70,7 @@ Q.Sprite.extend("Boss", {
 
             Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: 0}));
             Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: Math.PI}));
-            Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: Math.PI/2}));
+            Q.stage(0).insert(new Q.SoundEnemy({self: this, angle: -Math.PI/2}));
         }
     },
 

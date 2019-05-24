@@ -12,11 +12,11 @@ const levels = {
     },
 
     "level2": {
-        next_level: "levelPreBoss",
+        next_level: "level3",
         hud: "HUD",
     },
 
-    "levelPreBoss": {
+    "level3": {
         next_level: "levelBoss",
         hud: "HUD",
     },

@@ -54,6 +54,7 @@ Q.component("Enemy", {
         this.entity.hitBossTime = 30;
 
         this.entity.isEnemy = true;
+        this.entity.timeInvencible = 0;
     },
 
 	draw: function(){
@@ -71,15 +72,11 @@ Q.component("Enemy", {
 			const ex = this.entity.p.x;*/
 			//this.p.vx = 
 		}else if(entity.killEnemy){
-            console.log("paso");
-            if(this.entity.isBoss && this.entity.hitBossTime > 30){
+            
+            if(this.entity.isBoss &&  this.entity.timeInvencible <= 0){
                 Q.state.dec("bossHEALTH", 1);
-                if(Q.state.get("bossHEALTH")<=0){
-                    this.entity.hitBossTime = 0;
-                    Q.clearStages();
-                    Q.stageScene("win");
-                }
-            }else{
+                this.entity.timeInvencible = 0.5;
+            }else if(!this.entity.isBoss){
                 Q.state.inc("score", 1000);
                 this.entity.trigger("change_state", ENEMY_STATE.DIE);
             }
@@ -107,8 +104,10 @@ Q.component("Enemy", {
     },
 
     step: function(dt){
+
 		const self = this.entity;
 
+        self.timeInvencible -= dt;
         self.p.gravity = 0.89;
         self.p.skipCollision = false;
         

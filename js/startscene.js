@@ -4,7 +4,7 @@ compiling.audio.push(
     {"level": "Level1.mp3"},
     {"level1": "VegetableValley.mp3"},
     {"level2": "IceCreamIsland.mp3"},
-    {"levelPreBoss": "Grape_Garden.mp3"},
+    {"level3": "Grape_Garden.mp3"},
     {"levelBoss": "BossBattle.mp3"},
     {"gameOver": "GameOver.mp3"},
     {"lostLife": "LostLife.mp3"},
@@ -60,7 +60,7 @@ Q.animations("transitions", {
     //level 2
     level2: {frames:[1]},
     //level 3
-    levelPreBoss: {frames:[2]},
+    level3: {frames:[2]},
     //level 4
     levelBoss: {frames:[3]}
 });
@@ -74,7 +74,7 @@ Q.animations("handSelect", {
 });
 
 Q.animations("winAnim", {
-    win: {frames:[0]}
+    winMatch: {frames:[0]}
 });
 
 Q.animations("deathAnim", {
@@ -150,21 +150,18 @@ Q.Sprite.extend("gameOver", {
 });
 
 
-Q.Sprite.extend("win", {
+Q.Sprite.extend("Win", {
     init: function(p){
         this._super(p, {
             x: 55,
             y: 40,
             sheet: "win",
             sprite: "winAnim",
-            time: 0
         });
-        this.add('animation');
-        
+        this.add('animation');  
     },
     step: function(dt){
-        console.log("entra");
-        this.play("win");
+        this.play("winMatch");
     }
 });
 
@@ -333,7 +330,7 @@ Q.scene('deathScene2',function(stage) {
 });
 
 
-Q.scene('win',function(stage) {
+Q.scene('winScene',function(stage) {
     Q.handSelection = true;
     var container = stage.insert(new Q.UI.Container({
         x: 200,
@@ -341,14 +338,12 @@ Q.scene('win',function(stage) {
         h: 180,
         w: 180,
     }));
-    //Q.audio.play("gameOver");
-    stage.insert(new Q.win(), container);
-    //stage.insert(new Q.enter());
+    
+    stage.insert(new Q.Win(), container);
     Q.input.on("confirm",stage,function() {  
         Q.audio.stop();
-        Q.clearStages();
-        Q.inputKeys = true;
-        Q.handSelection = false;
-        //Q.stageScene("introScene");
+        //Q.clearStages();
+       // Q.inputKeys = true;
+       //Q.handSelection = false;
     });
 });

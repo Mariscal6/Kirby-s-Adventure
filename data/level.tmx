@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="2019.04.03" orientation="orthogonal" renderorder="right-down" width="148" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="43" nextobjectid="116">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="148" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="43" nextobjectid="129">
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="../images/tiles.png" width="512" height="512"/>
   <tile id="6">
@@ -3298,15 +3298,15 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="65"/>
+   <tile gid="89"/>
+   <tile gid="89"/>
+   <tile gid="89"/>
+   <tile gid="89"/>
+   <tile gid="89"/>
+   <tile gid="89"/>
+   <tile gid="89"/>
+   <tile gid="105"/>
    <tile/>
    <tile/>
    <tile/>
@@ -3445,16 +3445,16 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="65"/>
+   <tile gid="23"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="113"/>
    <tile/>
    <tile/>
    <tile/>
@@ -3593,16 +3593,16 @@
    <tile gid="89"/>
    <tile gid="89"/>
    <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
-   <tile gid="89"/>
+   <tile gid="23"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="97"/>
+   <tile gid="47"/>
    <tile gid="89"/>
    <tile gid="89"/>
    <tile gid="89"/>
@@ -3967,6 +3967,8 @@
   </properties>
   <object id="92" gid="293" x="1868.34" y="141.999" width="38" height="32"/>
   <object id="105" gid="293" x="903" y="223.333" width="38" height="32"/>
+  <object id="127" gid="293" x="2107.67" y="258.667" width="38" height="32"/>
+  <object id="128" gid="293" x="2477" y="233.333" width="38" height="32"/>
  </objectgroup>
  <objectgroup id="42" name="Gordo">
   <object id="114" gid="319" x="173.333" y="256" width="32" height="32">
@@ -3981,9 +3983,30 @@
     <property name="Radius" value="100"/>
    </properties>
   </object>
+  <object id="116" gid="319" x="2675.17" y="202.833" width="32" height="32">
+   <properties>
+    <property name="Angle" value="0"/>
+    <property name="Radius" value="100"/>
+   </properties>
+  </object>
+  <object id="117" gid="307" x="3374.16" y="232.5" width="32" height="32"/>
+  <object id="118" gid="307" x="3116.5" y="172.833" width="32" height="32"/>
+  <object id="119" gid="319" x="2821.33" y="202.667" width="32" height="32">
+   <properties>
+    <property name="Angle" value="0"/>
+    <property name="Radius" value="100"/>
+   </properties>
+  </object>
+  <object id="120" gid="307" x="3628" y="229.333" width="32" height="32"/>
+  <object id="121" gid="307" x="3936" y="241.333" width="32" height="32"/>
+  <object id="122" gid="307" x="4316" y="186.667" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="35" name="Sparky">
   <object id="112" gid="311" x="746.667" y="307" width="32" height="32"/>
+  <object id="123" gid="311" x="2742.67" y="242.667" width="32" height="32"/>
+  <object id="124" gid="311" x="3232" y="256" width="32" height="32"/>
+  <object id="125" gid="311" x="3517.33" y="248" width="32" height="32"/>
+  <object id="126" gid="311" x="2293.33" y="292" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="34" name="WaddleDee">
   <object id="106" gid="307" x="1353.33" y="289.667" width="32" height="32"/>

@@ -72,10 +72,16 @@ Q.component("Enemy", {
 			const ex = this.entity.p.x;*/
 			//this.p.vx = 
 		}else if(entity.killEnemy){
-            
             if(this.entity.isBoss &&  this.entity.timeInvencible <= 0){
                 Q.state.dec("bossHEALTH", 1);
                 this.entity.timeInvencible = 0.5;
+                if (Q.state.get("bossHEALTH") <= 0) {
+                    Q.clearStages();
+                    Q.inputKeys = false;
+                    Q.handSelection = false;
+                    Q.audio.stop();
+                    Q.stageScene("winScene");
+                }
             }else if(!this.entity.isBoss){
                 Q.state.inc("score", 1000);
                 this.entity.trigger("change_state", ENEMY_STATE.DIE);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="2019.04.03" orientation="orthogonal" renderorder="right-down" width="67" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="45" nextobjectid="119">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="67" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="45" nextobjectid="120">
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="../images/tiles.png" width="512" height="512"/>
   <tile id="6">
@@ -31,15 +31,15 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="257" name="Kirby" tilewidth="64" tileheight="64" tilecount="29" columns="29">
-  <image source="../images/kirby.png" width="1857" height="64"/>
+ <tileset firstgid="257" name="Kirby" tilewidth="64" tileheight="64" tilecount="36" columns="36">
+  <image source="../images/kirby.png" width="2305" height="64"/>
   <tile id="0">
    <properties>
     <property name="Class" value="Kirby"/>
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="286" name="WaddleDoo" tilewidth="32" tileheight="32" tilecount="5" columns="5">
+ <tileset firstgid="293" name="WaddleDoo" tilewidth="32" tileheight="32" tilecount="5" columns="5">
   <image source="../images/waddle_doo.png" width="160" height="34"/>
   <tile id="0">
    <properties>
@@ -51,7 +51,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="291" name="hotHead" tilewidth="32" tileheight="32" tilecount="9" columns="9">
+ <tileset firstgid="298" name="hotHead" tilewidth="32" tileheight="32" tilecount="9" columns="9">
   <properties>
    <property name="Class" value="HotHead"/>
   </properties>
@@ -66,7 +66,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="300" name="WaddleDee" tilewidth="32" tileheight="32" tilecount="4" columns="4">
+ <tileset firstgid="307" name="WaddleDee" tilewidth="32" tileheight="32" tilecount="4" columns="4">
   <image source="../images/waddle_dee.png" width="128" height="34"/>
   <tile id="0">
    <properties>
@@ -78,7 +78,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="304" name="Sparky" tilewidth="32" tileheight="32" tilecount="8" columns="8">
+ <tileset firstgid="311" name="Sparky" tilewidth="32" tileheight="32" tilecount="8" columns="8">
   <image source="../images/sparky.png" width="256" height="32"/>
   <tile id="0">
    <properties>
@@ -91,7 +91,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="312" name="gordo" tilewidth="32" tileheight="32" tilecount="4" columns="4">
+ <tileset firstgid="319" name="gordo" tilewidth="32" tileheight="32" tilecount="4" columns="4">
   <properties>
    <property name="Class" value="Gordo"/>
   </properties>
@@ -1863,9 +1863,9 @@
   <object id="115" gid="24" x="1952" y="320.083" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="44" name="Gordo">
-  <object id="117" gid="312" x="418" y="352" width="32" height="32">
+  <object id="117" gid="319" x="362" y="292" width="32" height="32">
    <properties>
-    <property name="Angle" value="0"/>
+    <property name="Angle" value="0.3"/>
     <property name="Radius" value="50"/>
    </properties>
   </object>
@@ -1874,17 +1874,18 @@
   <properties>
    <property name="Class" value="Waddle"/>
   </properties>
-  <object id="105" gid="286" x="1211" y="299.333" width="38" height="32"/>
+  <object id="105" gid="293" x="1211" y="299.333" width="38" height="32"/>
  </objectgroup>
  <objectgroup id="35" name="Sparky">
-  <object id="112" gid="304" x="1525" y="313" width="32" height="32"/>
+  <object id="112" gid="311" x="1525" y="313" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="34" name="WaddleDee">
-  <object id="106" gid="300" x="1751.33" y="259.667" width="32" height="32"/>
-  <object id="110" gid="300" x="611" y="310" width="32" height="32"/>
+  <object id="106" gid="307" x="1751.33" y="259.667" width="32" height="32"/>
+  <object id="110" gid="307" x="671" y="347.333" width="32" height="32"/>
+  <object id="119" gid="307" x="529.333" y="344" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="28" name="HotHead">
-  <object id="113" gid="291" x="1038" y="346" width="38" height="32"/>
+  <object id="113" gid="298" x="1038" y="346" width="38" height="32"/>
  </objectgroup>
  <objectgroup id="19" name="Hills"/>
  <objectgroup id="3" name="Kirby" offsetx="0.0606061" offsety="0.666667">

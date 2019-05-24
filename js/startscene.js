@@ -8,7 +8,8 @@ compiling.audio.push(
     {"levelBoss": "BossBattle.mp3"},
     {"gameOver": "GameOver.mp3"},
     {"lostLife": "LostLife.mp3"},
-    {"hit": "Hit.mp3"}
+    {"hit": "Hit.mp3"},
+    {"victory": "MinorVictory.mp3"}
 );
 
 compiling.sheet.push({
@@ -29,10 +30,13 @@ compiling.sheet.push({
 }, {
     "png_path": "deathScreen.png",
     "json_path": "deathScreen.json"
-},{
+});
+
+compiling.sheet.push({
     "png_path": "win.png",
     "json_path": "win.json"
 });
+
 
 var aux = new Array(60);
 for (let i = 0; i < 59; i++){
@@ -74,7 +78,7 @@ Q.animations("handSelect", {
 });
 
 Q.animations("winAnim", {
-    winMatch: {frames:[0]}
+    end: {frames:[0]}
 });
 
 Q.animations("deathAnim", {
@@ -153,15 +157,17 @@ Q.Sprite.extend("gameOver", {
 Q.Sprite.extend("Win", {
     init: function(p){
         this._super(p, {
-            x: 55,
-            y: 40,
             sheet: "win",
             sprite: "winAnim",
+            animation: "end",
+            x: 55,
+            y: 40
         });
+        
         this.add('animation');  
     },
     step: function(dt){
-        this.play("winMatch");
+        this.play("end");
     }
 });
 
@@ -338,12 +344,7 @@ Q.scene('winScene',function(stage) {
         h: 180,
         w: 180,
     }));
-    
+    Q.audio.play("victory");
+    Q.handSelection = false;
     stage.insert(new Q.Win(), container);
-    Q.input.on("confirm",stage,function() {  
-        Q.audio.stop();
-        //Q.clearStages();
-       // Q.inputKeys = true;
-       //Q.handSelection = false;
-    });
 });

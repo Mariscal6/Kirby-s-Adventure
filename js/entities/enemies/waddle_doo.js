@@ -53,33 +53,20 @@ Q.Sprite.extend("WaddleDoo", {
         this.add("Enemy");
 
         this.attack_cycle = 2.0;
-        this.attack_duration = 2.0;
+        this.attack_duration = 0.5;
 
         // Jump
         this.jump_cycle = 3;
         this.jump_high = 400;
 
+        this.sparkEntity = new Array(3).fill(0).map((e, i) => new Q.WaddleDooMissile(i));
+        this.sparkEntity.forEach(e => Q.stage(0).insert(e));
     },
 
     
     attack: function(){
-        
-        //this.isStatue = true;
-        /*
-        var stage=Q.stage(0);
-        var fire = stage.insert(new Q.FireWaddle({
-            y:this.p.y,
-            x:this.p.x,
-            direction:this.p.direction
-         }));
-         this.p.vx=0;
-        */
+        this.sparkEntity.forEach((e, i) => e.trigger("respawn", this));
     },
-    // Update Step
-    /*step: function(dt){
-
-        console.log(1);
-    },*/
 });
 
 

@@ -30,7 +30,7 @@ Q.Sprite.extend("FireHotHead", {
 
         this.add("Entity, Particle");
         this.isEntity = false;
-        this.max_life = 0.4;
+        this.max_life = 0.5;
 
         /* Events */
         /*this.on("bump.left,bump.right,bump.bottom, bump.top",function(collision){
@@ -59,7 +59,6 @@ Q.Sprite.extend("FireHotHead", {
         const kirby = Q("Kirby").first();
         const dx = kirby.p.x - entity.p.x, dy = kirby.p.y - entity.p.y;
         const angle = Math.atan2(-dy, dx); //  && Math.abs(angle) < Math.PI / 4
-        console.log(dir, angle);
         if(((dir <= 0 && angle >= 3 * Math.PI / 4) || (dir >= 0 && angle < Math.PI / 4) ) && Math.sign(dy) <= 0){ // Visible in 45º angle and same direction
             const ds = 1 / Math.sqrt(dx ** 2 + dy ** 2);
             this.p.vx = dx * ds * 300;

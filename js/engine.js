@@ -57,7 +57,7 @@ const load = (callback) => {
                             stage.add("viewport").follow(Q('Kirby').first(), {x: level.isDynamic || true, y: true},{
                                 minX: 32,
                                 maxX: Q("TileLayer").first().c.w - 32,
-                                minY: +225.5,
+                                minY: 32,
                                 maxY: 0,
                             });
 

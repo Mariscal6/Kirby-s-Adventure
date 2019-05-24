@@ -5,7 +5,7 @@ Q.Sprite.extend("SparkyMissile", {
     init: function(p){
         
         this._super(p, {
-            sheet: "SparkyMissile",
+            sheet: "sparky_missile",
             skipCollision: true,
             gravity: false,
         });

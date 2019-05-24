@@ -4,5 +4,11 @@
         "sy": 0,
         "tileW": 32,
         "tileH": 34
+    },
+    "waddle_doo_missile": {
+        "sx": 128,
+        "sy": 0,
+        "tileW": 32,
+        "tileH": 34
     }
 }

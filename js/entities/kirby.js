@@ -272,7 +272,7 @@ Q.animations("kirby", {
 
     /*Byebye*/
     bye:{
-        frames: [28, 27, 26, 25],
+        frames: [28, 27, 26, 25, 25, 25],
         rate: 1/16,
         collision_box: {
             width: 30,
@@ -757,6 +757,8 @@ Q.Sprite.extend("Kirby", {
                 }
 
             break;
+
+            ///////////////////////////////////////////////////////////
             case KIRBY_STATE.BYE:
 
                 this.byeTime += dt;

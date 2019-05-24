@@ -1,8 +1,10 @@
 const levels = {
     "intro": {
+
     },
 
     "level_selector": {
+
     },
 
     "level": { // Level 1
@@ -15,6 +17,8 @@ const levels = {
     "level1": {
         next_level: "level2",
         hud: "BOSS",
+        keys: [],
+        isDynamic: true
     },
 
     "level2": {

@@ -2,7 +2,7 @@
     "transition":{
         "sx": 0,
         "sy": 0,
-        "tileW": 160,
-        "tileH": 128
+        "tileW": 256,
+        "tileH": 240
     }
 }

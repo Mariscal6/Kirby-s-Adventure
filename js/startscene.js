@@ -40,9 +40,13 @@ Q.animations("storyAnim", {
 
 Q.animations("transitions", {
     //level 1
-    first: {frames:[0]},
+    level: {frames:[0]},
     //level 2
-    second: {frames:[1]}
+    level1: {frames:[1]},
+    //level 3
+    level2: {frames:[2]},
+    //level 4
+    level3: {frames:[3]}
 });
 
 Q.animations("enter", {
@@ -71,12 +75,13 @@ Q.Sprite.extend("transitionLevel", {
             y: 55,
             sheet: "transition",
             sprite: "transitions",
-            scale: 2.4
+            scale: 2.1
         });
         this.add('animation');
     },
     step: function(dt){
-        this.play("first");
+        //const aux = levels[Q.state.get("current_level")].next_level;
+        this.play(Q.state.get("current_level"));
     }
 });
 
@@ -138,6 +143,7 @@ Q.scene('introScene',function(stage) {
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
         //Q.audio.stop("sonido_logotipo_intro.ogg");
         Q.clearStages();
+        
         Q.stageScene('introScene2');
     });
 });
@@ -173,7 +179,8 @@ Q.scene('introScene3',function(stage) {
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
         //Q.audio.stop("sonido_logotipo_intro.ogg");
         Q.clearStages();
-        Q.stageScene('level');
+        Q.inputKeys = true;
+        Q.stageScene(Q.state.get("current_level"));
     });
 });
 

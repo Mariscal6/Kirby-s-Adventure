@@ -17,7 +17,7 @@ const Q = window.Q = Quintus({audioSupporter:["mp3", "ogg"]})
     height: 240 * 2, // Set the default height to 480 pixels
 })
 .enableSound().controls();
-
+Q.inputKeys = false;///Des habilitar teclas de
 const load = (callback) => {
     Q.load(unroll(unroll(Object.values(compiling)).map(e => Object.values(e))).join(","), function() {
         // Loading Threads
@@ -54,6 +54,7 @@ const load = (callback) => {
                             Q.stageScene(level.hud, 1);
                             Q.stageTMX(`${level_name}.tmx`, stage);
                             init_global_entities(stage);
+                            console.log(Q("TileLayer"));
                             stage.add("viewport").follow(Q('Kirby').first(), {x: level.isDynamic || true, y: true},{
                                 minX: 32,
                                 maxX: Q("TileLayer").first().c.w - 32,

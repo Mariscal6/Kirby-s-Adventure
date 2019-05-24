@@ -39,7 +39,10 @@ Q.animations("storyAnim", {
 });
 
 Q.animations("transitions", {
-    first: {frames:[0]}
+    //level 1
+    first: {frames:[0]},
+    //level 2
+    second: {frames:[1]}
 });
 
 Q.animations("enter", {
@@ -68,6 +71,7 @@ Q.Sprite.extend("transitionLevel", {
             y: 55,
             sheet: "transition",
             sprite: "transitions",
+            scale: 2.4
         });
         this.add('animation');
     },
@@ -123,7 +127,6 @@ Q.Sprite.extend("introEntity", {
 
 Q.scene('introScene',function(stage) {
     var container = stage.insert(new Q.UI.Container({
-        //asset:  "InitScreen/KirbyNES04.png",
         x: 200,
         y: 200,
         h: 180,
@@ -162,9 +165,9 @@ Q.scene('introScene3',function(stage) {
         x: 200,
         y: 200,
         h: 180,
-        w: 180,
-
-}));
+        w: 180, 
+    }));
+    
     stage.insert(new Q.transitionLevel(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
@@ -178,7 +181,7 @@ Q.scene('introScene3',function(stage) {
 
 
 
-Q.animations("menuChoicesAnim",{
+/*Q.animations("menuChoicesAnim",{
     initial: {  
         frames: [0,1,2,3,4,5,6,7,8,9,10,11], 
         rate: 1/2
@@ -213,5 +216,5 @@ Q.Sprite.extend("menuChoice", {
            
         }
     }
-});
+});*/
 

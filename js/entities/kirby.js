@@ -282,6 +282,32 @@ Q.animations("kirby", {
         }
     },
 
+    /*Byebye*/
+    fire_start:{
+        frames: [31, 32, 31, 32],
+        rate: 1/4,
+        collision_box: {
+            width: 30,
+            height: 30
+        }
+    },
+    fire_red:{
+        frames: [29],
+        rate: 1/4,
+        collision_box: {
+            width: 30,
+            height: 30
+        }
+    },
+    fire_redchubby:{
+        frames: [30],
+        rate: 1/4,
+        collision_box: {
+            width: 30,
+            height: 30
+        }
+    },
+
 });
 
 /* Object */
@@ -302,6 +328,7 @@ const KIRBY_STATE = {
     SLIDING: 12,
     HIT: 13,
     BYE: 14,
+    FIRE: 15,
     DIE: -1,
 };
 
@@ -384,6 +411,10 @@ Q.Sprite.extend("Kirby", {
         // Power
         this.isPowered = KIRBY_POWER.NONE;
 
+        //Fire
+
+        this.fireTime = 0;
+
         this.add("platformerControls, Entity");
 
         /* Events */
@@ -432,12 +463,19 @@ Q.Sprite.extend("Kirby", {
 
             //console.log(Q.state.dec("bar", 1));
             this.p.direction = (this.p.x - collide.obj.p.x > 0) ? "left" : "right";
-
+            Q.audio.play("hit");
+            Q.state.set("power", "ouch");
             if(collide.obj.killPlayer){
                 collide.obj.trigger("die");
             }
-            this.trigger("change_state", KIRBY_STATE.HIT);
+            
+            if(collide.obj.isA("FireHotHead")){
+                this.trigger("change_state", KIRBY_STATE.FIRE);
+            }else{
+                this.trigger("change_state", KIRBY_STATE.HIT);
             this.invencibleTime = INVENCIBILITY_TIME;
+            }
+            
         }
     },
 
@@ -799,15 +837,39 @@ Q.Sprite.extend("Kirby", {
                 this.trigger("cplay", "bye");
                 this.p.isStatue = true;
                 this.p.vy = 0;
+                this.p.vx = 0;
                 if(this.byeTime >= 6/16){
+                    this.byeTime = 0;
                     this.trigger("change_state", KIRBY_STATE.IDLE);
-                    Q.inputKeys = false;
-                    const next_level = levels[Q.state.get("current_level")].next_level;
-                    Q.state.set("current_level", next_level);
                     Q.clearStages();
                     Q.audio.stop();
                     Q.stageScene("introScene3", 0);
+                    Q.inputKeys = false;
+                    const next_level = levels[Q.state.get("current_level")].next_level;
+                    Q.state.set("current_level", next_level);
                    
+                }
+
+            break;
+
+            case KIRBY_STATE.FIRE:
+                console.log("estado fuego");
+                if(this.bounces++ == 0){
+                    this.invencibleTime = INVENCIBILITY_TIME;
+                    this.p.vy = -150;
+                    this.p.vx = 20 * (this.p.direction === "left" ? 1 : -1);
+                    this.trigger("cplay", "fire_start");
+                }else if(Math.abs(this.p.vy) < 0.01){
+                    // First Bounce
+                    if (this.bounces++ <= 2) {
+                        Q("StarParticle").first().trigger("respawn", this);
+                        this.p.vy = -150;
+                        (this.bounces == 2)? this.trigger("cplay", "fire_start"):this.trigger("cplay", "fire_red");
+                    }else{ // Last Bounce
+                        this.p.isStatue = false;
+                        this.bounces = 0;
+                        this.trigger("change_state", KIRBY_STATE.IDLE);
+                    }
                 }
 
             break;

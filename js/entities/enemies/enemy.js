@@ -67,6 +67,7 @@ Q.component("Enemy", {
 			const ex = this.entity.p.x;*/
 			//this.p.vx = 
 		}else if(entity.killEnemy){
+            Q.state.inc("score", 1000);
 			this.entity.trigger("change_state", ENEMY_STATE.DIE);
         }
        /*

@@ -1,11 +1,10 @@
 // ------- Kirby Intro
 compiling.audio.push(
     {"title_screen": "TitleScreen.mp3"},
-    {"bossBattle": "BossBattle.mp3"},
-    {"level": "VegetableValley.mp3"},
-    {"level1": "IceCreamIsland.mp3"},
-    {"level2": "Grape_Garden.mp3"},
-    {"level3": "Butter_Building.mp3"},
+    {"level1": "VegetableValley.mp3"},
+    {"level2": "IceCreamIsland.mp3"},
+    {"levelPreBoss": "Grape_Garden.mp3"},
+    {"levelBoss": "BossBattle.mp3"},
     {"gameOver": "GameOver.mp3"},
     {"lostLife": "LostLife.mp3"},
     {"hit": "Hit.mp3"}
@@ -52,13 +51,13 @@ Q.animations("storyAnim", {
 
 Q.animations("transitions", {
     //level 1
-    level: {frames:[0]},
+    level1: {frames:[0]},
     //level 2
-    level1: {frames:[1]},
+    level2: {frames:[1]},
     //level 3
-    level2: {frames:[2]},
+    levelPreBoss: {frames:[2]},
     //level 4
-    level3: {frames:[3]}
+    levelBoss: {frames:[3]}
 });
 
 Q.animations("enter", {
@@ -265,7 +264,7 @@ Q.scene('deathScene',function(stage) {
         h: 180,
         w: 180,
     }));
-    //Q.audio.play("gameOver");
+    Q.audio.play("gameOver");
     stage.insert(new Q.deathScene(), container);
     stage.insert(new Q.hand({x:-42, y:-60}), container);
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
@@ -274,7 +273,7 @@ Q.scene('deathScene',function(stage) {
             Q.clearStages();
             Q.inputKeys = true;
             Q.handSelection = false;
-            //Q.audio.play("vegetableValley");
+            Q.audio.play(Q.state.get("current_level"));
             Q.stageScene(Q.state.get("current_level"));
         }else{
             Q.clearStages();
@@ -295,7 +294,10 @@ Q.scene('deathScene2',function(stage) {
     //Q.audio.play("gameOver");
     stage.insert(new Q.gameOver(), container);
     stage.insert(new Q.enter());
-    Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
-        //Q.audio.stop("sonido_logotipo_intro.ogg");        
+    Q.input.on("confirm",stage,function() {  Q.audio.stop();
+        Q.clearStages();
+        Q.inputKeys = true;
+        Q.handSelection = false;
+        Q.stageScene(Q.state.get("introScene"));
     });
 });

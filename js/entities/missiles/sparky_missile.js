@@ -11,7 +11,6 @@ Q.Sprite.extend("SparkyMissile", {
         });
 
         this.add("Entity, Particle");
-        this.isEntity = false;
         this.killPlayer = true;
     },
   

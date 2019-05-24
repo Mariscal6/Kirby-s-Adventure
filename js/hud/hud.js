@@ -118,8 +118,9 @@ Q.Sprite.extend("lifesNumber", {
     step: function(){
         if(this.p.number == 'first')
             this.play(0);
-        else
-            this.play(Q.state.get("lives"));
+        else{
+            this.play(Q.state.get("lifes"));
+        }
     }
 });
 
@@ -257,7 +258,6 @@ Q.Sprite.extend("PowersHUD", {
         this._super(p, {
             sprite: "powersKirby",
             height: 135,
-            scaleToFit: true
         });
         this.add('animation');
     },

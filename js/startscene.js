@@ -19,6 +19,16 @@ compiling.sheet.push({
     "json_path": "transitions.json"
 });
 
+compiling.sheet.push({
+    "png_path": "hand.png",
+    "json_path": "hand.json"
+});
+
+compiling.sheet.push({
+    "png_path": "deathScreen.png",
+    "json_path": "deathScreen.json"
+});
+
 var aux = new Array(60);
 for (let i = 0; i < 59; i++){
     aux[i] = i;
@@ -53,6 +63,15 @@ Q.animations("enter", {
     blink: {frames:[0,1], rate: 1/2}
 });
 
+Q.animations("handSelect", {
+    select: {frames:[0]}
+});
+
+Q.animations("deathAnim", {
+    gameOver: {frames:[0]},
+    continue: {frames:[1]}
+});
+
 Q.Sprite.extend("enter", {
     init: function(p){
         this._super(p, {
@@ -71,11 +90,10 @@ Q.Sprite.extend("enter", {
 Q.Sprite.extend("transitionLevel", {
     init: function(p){
         this._super(p, {
-            x: 55,
-            y: 55,
+            x: p.x,
+            y: p.y,
             sheet: "transition",
-            sprite: "transitions",
-            scale: 2.1
+            sprite: "transitions",         
         });
         this.add('animation');
     },
@@ -85,6 +103,60 @@ Q.Sprite.extend("transitionLevel", {
     }
 });
 
+Q.Sprite.extend("deathScene", {
+    init: function(p){
+        this._super(p, {
+            x: 55,
+            y: 40,
+            sheet: "deathScreen",
+            sprite: "deathAnim",
+            time: 0
+        });
+        this.add('animation');
+        
+    },
+    step: function(dt){
+        this.p.time += dt;
+            this.play("continue");
+    }
+});
+
+
+Q.Sprite.extend("gameOver", {
+    init: function(p){
+        this._super(p, {
+            x: 55,
+            y: 40,
+            sheet: "deathScreen",
+            sprite: "deathAnim",
+            time: 0
+        });
+        this.add('animation');
+        
+    },
+    step: function(dt){
+        this.p.time += dt;
+            this.play("gameOver");
+    }
+});
+
+Q.Sprite.extend("hand", {
+    init: function(p){
+        this._super(p, {
+            x: p.x,
+            y: p.x,
+            sheet: "hand",
+            sprite: "handSelect",
+            time: 0
+        });
+        this.continue = true;
+        this.add('animation');
+    },
+    step: function(dt){
+        this.p.y=(this.continue)? -55:12;
+        this.play("select");  
+    }
+});
 Q.Sprite.extend("story", {
     init: function(p){
         this._super(p, {
@@ -137,13 +209,11 @@ Q.scene('introScene',function(stage) {
         h: 180,
         w: 180,
     }));
-    
     stage.insert(new Q.introEntity(), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
         //Q.audio.stop("sonido_logotipo_intro.ogg");
         Q.clearStages();
-        
         Q.stageScene('introScene2');
     });
 });
@@ -162,7 +232,7 @@ Q.scene('introScene2',function(stage) {
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
         //Q.audio.stop("sonido_logotipo_intro.ogg");
         Q.clearStages();
-        Q.stageScene('introScene3');
+        Q.stageScene('deathScene');
     });
 });
 
@@ -173,8 +243,7 @@ Q.scene('introScene3',function(stage) {
         h: 180,
         w: 180, 
     }));
-    
-    stage.insert(new Q.transitionLevel(), container);
+    stage.insert(new Q.transitionLevel({ x: 55, y: 40}), container);
     stage.insert(new Q.enter());
     Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
         //Q.audio.stop("sonido_logotipo_intro.ogg");
@@ -184,44 +253,42 @@ Q.scene('introScene3',function(stage) {
     });
 });
 
-
-
-
-
-/*Q.animations("menuChoicesAnim",{
-    initial: {  
-        frames: [0,1,2,3,4,5,6,7,8,9,10,11], 
-        rate: 1/2
-    },
-    static: {  
-        frames: [11]
-    }
-    
+Q.scene('deathScene',function(stage) {
+    Q.handSelection = true;
+    var container = stage.insert(new Q.UI.Container({
+        x: 200,
+        y: 200,
+        h: 180,
+        w: 180,
+    }));
+    stage.insert(new Q.deathScene(), container);
+    stage.insert(new Q.hand({x:-42, y:-60}), container);
+    Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
+        //Q.audio.stop("sonido_logotipo_intro.ogg");
+        if(Q("hand").first().continue){
+            Q.clearStages();
+            Q.inputKeys = true;
+            Q.handSelection = false;
+            Q.stageScene(Q.state.get("current_level"));
+        }else{
+            Q.clearStages();
+            Q.stageScene("deathScene2");
+        }
+        
+    });
 });
 
-
-Q.Sprite.extend("menuChoice", {
-    init: function(){
-        this._super(p, {
-            x: 0,
-            y: 0,
-            h: 10,
-            w: 10, 
-            //sheet: "menuChoices",
-            //sprite: "menuChoicesAnim",
-            ready: false,
-        }); 
-        this.add("animation");  
-    },
-    step: function(dt){
-        if(this.p.ready){
-             this.play("initial");
-             this.p.ready = false;
-        }
-        else{
-            this.play("static");
-           
-        }
-    }
-});*/
-
+Q.scene('deathScene2',function(stage) {
+    Q.handSelection = true;
+    var container = stage.insert(new Q.UI.Container({
+        x: 200,
+        y: 200,
+        h: 180,
+        w: 180,
+    }));
+    stage.insert(new Q.gameOver(), container);
+    stage.insert(new Q.enter());
+    Q.input.on("confirm",stage,function() { //pulsamos enter durante la intro para saltarla
+        //Q.audio.stop("sonido_logotipo_intro.ogg");        
+    });
+});

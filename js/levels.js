@@ -1,12 +1,4 @@
 const levels = {
-    "intro": {
-
-    },
-
-    "level_selector": {
-
-    },
-
     "level": { // Level 1
         next_level: "level1",
         hud: "HUD",
@@ -22,7 +14,18 @@ const levels = {
     },
 
     "level2": {
+        next_level: "preBoss",
+        hud: "HUD",
+    },
+
+    "preBoss": {
+        next_level: "bossLevel",
+        hud: "HUD",
+    },
+
+    "boosLevel": {
         next_level: "level",
         hud: "HUD",
+        isDynamic: true
     }
 };

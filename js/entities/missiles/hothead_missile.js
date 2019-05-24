@@ -29,7 +29,7 @@ Q.Sprite.extend("FireHotHead", {
         });
 
         this.add("Entity, Particle");
-        this.isEntity = false;
+        this.killPlayer = true;
         this.max_life = 0.5;
 
         /* Events */

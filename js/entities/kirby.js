@@ -16,6 +16,8 @@ compiling.sheet.push({
 const INITIAL_SPEED = 130;
 const INITIAL_CHUBBY_SPEED = 65;
 
+const INVENCIBILITY_TIME = 2.0;
+
 const MAX_SPEED = 200;
 const MAX_CHUBBY_SPEED = 100;
 const MAX_CHUBBY_RUNNING_SPEED = 200;
@@ -308,6 +310,12 @@ const ABSORB_TYPE = {
     BLOWING: -1
 };
 
+const KIRBY_POWER = {
+    FIRE: "fire",
+    SPARKY: "sparky",
+    NONE : "",
+};
+
 Q.Sprite.extend("Kirby", {
 
     init: function(p){
@@ -367,8 +375,14 @@ Q.Sprite.extend("Kirby", {
         // Hit
         this.hitTime = 0.0;
 
-        //bye 
+        // bye 
         this.byeTime = 0;
+
+        // invencible
+        this.invencibleTime = 0;
+
+        // Power
+        this.isPowered = KIRBY_POWER.NONE;
 
         this.add("platformerControls, Entity");
 
@@ -385,10 +399,20 @@ Q.Sprite.extend("Kirby", {
         this.on("bump", this, "collision");
 
         this.on("run", this, "run");
+        
+    },
+
+    draw: function(ctx){
+        ctx.save();
+            const opacity = Math.abs(Math.sin(Math.max(0.0, this.invencibleTime) * (4 * 2 * Math.PI) / INVENCIBILITY_TIME)) * 0.3;
+            ctx.globalAlpha = 1 - opacity;
+            this._super(ctx);
+        ctx.restore();
     },
 
     collision: function(collide){
-        if(!collide.obj.isEntity || collide.obj.timeDead > 0) return;
+        if(!collide.obj.isEntity || this.invencibleTime >= 0 || collide.obj.timeDead > 0) return;
+
         // If kirby collides with something while absorbing.
         // TODO: Check if the collision directions is the same as the absorbing direction
         if(
@@ -400,11 +424,20 @@ Q.Sprite.extend("Kirby", {
             Q.inputs["attack"] = false; //attack_end
             this.isAttackSwitch = true;
             collide.obj.destroy();
+            Q.state.inc("score",1000);
         }else{
+
             this.p.isStatue = true;
-            console.log(Q.state.dec("bar", 1));
+            decShield(Q);
+
+            //console.log(Q.state.dec("bar", 1));
             this.p.direction = (this.p.x - collide.obj.p.x > 0) ? "left" : "right";
+
+            if(collide.obj.killPlayer){
+                collide.obj.trigger("die");
+            }
             this.trigger("change_state", KIRBY_STATE.HIT);
+            this.invencibleTime = INVENCIBILITY_TIME;
         }
     },
 
@@ -516,6 +549,7 @@ Q.Sprite.extend("Kirby", {
         //console.log(this.wasClimbing);
         //console.log(this);
         const prefix = this.isChubby ? "chubby_" : "";
+        this.invencibleTime -= dt;
 
         switch(this.state){
             
@@ -765,11 +799,14 @@ Q.Sprite.extend("Kirby", {
                 this.trigger("cplay", "bye");
                 this.p.isStatue = true;
                 this.p.vy = 0;
-                if(this.byeTime >= 4/16){
+                if(this.byeTime >= 6/16){
                     this.trigger("change_state", KIRBY_STATE.IDLE);
+                    Q.inputKeys = false;
                     const next_level = levels[Q.state.get("current_level")].next_level;
-                    Q.stageScene(next_level, 0);
                     Q.state.set("current_level", next_level);
+                    Q.clearStages();
+                    Q.stageScene("introScene3", 0);
+                   
                 }
 
             break;

@@ -13,7 +13,7 @@ body, html{
 }
 
 body{
-    background-color: black;
+    background: url(../images/background.jpg) no-repeat;
 }
 
 #quintus-kirby_container{

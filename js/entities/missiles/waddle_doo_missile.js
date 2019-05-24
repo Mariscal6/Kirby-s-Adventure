@@ -14,7 +14,6 @@ Q.Sprite.extend("WaddleDooMissile", {
 
         this.p.points = [[-8, -8], [-8, +8], [+8, +8], [+8, -8]];
 
-        this.isEntity = false;
         this.killPlayer = true;
         this.max_life = Number.MAX_SAFE_INTEGER;
         this.parent = null;

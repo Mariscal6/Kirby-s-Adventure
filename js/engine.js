@@ -17,7 +17,10 @@ const Q = window.Q = Quintus({audioSupporter:["mp3", "ogg"]})
     height: 240 * 2, // Set the default height to 480 pixels
 })
 .enableSound().controls();
+
 Q.inputKeys = false;///Des habilitar teclas de
+
+Q.handSelection = false;
 const load = (callback) => {
     Q.load(unroll(unroll(Object.values(compiling)).map(e => Object.values(e))).join(","), function() {
         // Loading Threads

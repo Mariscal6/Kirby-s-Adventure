@@ -19,6 +19,9 @@ Q.input.on("highJumpUp", function(){
 
 /* Balloon Key */
 Q.input.on("balloon", function(){
+    if(Q.handSelection) {
+        Q("hand").first().continue = !Q("hand").first().continue;
+    }
     if(!Q.inputKeys) return;
     Q("Kirby").first().trigger("balloon");
 });
@@ -35,6 +38,7 @@ Q.input.on("attackUp", function(){
 });
 
 Q.input.on("bend", function () {
+    if(Q.handSelection) Q("hand").first().continue = !Q("hand").first().continue;
     if(!Q.inputKeys) return;
     if (!Q.inputs['down']) {
         Q.inputs['down'] = true;

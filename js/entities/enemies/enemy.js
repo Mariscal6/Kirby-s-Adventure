@@ -35,6 +35,8 @@ Q.component("Enemy", {
         this.entity.time_attack = 0.0;
         this.entity.attack_duration = 0.0;
         this.entity.attack_cycle = 0.0;
+        this.entity.num_attacks = 1;
+        this.entity.current_attack = 0;
 
         // Jump
         this.entity.time_jump = 0.0;
@@ -102,6 +104,7 @@ Q.component("Enemy", {
 
                 if(self.time_idle >= self.attack_cycle){
                     self.time_idle = 0.0;
+                    self.current_attack = 0;
                     self.trigger("change_state", ENEMY_STATE.ATTACKING);
                 }else if(self.time_jump >= self.jump_cycle){
                     self.time_jump = 0.0;
@@ -116,7 +119,8 @@ Q.component("Enemy", {
                 self.p.vx = 0.0;
                 self.p.vy = 0.0;
                 
-                if(self.time_attack === 0){
+                if(self.time_attack > ((self.attack_duration / self.num_attacks) * self.current_attack)){
+                    ++self.current_attack;
                     self.trigger("attack");
                 }
                 

@@ -33,7 +33,7 @@ Q.component("Particle", {
         if(!this.entity.onScreen) return;
 
         entity.life += dt;
-        if(entity.life >= entity.max_life){
+        if(entity.life > entity.max_life){
             entity.trigger("die");
         }
     }

@@ -4,5 +4,11 @@
         "sy": 0,
         "tileW": 32,
         "tileH": 34
+    },
+    "SparkyMissile": {
+        "sx": 224,
+        "sy": 0,
+        "tileW": 32,
+        "tileH": 34
     }
 }

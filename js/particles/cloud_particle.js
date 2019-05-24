@@ -7,7 +7,7 @@ compiling.sheet.push({
 
 Q.animations("cloudExplosion", {
     slide: {
-        frames: [0,1],
+        frames: [0, 1],
         rate: 1/8, 
         collision_box: {
             width: 32,

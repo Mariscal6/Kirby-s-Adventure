@@ -92,10 +92,10 @@
   </tile>
  </tileset>
  <tileset firstgid="312" name="tiles2" tilewidth="32" tileheight="32" tilecount="800" columns="79">
-  <image source="../../../../KirbySprites/NES - Kirbys Adventure - Ice Cream Island 1.png" width="2533" height="288"/>
+  <image source="../images/NES - Kirbys Adventure - Ice Cream Island 1.png" width="2533" height="288"/>
  </tileset>
  <tileset firstgid="1112" name="tiles2" tilewidth="32" tileheight="32" tilecount="711" columns="79">
-  <image source="../../../../KirbySprites/NES - Kirbys Adventure - Ice Cream Island 1.png" width="2533" height="288"/>
+  <image source="../images/NES - Kirbys Adventure - Ice Cream Island 1.png" width="2533" height="288"/>
  </tileset>
  <layer id="42" name="Background" width="81" height="13">
   <data>
